@@ -7,6 +7,7 @@ import { ActivityIndicator, View } from "react-native";
 import useAuthStore from "../auth/store/useAuthStore";
 
 const CheckAuthLayout = () => {
+  //TODO: Dividir por admin, empleado, o cliente
   const { status, checkStatus, user } = useAuthStore();
 
   useEffect(() => {
