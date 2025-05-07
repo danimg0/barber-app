@@ -107,25 +107,27 @@ export default function RegisterScreen() {
                 </Text>
               ) : null}
               <ThemedText type="h2" className="mb-5">
-                Registrandose
+                Registro
               </ThemedText>
-              {/* inputs login */}
+              {/* inputs registro */}
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
                 placeholder="Nombre"
                 keyboardType="default"
                 autoCapitalize="none"
                 icon="person-outline"
-                onChangeText={(value) => handleChange("email", value)}
+                // onChangeText={(value) => handleChange("email", value)}
               />
+              {/* correo */}
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
                 placeholder="Correo electrónico"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 icon="mail-outline"
-                onChangeText={(value) => handleChange("email", value)}
+                // onChangeText={(value) => handleChange("email", value)}
               />
+              {/* telefono */}
               {/* //TODO: Poner un icono de informacion y si le pulsa, abrir modal informando de porque tiene que dar el tlf */}
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
@@ -133,13 +135,14 @@ export default function RegisterScreen() {
                 keyboardType="phone-pad"
                 autoCapitalize="none"
                 icon="phone-portrait-outline"
-                onChangeText={(value) => handleChange("email", value)}
+                // onChangeText={(value) => handleChange("email", value)}
               />
+              {/* password */}
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Contraseña"
                 secureTextEntry
-                onChangeText={(value) => handleChange("password", value)}
+                // onChangeText={(value) => handleChange("password", value)}
                 value={inputs.password}
                 icon="lock-closed-outline"
               />
@@ -147,7 +150,7 @@ export default function RegisterScreen() {
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Repetir contraseña"
                 secureTextEntry
-                onChangeText={(value) => handleChange("password", value)}
+                // onChangeText={(value) => handleChange("password", value)}
                 value={inputs.password}
                 icon="lock-closed-outline"
               />

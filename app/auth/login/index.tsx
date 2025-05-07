@@ -127,7 +127,7 @@ export default function LoginScreen() {
               <Text className="text-white text-center">
                 ¿Has olvidado la contraseña?
               </Text>
-              <Text className="text-white text-center">
+              <Text className="text-white text-center mb-5">
                 Recuperala{" "}
                 <ThemedLink href={"/"} className="underline font-bold">
                   aquí
@@ -147,15 +147,15 @@ export default function LoginScreen() {
                 )}
               </ThemedButton>
               {/* Boton registro */}
-              {/* <ThemedButton className="bg-light-primary w-[50%]">
+              <ThemedButton className="bg-light-primary w-[50%]">
                 <ThemedText type="semi-bold">Registrarse</ThemedText>
-              </ThemedButton> */}
+              </ThemedButton>
 
               {/* Link a registro */}
-              <View className="flex flex-row items-center mt-10">
+              {/* <View className="flex flex-row items-center mt-10">
                 <ThemedText>¿No tienes cuenta?</ThemedText>
                 <ThemedLink href={"/auth/register"}> Crear cuenta</ThemedLink>
-              </View>
+              </View> */}
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
