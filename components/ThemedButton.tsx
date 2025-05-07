@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, PressableProps, View } from "react-native";
-import ThemedText from "./ThemedText";
 
 interface Props extends PressableProps {
   icon?: keyof typeof Ionicons.glyphMap;
@@ -11,16 +10,18 @@ interface Props extends PressableProps {
 
 const ThemedButton = ({ icon, className, children, ...rest }: Props) => {
   return (
-    <View
+    <Pressable
       className={`${className} rounded-lg mt-3 py-3 active:opacity-80 items-center justify-center flex-row`}
+      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      {...rest}
     >
-      <Pressable {...rest}>
-        <ThemedText>{children}</ThemedText>
-      </Pressable>
-      {icon && (
-        <Ionicons name={icon} size={20} color={"white"} className="ml-3" />
-      )}
-    </View>
+      <View className="flex-row items-center justify-center">
+        {children}
+        {icon && (
+          <Ionicons name={icon} size={20} color={"white"} className="ml-3" />
+        )}
+      </View>
+    </Pressable>
   );
 };
 
