@@ -138,6 +138,7 @@ export default function RegisterScreen() {
                 // onChangeText={(value) => handleChange("email", value)}
               />
               {/* password */}
+              {/* //TODO: ojito para ver la contrasena? */}
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Contraseña"

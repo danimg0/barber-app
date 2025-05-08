@@ -95,6 +95,7 @@ export default function LoginScreen() {
                 icon="mail-outline"
                 onChangeText={(value) => handleChange("email", value)}
               />
+              {/* //TODO: ojito para ver la contrasena? */}
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Contraseña"
@@ -126,7 +127,10 @@ export default function LoginScreen() {
                 )}
               </ThemedButton>
               {/* Boton registro */}
-              <ThemedButton className="bg-light-primary w-[50%]">
+              <ThemedButton
+                onPress={() => router.push("/auth/register")}
+                className="bg-light-primary w-[50%]"
+              >
                 <ThemedText type="semi-bold">Registrarse</ThemedText>
               </ThemedButton>
 
