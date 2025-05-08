@@ -1,5 +1,4 @@
 //TODO: Una especie de loading hasta que no cargue las imagenes
-
 import ThemedButton from "@/components/ThemedButton";
 import ThemedLink from "@/components/ThemedLink";
 import ThemedText from "@/components/ThemedText";
@@ -8,6 +7,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
@@ -17,62 +17,41 @@ import {
   Text,
   View,
 } from "react-native";
+import useAuthStore from "../store/useAuthStore";
 
 export default function LoginScreen() {
-  const [loading, setLoading] = useState(false);
+  const { login } = useAuthStore();
   const [error, setError] = useState("");
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
+  //TODO: Usar tanstack query para esto en vez de un estado
+  const [isPosting, setIsPosting] = useState(false);
 
   function handleChange(name: string, value: string) {
     setInputs((prev) => ({ ...prev, [name]: value }));
   }
 
   const handleLogin = async () => {
-    try {
-      setLoading(true);
-      setError("");
-
-      // Validación básica
-      if (!inputs.email || !inputs.password) {
-        setError("Por favor, complete todos los campos");
-        return;
-      }
-
-      // Llamada a la API
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: inputs.email,
-          password: inputs.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data) {
-        console.log("Usuario logueado:", {
-          id: data.id,
-          email: data.email,
-          name: data.name,
-          roles: data.roles,
-          token: data.token,
-        });
-        router.push("/(barber-app)/(client)");
-      } else {
-        setError(data.message || "Error al iniciar sesión");
-      }
-    } catch (err) {
-      setError("Error de conexión. Inténtelo más tarde.");
-      console.error(err);
-    } finally {
-      setLoading(false);
+    const { email, password } = inputs;
+    setError("");
+    // Validación básica
+    if (!inputs.email || !inputs.password) {
+      setError("Por favor, complete todos los campos");
+      return;
     }
+
+    //Con esto evito el doble tap
+    setIsPosting(true);
+    const wasSuccessful = await login(email, password);
+    setIsPosting(false);
+
+    if (wasSuccessful) {
+      router.replace("/");
+    }
+
+    Alert.alert("Error", "Usuario o contraseña no son correctos");
   };
 
   return (
@@ -136,11 +115,11 @@ export default function LoginScreen() {
               {/* boton login */}
               <ThemedButton
                 onPress={handleLogin}
-                disabled={loading}
+                disabled={isPosting}
                 className="bg-light-secondary w-[70%]"
                 icon="log-in-outline"
               >
-                {loading ? (
+                {isPosting ? (
                   <ActivityIndicator color="white" />
                 ) : (
                   <ThemedText type="semi-bold">Iniciar sesion</ThemedText>

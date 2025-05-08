@@ -73,6 +73,9 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   },
 
   checkStatus: async () => {
+    if (get().user) {
+      return;
+    }
     const resp = await authCheckStatus();
     get().changeStatus(resp?.token, resp?.user);
     // if (!resp) {

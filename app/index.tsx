@@ -4,6 +4,8 @@ import { View } from "react-native";
 
 const RootIndex = () => {
   return (
+    //TODO: Comprobar si esta login
+    //TODO: Redirigir en funcion del rol
     <View>
       <Redirect href={"/auth/login"} />
     </View>
