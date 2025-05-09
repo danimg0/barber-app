@@ -13,7 +13,6 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
-  Text,
   View,
 } from "react-native";
 
@@ -102,11 +101,11 @@ export default function RegisterScreen() {
             />
             <View className="px-8 pb-8 w-11/12 max-w-md items-center">
               {error ? (
-                <Text className="text-white bg-light-primary px-4 py-2 rounded-lg mb-4">
+                <ThemedText className="text-white bg-light-primary px-4 py-2 rounded-lg mb-4">
                   {error}
-                </Text>
+                </ThemedText>
               ) : null}
-              <ThemedText type="h2" className="mb-5">
+              <ThemedText type="h2" className="mb-5 text-white text-left">
                 Registro
               </ThemedText>
               {/* inputs registro */}

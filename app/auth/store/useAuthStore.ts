@@ -11,7 +11,6 @@ export type AuthStatus =
 export interface AuthState {
   status: AuthStatus;
   token?: string;
-  changeStatus: (token?: string, user?: User) => boolean;
   user?: User;
 
   //Se va a usar zunstand para el manejo de estados
@@ -21,6 +20,8 @@ export interface AuthState {
   //Determina el estado de la autenticacion en el json o en el token
   checkStatus: () => Promise<void>;
   logout: () => Promise<void>;
+
+  changeStatus: (token?: string, user?: User) => boolean;
 }
 
 // El get nos da acceso a todo el state
@@ -36,7 +37,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   changeStatus: (token?: string, user?: User) => {
     if (!token || !user) {
       //Si la respuesta es nula, no esta autenticado. Hacemos limpieza de valores
-      set({ status: "authenticated", token: undefined, user: undefined });
+      set({ status: "unauthenticated", token: undefined, user: undefined });
       //TODO: llamar logout (para limpiar)
       return false;
     }
@@ -73,9 +74,6 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   },
 
   checkStatus: async () => {
-    if (get().user) {
-      return;
-    }
     const resp = await authCheckStatus();
     get().changeStatus(resp?.token, resp?.user);
     // if (!resp) {
@@ -91,7 +89,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
 
   logout: async () => {
     //TODO: limpiar el token del secure storage
-    set({ status: "authenticated", token: undefined, user: undefined });
+    set({ status: "unauthenticated", token: undefined, user: undefined });
   },
 }));
 

@@ -16,18 +16,19 @@ const ThemedText = ({
   ...rest
 }: Props) => {
   const textType = {
-    normal: "",
-    h1: "text-3xl font-bold",
-    h2: "text-2xl font-semibold",
-    "semi-bold": "font-semibold",
-    link: "text-blue-500 underline",
+    //TODO: Anadir font-family que sea a cada parte
+    normal: "font-merriweather",
+    h1: "text-3xl font-bold font-rye",
+    h2: "text-2xl font-semibold font-rye ",
+    "semi-bold": "font-semibold font-merriweather",
+    link: "text-blue-500 underline font-merriweather",
   };
 
   //El children lo podria borrar y dejar el Text como autocierre, ya que
   // viene en las propiedades del ...rest al heredar
   return (
     <Text
-      className={["dark:text-white", className, textType[type]].join(" ")}
+      className={["text-white", className, textType[type]].join(" ")}
       {...rest}
     >
       {children}

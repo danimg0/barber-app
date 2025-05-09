@@ -1,8 +1,10 @@
 //TODO: Una especie de loading hasta que no cargue las imagenes
+import ElevatedButton from "@/components/ElevatedButton";
 import ThemedButton from "@/components/ThemedButton";
 import ThemedLink from "@/components/ThemedLink";
 import ThemedText from "@/components/ThemedText";
 import ThemedTextInput from "@/components/ThemedTextInput";
+import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -48,7 +50,8 @@ export default function LoginScreen() {
     setIsPosting(false);
 
     if (wasSuccessful) {
-      router.replace("/");
+      router.replace("/(barber-app)/(client)");
+      return;
     }
 
     Alert.alert("Error", "Usuario o contraseña no son correctos");
@@ -80,6 +83,9 @@ export default function LoginScreen() {
               }}
               className="w-48 h-48"
             />
+            <ThemedText type="h2" className="mb-5">
+              Inicio de sesión
+            </ThemedText>
             <View className="px-8 pb-8 w-11/12 max-w-md items-center">
               {error ? (
                 <Text className="text-white bg-light-primary px-4 py-2 rounded-lg mb-4">
@@ -100,6 +106,7 @@ export default function LoginScreen() {
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Contraseña"
                 secureTextEntry
+                autoCapitalize="none"
                 onChangeText={(value) => handleChange("password", value)}
                 value={inputs.password}
                 icon="lock-closed-outline"
@@ -142,6 +149,12 @@ export default function LoginScreen() {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
+        <ElevatedButton
+          icon="logo-whatsapp"
+          phoneNumber={MAIN_PELUQUERO}
+          openType="whatsapp"
+          message="Hola, me gustaría reservar una cita."
+        />
       </ImageBackground>
     </SafeAreaView>
   );

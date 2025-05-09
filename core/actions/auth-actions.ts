@@ -44,7 +44,7 @@ export const authLogin = async (email: string, password: string) => {
   email = email.toLowerCase();
 
   try {
-    const response = await fetch("/api/auth", {
+    const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,9 +71,10 @@ export const authLogin = async (email: string, password: string) => {
  * Hace el check del estado de autentifacion
  * @returns
  */
+//TODO: hacer el checkStatus
 export const authCheckStatus = async () => {
   try {
-    const response = await fetch("api/check-status", {
+    const response = await fetch("api/auth/check-status", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
