@@ -11,7 +11,13 @@ interface Props {
   onPress?: () => void; //No lo estoy usando ahora mismo
 }
 
-const ElevatedButton = ({ icon, message, phoneNumber, openType }: Props) => {
+const ElevatedButton = ({
+  icon,
+  message,
+  onPress,
+  phoneNumber,
+  openType,
+}: Props) => {
   const { width, height } = useWindowDimensions();
   const rightPosition = width * 0.1;
   const bottomPosition = height * 0.1;
@@ -25,7 +31,11 @@ const ElevatedButton = ({ icon, message, phoneNumber, openType }: Props) => {
         bottom: bottomPosition,
       }}
       onPress={
-        openType === "whatsapp"
+        //Si mando un onPress hago eso, si no sigo el comportamiento natural del FAB este
+        onPress
+          ? onPress
+          : //Abro whatsapp
+          openType === "whatsapp"
           ? () =>
               openWhatsApp({
                 phoneNumber: phoneNumber,

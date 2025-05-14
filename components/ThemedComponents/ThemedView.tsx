@@ -4,10 +4,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
   darkColor?: string;
+  className?: string;
 };
 
 export function ThemedView({
   style,
+  className,
   lightColor,
   darkColor,
   ...otherProps
@@ -17,7 +19,7 @@ export function ThemedView({
 
   return (
     <View
-      className="bg-dark-background flex-1"
+      className={`bg-dark-background flex-1 ${className} `}
       style={[{ paddingTop: top }, style]}
       {...otherProps}
     />

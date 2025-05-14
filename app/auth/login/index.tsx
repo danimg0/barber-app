@@ -1,10 +1,8 @@
 //TODO: Una especie de loading hasta que no cargue las imagenes
-import ElevatedButton from "@/components/ElevatedButton";
-import ThemedButton from "@/components/ThemedButton";
-import ThemedLink from "@/components/ThemedLink";
-import ThemedText from "@/components/ThemedText";
-import ThemedTextInput from "@/components/ThemedTextInput";
-import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
+import ThemedButton from "@/components/ThemedComponents/ThemedButton";
+import ThemedLink from "@/components/ThemedComponents/ThemedLink";
+import ThemedText from "@/components/ThemedComponents/ThemedText";
+import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -50,7 +48,15 @@ export default function LoginScreen() {
     setIsPosting(false);
 
     if (wasSuccessful) {
-      router.replace("/(barber-app)/(client)");
+      const { user } = useAuthStore.getState();
+      console.log("wasSuccesful, usuario: ", user);
+      if (user?.rol === 1) {
+        router.replace("/(barber-app)/(drawer)/(admin)");
+      } else if (user?.rol === 2) {
+        router.replace("/(barber-app)/(drawer)/(barber)");
+      } else if (user?.rol === 3) {
+        router.replace("/(barber-app)/(drawer)/(client)");
+      }
       return;
     }
 
@@ -149,12 +155,12 @@ export default function LoginScreen() {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-        <ElevatedButton
+        {/* <ElevatedButton
           icon="logo-whatsapp"
           phoneNumber={MAIN_PELUQUERO}
           openType="whatsapp"
           message="Hola, me gustaría reservar una cita."
-        />
+        /> */}
       </ImageBackground>
     </SafeAreaView>
   );

@@ -19,11 +19,16 @@ const openWhatsApp = async ({ phoneNumber, message }: Props) => {
   if (canOpen) {
     await Linking.openURL(whatsappUrl);
   } else {
-    Alert.alert(
-      "Error al abrir WhatsApp",
-      "Por favor asegurate de que se encuentra instalado",
-      [{ text: "OK" }]
-    );
+    try {
+      let whatsapp2try = `https://wa.me/${formattedNumber}?text=hola`;
+      await Linking.openURL(whatsapp2try);
+    } catch (e) {
+      Alert.alert(
+        "Error al abrir WhatsApp",
+        "Por favor asegurate de que se encuentra instalado",
+        [{ text: "OK" }]
+      );
+    }
   }
 };
 

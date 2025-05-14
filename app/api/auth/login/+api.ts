@@ -11,7 +11,7 @@ type LoginResponse = {
   id: string;
   email: string;
   name: string;
-  roles: number[];
+  rol: number[];
   token?: string;
 };
 
@@ -32,8 +32,6 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    console.log("Datos de entrada:", body);
-
     // Buscar usuario por nombre en la base de datos
     const { data: user, error: userError } = await supabase
       .from("usuarios")
@@ -52,8 +50,6 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    console.log("Usuario encontrado:", user);
-
     // Con Supabase, lo ideal es usar auth.signInWithPassword, pero para este ejemplo
     // estamos comparando passwords manualmente.
     // En un entorno real, deberías usar bcrypt para verificar las contraseñas
@@ -65,38 +61,22 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    console.log("Contraseña correcta");
-
-    // Generar un token de sesión (mejor usar auth.signIn de Supabase)
-    // const { data: session, error: sessionError } =
-    //   await supabase.auth.signInWithPassword({
-    //     email: email,
-    //     password: password, // Esto asume que guardas las contraseñas sin encriptar (NO recomendado)
-    //   });
-
-    // console.log("Sesión generada:", session);
-
-    // if (sessionError) {
-    //   return new Response(
-    //     JSON.stringify({ success: false, message: "Error al crear sesión" }),
-    //     { status: 500, headers: { "Content-Type": "application/json" } }
-    //   );
-    // }
-
     if (!process.env.JWT_SECRET) {
       throw new Error("JWT_SECRET is not defined in environment variables");
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1m",
+      expiresIn: "12m",
     });
     // Devolver éxito y token
     const response: LoginResponse = {
       id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.rol,
+      rol: user.rol,
       token: token,
     };
+
+    console.log("Response de getUsuario:", JSON.stringify(response, null, 2));
 
     return new Response(JSON.stringify(response), {
       status: 200,

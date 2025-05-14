@@ -1,8 +1,8 @@
 //TODO: Una especie de loading hasta que no cargue las imagenes
 
-import ThemedButton from "@/components/ThemedButton";
-import ThemedText from "@/components/ThemedText";
-import ThemedTextInput from "@/components/ThemedTextInput";
+import ThemedButton from "@/components/ThemedComponents/ThemedButton";
+import ThemedText from "@/components/ThemedComponents/ThemedText";
+import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -58,10 +58,10 @@ export default function RegisterScreen() {
           id: data.id,
           email: data.email,
           name: data.name,
-          roles: data.roles,
+          rol: data.rol,
           token: data.token,
         });
-        router.push("/(barber-app)/(client)");
+        router.push("/(barber-app)/(drawer)/(client)");
       } else {
         setError(data.message || "Error al iniciar sesión");
       }

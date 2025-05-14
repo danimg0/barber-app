@@ -5,7 +5,7 @@ type CheckStatusResponse = {
   id: string;
   email: string;
   name: string;
-  roles: number[];
+  rol: number;
   token: string;
 };
 
@@ -64,7 +64,7 @@ export async function GET(request: Request): Promise<Response> {
 
     // Generar un nuevo token (renovación)
     const newToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d", // Extendemos la duración en la renovación
+      expiresIn: "360d", // Extendemos la duración en la renovación
     });
 
     // Construir respuesta
@@ -72,7 +72,7 @@ export async function GET(request: Request): Promise<Response> {
       id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.rol,
+      rol: user.rol,
       token: newToken,
     };
 

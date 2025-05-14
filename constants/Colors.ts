@@ -21,7 +21,7 @@ const Colors = {
     background: "#FFFFFF",
   },
   dark: {
-    text: "#ECEDEE",
+    text: "#11181C",
     // background: '#151718',
     tint: tintColorDark,
     icon: "#9BA1A6",
@@ -30,7 +30,7 @@ const Colors = {
 
     primary: "#FF5656",
     secondary: "#6A7EFC",
-    tertiary: "",
+    tertiary: "EDF2F6",
     background: "#49454F",
   },
 };

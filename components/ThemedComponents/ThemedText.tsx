@@ -1,18 +1,20 @@
 import React from "react";
 import { Text, TextProps } from "react-native";
 
-type TextType = "normal" | "h1" | "h2" | "semi-bold" | "link";
+type TextType = "normal" | "h1" | "h2" | "h3" | "semi-bold" | "link";
 
 interface Props extends TextProps {
   className?: string;
   type?: TextType;
-  children: string;
+  children: string | string[];
+  textBlack?: boolean;
 }
 
 const ThemedText = ({
   className,
   type = "normal",
   children,
+  textBlack,
   ...rest
 }: Props) => {
   const textType = {
@@ -20,7 +22,8 @@ const ThemedText = ({
     normal: "font-merriweather",
     h1: "text-3xl font-bold font-rye",
     h2: "text-2xl font-semibold font-rye ",
-    "semi-bold": "font-semibold font-merriweather",
+    h3: "text-xl font-semibold font-merriweather",
+    "semi-bold": "text-lg font-semibold font-merriweather",
     link: "text-blue-500 underline font-merriweather",
   };
 
@@ -28,7 +31,13 @@ const ThemedText = ({
   // viene en las propiedades del ...rest al heredar
   return (
     <Text
-      className={["text-white", className, textType[type]].join(" ")}
+      className={[
+        className,
+        textType[type],
+        //TODO: Dejarlo bien para el modo oscuro / claro
+        // textBlack ? "text-black dark:text-black" : "text-black dark:text-black",
+        textBlack ? "text-black dark:text-black" : "text-white",
+      ].join(" ")}
       {...rest}
     >
       {children}

@@ -1,5 +1,6 @@
 import { authCheckStatus, authLogin } from "@/core/actions/auth-actions";
 import { User } from "@/core/auth/interface/user";
+import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { create } from "zustand";
 
 export type AuthStatus =
@@ -21,7 +22,8 @@ export interface AuthState {
   checkStatus: () => Promise<void>;
   logout: () => Promise<void>;
 
-  changeStatus: (token?: string, user?: User) => boolean;
+  //Le tengo que poner lo de promise cuando la funcion es async
+  changeStatus: (token?: string, user?: User) => Promise<boolean>;
 }
 
 // El get nos da acceso a todo el state
@@ -34,21 +36,25 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   user: undefined,
 
   //Para usar esta funcion en el checkStatus y en el login, llamamos a changeStatus
-  changeStatus: (token?: string, user?: User) => {
+  changeStatus: async (token?: string, user?: User) => {
     if (!token || !user) {
+      console.log("Deslogeandose por token:", token, " o user:", user);
       //Si la respuesta es nula, no esta autenticado. Hacemos limpieza de valores
+      console.log("Usuario NO autenticado");
       set({ status: "unauthenticated", token: undefined, user: undefined });
-      //TODO: llamar logout (para limpiar)
+      await SecureStorageAdapter.deleteItem("token");
       return false;
     }
     //Si la respuesta no es nula, llamamos al set para cambiar el estado, nuestra funcion dispatcher
+    console.log("Usuario autenticado");
     set({
       status: "authenticated",
       token: token,
       user: user,
     });
 
-    //TODO: guardar el token en secure storage
+    await SecureStorageAdapter.setItem("token", token);
+    console.log("token actualizado:", token);
 
     return true;
   },
@@ -57,38 +63,19 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   //Metodos (en verda en zunstand se les llama acciones)
   login: async (email: string, password: string) => {
     const resp = await authLogin(email, password);
-    //Gracias al changestatus no hace falta todo lo de abajo
     return get().changeStatus(resp?.token, resp?.user);
-
-    // if (!resp) {
-    //   //Si la respuesta es nula, no esta autenticado. Hacemos limpieza de valores
-    //   set({ status: "authenticated", token: undefined, user: undefined });
-    //   return false;
-    // }
-    // //Si la respuesta no es nula, llamamos al set para cambiar el estado, nuestra funcion dispatcher
-    // set({ status: "authenticated", token: resp.token, user: resp.user });
-
-    // //TODO: guardar el token en secure storage
-
-    // return true;
   },
 
   checkStatus: async () => {
+    console.log("Checkeando status");
     const resp = await authCheckStatus();
-    get().changeStatus(resp?.token, resp?.user);
-    // if (!resp) {
-    //   set({ status: "authenticated", token: undefined, user: undefined });
-    //   return;
-    // }
-    // set({ status: "authenticated", token: resp.token, user: resp.user });
-
-    // //TODO: guardar el token en secure storage
-
-    // return;
+    console.log("Resp en el checkStatus:", resp);
+    await get().changeStatus(resp?.token, resp?.user);
   },
 
   logout: async () => {
-    //TODO: limpiar el token del secure storage
+    console.log("Deslogeandose");
+    await SecureStorageAdapter.deleteItem("token");
     set({ status: "unauthenticated", token: undefined, user: undefined });
   },
 }));

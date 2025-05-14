@@ -8,8 +8,16 @@ import { useFonts } from "expo-font";
 
 import "../global.css";
 
+import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Stack } from "expo-router";
+import { useEffect } from "react";
+import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import useAuthStore from "./auth/store/useAuthStore";
+
+//LAYOUT RAIZ
+// TEMAS, FUENTES, CHECKSTATUS
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -18,24 +26,34 @@ export default function RootLayout() {
     Merriweather: require("../assets/fonts/Merriweather_24pt-Regular.ttf"),
     Rye: require("../assets/fonts/Rye-Regular.ttf"),
   });
+  const { checkStatus } = useAuthStore();
+
+  useEffect(() => {
+    console.log("Verificando estado de autenticación una sola vez");
+    checkStatus();
+  }, []);
 
   if (!loaded) {
     // Async font loading only occurs in development.
     return null;
   }
 
+  //TODO: revisar video pantalla registro de fernando para el parpadeo
   return (
-    // <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {/* <Text className="">Hola</Text> */}
-
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      ></Stack>
-
-      {/* <StatusBar style="auto" /> */}
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        {/* <Text className="">Hola</Text> */}
+        <View style={{ flex: 1, backgroundColor: "#000000" }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: Colors.dark.background },
+              animation: "fade", // Usar animación fade en vez de slide
+            }}
+          />
+        </View>
+        {/* <StatusBar style="auto" /> */}
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
