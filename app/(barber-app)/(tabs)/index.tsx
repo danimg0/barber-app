@@ -18,23 +18,23 @@ const DrawerIndexScreen = () => {
   );
 
   useEffect(() => {
-    //TODO: Cuando me voy al perfil y luego al home, ya no me entra aqui, fix
     console.log(
       `DEBUG drawer.index --> Estado ${status} y usuario ${user?.rol}`
     );
 
     if (status === "authenticated" && user !== null) {
       if (user?.rol === ROLE.ADMIN) {
-        router.replace("/(barber-app)/(drawer)/(admin)");
+        router.replace("/(barber-app)/(tabs)/(admin)");
       } else if (user?.rol === ROLE.EMPLEADO) {
-        router.replace("/(barber-app)/(drawer)/(barber)");
+        router.replace("/(barber-app)/(tabs)/(barber)");
       } else if (user?.rol === ROLE.CLIENTE) {
-        router.replace("/(barber-app)/(drawer)/(client)");
+        router.replace("/(barber-app)/(tabs)/(client)");
         // return <Redirect  href={"/(barber-app)/(drawer)/(client)"} />;
       }
     } else {
       router.push("/auth/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, user, new Date()]); // Dependencias para que se ejecute cuando cambien
 
   // Renderiza un loading o contenido temporal mientras se procesa la redirección

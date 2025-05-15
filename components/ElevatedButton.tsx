@@ -20,7 +20,7 @@ const ElevatedButton = ({
 }: Props) => {
   const { width, height } = useWindowDimensions();
   const rightPosition = width * 0.1;
-  const bottomPosition = height * 0.1;
+  const bottomPosition = height * 0.075;
 
   //TODO: distintos tamaños, izquierda o derecha
 

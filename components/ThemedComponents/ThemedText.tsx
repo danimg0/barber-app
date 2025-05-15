@@ -20,7 +20,7 @@ const ThemedText = ({
   const textType = {
     //TODO: Anadir font-family que sea a cada parte
     normal: "font-merriweather",
-    h1: "text-3xl font-bold font-rye",
+    h1: "text-3xl font-semibold font-rye",
     h2: "text-2xl font-semibold font-rye ",
     h3: "text-xl font-semibold font-merriweather",
     "semi-bold": "text-lg font-semibold font-merriweather",
@@ -32,8 +32,8 @@ const ThemedText = ({
   return (
     <Text
       className={[
-        className,
         textType[type],
+        className,
         //TODO: Dejarlo bien para el modo oscuro / claro
         // textBlack ? "text-black dark:text-black" : "text-black dark:text-black",
         textBlack ? "text-black dark:text-black" : "text-white",
