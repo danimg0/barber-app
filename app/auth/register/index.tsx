@@ -61,7 +61,7 @@ export default function RegisterScreen() {
           rol: data.rol,
           token: data.token,
         });
-        router.push("/(barber-app)/(drawer)/(client)");
+        router.push("/(barber-app)/(tabs)/(client)");
       } else {
         setError(data.message || "Error al iniciar sesión");
       }

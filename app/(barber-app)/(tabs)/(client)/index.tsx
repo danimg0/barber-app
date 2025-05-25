@@ -23,6 +23,7 @@ const ClienteIndex = () => {
           icon="bookmark-outline"
           border
           background="secondary"
+          onPress={() => router.replace("/reserva-cita/eleccion-barbero")}
         >
           <ThemedText>Reservar cita</ThemedText>
         </ThemedButton>

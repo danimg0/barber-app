@@ -1,6 +1,6 @@
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
-import { barberApi } from "../auth/api/barberApi";
-import { User } from "../auth/interface/user";
+import { barberApi } from "../api/barberApi";
+import { User } from "../interface/user";
 
 export interface AuthResponse {
   id: number;

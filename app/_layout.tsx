@@ -10,6 +10,7 @@ import "../global.css";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { View } from "react-native";
@@ -18,6 +19,16 @@ import useAuthStore from "./auth/store/useAuthStore";
 
 //LAYOUT RAIZ
 // TEMAS, FUENTES, CHECKSTATUS
+
+//Configuracion de tanstack query
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      //Reintentar si una peticion falla, tambien se le puede poner un numero de intentos
+      retry: false,
+    },
+  },
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -41,19 +52,24 @@ export default function RootLayout() {
   //TODO: revisar video pantalla registro de fernando para el parpadeo
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        {/* <Text className="">Hola</Text> */}
-        <View style={{ flex: 1, backgroundColor: "#000000" }}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: Colors.dark.background },
-              animation: "fade", // Usar animación fade en vez de slide
-            }}
-          />
-        </View>
-        {/* <StatusBar style="auto" /> */}
-      </ThemeProvider>
+      {/* Configuracion de tanstack query */}
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          {/* <Text className="">Hola</Text> */}
+          <View style={{ flex: 1, backgroundColor: "#000000" }}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: Colors.dark.background },
+                animation: "fade", // Usar animación fade en vez de slide
+              }}
+            />
+          </View>
+          {/* <StatusBar style="auto" /> */}
+        </ThemeProvider>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }

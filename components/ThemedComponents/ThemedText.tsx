@@ -34,10 +34,12 @@ const ThemedText = ({
       className={[
         textType[type],
         className,
-        //TODO: Dejarlo bien para el modo oscuro / claro
-        // textBlack ? "text-black dark:text-black" : "text-black dark:text-black",
-        textBlack ? "text-black dark:text-black" : "text-white",
-      ].join(" ")}
+        // Solo añade color por defecto si no hay ninguno en className
+        !className?.includes("text-") &&
+          (textBlack ? "text-black dark:text-black" : "text-white"),
+      ]
+        .filter(Boolean)
+        .join(" ")}
       {...rest}
     >
       {children}

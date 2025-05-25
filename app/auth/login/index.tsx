@@ -51,11 +51,11 @@ export default function LoginScreen() {
       const { user } = useAuthStore.getState();
       console.log("wasSuccesful, usuario: ", user);
       if (user?.rol === 1) {
-        router.replace("/(barber-app)/(drawer)/(admin)");
+        router.replace("/(barber-app)/(tabs)/(admin)");
       } else if (user?.rol === 2) {
-        router.replace("/(barber-app)/(drawer)/(barber)");
+        router.replace("/(barber-app)/(tabs)/(barber)");
       } else if (user?.rol === 3) {
-        router.replace("/(barber-app)/(drawer)/(client)");
+        router.replace("/(barber-app)/(tabs)/(client)");
       }
       return;
     }

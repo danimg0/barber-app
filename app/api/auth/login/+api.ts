@@ -1,4 +1,4 @@
-import { supabase } from "@/core/supabase";
+import { supabase } from "@/constants/supabase";
 import jwt from "jsonwebtoken";
 
 // Tipos para la solicitud y respuesta
