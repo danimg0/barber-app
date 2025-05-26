@@ -1,6 +1,7 @@
 import useAuthStore from "@/app/auth/store/useAuthStore";
 import BarberoCard from "@/components/BarberoCard";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
+import ThemedMultiselect from "@/components/ThemedComponents/ThemedMultiselect";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
@@ -12,7 +13,6 @@ import { useBarbero } from "@/hooks/barberos/useBarbero";
 import { useCitaHorasDisponibles } from "@/hooks/citas/useCitaHorasDisponibles";
 import { useServicios } from "@/hooks/servicios/useServicios";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
-import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { Formik } from "formik";
 import React, { useRef, useState } from "react";
@@ -23,9 +23,9 @@ import {
   Modal,
   View,
 } from "react-native";
-import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { TextInput } from "react-native-gesture-handler";
 import { ThemedDatePicker } from "../../../../../../components/ThemedComponents/ThemedDateInput";
+import ThemedDropdown from "../../../../../../components/ThemedComponents/ThemedDropdown";
 
 const SeleccionCitaScreen = () => {
   const { barberoId } = useLocalSearchParams();
@@ -92,7 +92,7 @@ const SeleccionCitaScreen = () => {
               nombreBarbero: barberoData.nombre,
               fotoPerfil: barberoData.foto,
               duracionTotal: 0,
-              fechaCita: citaFinal.fecha,
+              fechaCita: new Date(citaFinal.fecha),
               horaFin: citaFinal.hora,
               horaInicio: citaFinal.hora,
               idCita: 0,
@@ -128,6 +128,7 @@ const SeleccionCitaScreen = () => {
           isValid, // cuando todos los campos pasan las reglas de validacion
           dirty, // es true si el usuario ha cambiado algo de los valores iniciales, si no es false
         }) => {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           const { horasCitaDisponiblesQuery } = useCitaHorasDisponibles(
             Number(barberoId),
             values.servicios,
@@ -173,43 +174,12 @@ const SeleccionCitaScreen = () => {
                   Servicios
                 </ThemedText>
                 <View className="mt-4 min-w-[113%]">
-                  <MultiSelect
-                    style={{
-                      backgroundColor: "white",
-                      width: "100%",
-                      borderRadius: 4,
-                      borderWidth: 1,
-                      borderColor: "#d1d5db", // gris claro, igual que border-gray-300
-                      paddingHorizontal: 4,
-                      paddingVertical: 11,
-                      marginBottom: 10,
-                      minHeight: 44,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                    containerStyle={{
-                      borderRadius: 16, // <-- redondea el menú desplegable
-                      backgroundColor: "white",
-                      overflow: "hidden",
-                    }}
-                    //TODO: cambiar fontFamily a merriweather
-                    placeholderStyle={{
-                      color: "#5c5c5c", // igual que placeholderTextColor
-                      fontSize: 14,
-                    }}
-                    //Container de abajo
-                    selectedStyle={{
-                      borderRadius: 16,
-                      backgroundColor: "grey",
-                    }}
-                    //Texto de los containers de abajo
-                    selectedTextStyle={{
-                      color: "white", // texto negro
-                      fontSize: 13,
-                    }}
-                    //Esto es para los contenedores de abajo
-                    //   renderSelectedItem={() => <ThemedText>hola</ThemedText>}
-                    //Items del dropdown
+                  <ThemedMultiselect
+                    value={values.servicios}
+                    placeholder="Selecciona uno o más servicios"
+                    labelField="nombre"
+                    valueField="id"
+                    icon={"cut-outline"}
                     renderItem={(item, selected) => (
                       <View
                         key={item.id}
@@ -229,22 +199,10 @@ const SeleccionCitaScreen = () => {
                         </ThemedText>
                       </View>
                     )}
-                    renderLeftIcon={() => (
-                      <Ionicons
-                        name="cut-outline"
-                        size={24}
-                        className="ml-2 mr-4"
-                      />
-                    )}
-                    data={serviciosDisponibles}
-                    labelField="nombre"
-                    valueField="id"
-                    placeholder="Selecciona uno o más servicios"
-                    value={values.servicios}
                     onChange={(item) => {
-                      console.log("campo anadido", item);
                       setFieldValue("servicios", item);
                     }}
+                    elementosDespegables={serviciosDisponibles}
                   />
                 </View>
                 {/* hora */}
@@ -253,34 +211,24 @@ const SeleccionCitaScreen = () => {
                 </ThemedText>
                 {values.fecha != null && values.servicios[0] != null ? (
                   <View className="mt-4 min-w-[113%]">
-                    <Dropdown
-                      style={{
-                        backgroundColor: "white",
-                        width: "100%",
-                        borderRadius: 4,
-                        borderWidth: 1,
-                        borderColor: "#d1d5db",
-                        paddingHorizontal: 4,
-                        paddingVertical: 11,
-                        marginBottom: 10,
-                        minHeight: 44,
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                      containerStyle={{
-                        borderRadius: 16,
-                        backgroundColor: "white",
-                        overflow: "hidden",
-                      }}
-                      //TODO: cambiar fontFamily a merriweather
-                      placeholderStyle={{
-                        color: "#5c5c5c",
-                        fontSize: 14,
-                      }}
-                      selectedTextStyle={{
-                        color: "black",
-                        fontSize: 13,
-                      }}
+                    <ThemedDropdown
+                      elementosDespegables={
+                        (horasCitaDisponiblesQuery.data?.horasDisponibles ?? [])
+                          .length > 0
+                          ? horasCitaDisponiblesQuery.data.horasDisponibles.map(
+                              (hora: any) => ({
+                                label: hora,
+                                value: hora,
+                              })
+                            )
+                          : [{ label: "No hay horas", value: "" }]
+                      }
+                      icon="time-outline"
+                      labelField="label"
+                      valueField="value"
+                      onChange={(item) => setFieldValue("hora", item.value)}
+                      placeholder="Selecciona tu hora"
+                      value={values.hora}
                       renderItem={(item, selected) => (
                         <View
                           key={item.value}
@@ -295,29 +243,6 @@ const SeleccionCitaScreen = () => {
                           </ThemedText>
                         </View>
                       )}
-                      renderLeftIcon={() => (
-                        <Ionicons
-                          name="time-outline"
-                          size={24}
-                          className="ml-2 mr-4"
-                        />
-                      )}
-                      data={
-                        (horasCitaDisponiblesQuery.data?.horasDisponibles ?? [])
-                          .length > 0
-                          ? horasCitaDisponiblesQuery.data.horasDisponibles.map(
-                              (hora: any) => ({
-                                label: hora,
-                                value: hora,
-                              })
-                            )
-                          : [{ label: "No hay horas", value: "" }]
-                      }
-                      labelField="label"
-                      valueField="value"
-                      placeholder="Selecciona tu hora"
-                      value={values.hora}
-                      onChange={(item) => setFieldValue("hora", item.value)}
                     />
                   </View>
                 ) : (

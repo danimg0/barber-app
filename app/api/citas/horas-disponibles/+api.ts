@@ -132,6 +132,7 @@ function calculaHorasDisponibles(
   console.log("Calculando horas en el tramo", inicioTramo, finTramo);
 
   // Convierte una hora "HH:mm:ss" a minutos desde medianoche
+  // Para hacer las comparaciones
   function horaToMinutos(hora: string): number {
     const [h, m, s] = hora.split(":").map(Number);
     return h * 60 + m + Math.floor((s || 0) / 60);
@@ -143,29 +144,41 @@ function calculaHorasDisponibles(
     const m = (minutos % 60).toString().padStart(2, "0");
     return `${h}:${m}`;
   }
+  //Coger los minutos del inicio y el final del horario
   const inicioMin = horaToMinutos(inicioTramo);
   const finMin = horaToMinutos(finTramo);
 
+  //Se ordenan las citas por hora
   const citasOrdenadas = [...citasCogidas].sort(
     (a, b) => horaToMinutos(a.hora_inicio) - horaToMinutos(b.hora_inicio)
   );
 
   const horasDisponibles: string[] = [];
+  //Hora de apertura, inicioHorario
   let actual = inicioMin;
 
-  for (; actual + duracionServicios <= finMin; ) {
+  while (actual + duracionServicios <= finMin) {
+    //Se comprueba si la franja elegida choca con alguna cita yas cogida
     const citaSolapada = citasOrdenadas.find((cita) => {
+      //En las citas que hay, se coge para cada cita, la hora de inicio
       const citaInicio = horaToMinutos(cita.hora_inicio);
+      //La hora de fin de esa cita
       const citaFin = citaInicio + cita.duracion_total;
+      //Final del hueco de tiempo a evaluar
       const intervaloFin = actual + duracionServicios;
+
+      //actual es el minuto actual (dede medianoche ) que se esta evaluando
+      //Se comprueba si el hueco de tiempo a evaluar (actual + intervaloFin) se solapa con cita existente (citaInicio y citaFin)
       return actual < citaFin && intervaloFin > citaInicio;
     });
 
+    //Si hay solape, se salta al final de esa cita
     if (citaSolapada) {
       const citaFin =
         horaToMinutos(citaSolapada.hora_inicio) + citaSolapada.duracion_total;
       actual = citaFin;
     } else {
+      //Si no lo hay, se anade la hora a las horas disponibles y se suma la duracion de los servicios al horario
       horasDisponibles.push(minutosToHora(actual));
       actual += duracionServicios;
     }
