@@ -1,5 +1,14 @@
 import { supabase } from "@/constants/supabase";
+import * as crypto from "crypto";
 import jwt from "jsonwebtoken";
+//https://www.honeybadger.io/blog/encryption-and-decryption-in-typescript/
+//Se usara cifrado simetrico
+const algorithm = "aes-256-cbc"; //algoritmo de cifrado
+// const key = crypto.randomBytes(32); //clave random de 32 bytes
+//iv representa el vector de inicializacion, que se usa para aumentar la seguridad del proceso de cifrado
+// const iv = crypto.randomBytes(16);
+const key = Buffer.from(process.env.ENCRYPTION_KEY!, "utf-8");
+const iv = Buffer.from(process.env.ENCRYPTION_IV!, "utf-8");
 // Funciones de autenticacion y helpers
 
 export async function getUserFromRequest(request: Request) {
@@ -35,4 +44,32 @@ export async function getUserFromRequest(request: Request) {
   }
 
   return { user };
+}
+
+/**
+ * Crea un objeto cipher con el alhoritmo, clave y vector de inicializacion.
+ * El cipher.update procesa la entrada en utf-8 y la codifica en hex
+ * @param password
+ * @returns
+ */
+export function encriptar(password: string) {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(password, "utf-8", "hex");
+  encrypted += cipher.final("hex");
+  //devuelve el texto cifrado en formato hexadecimal
+  return encrypted;
+}
+export function desincriptar(password: string) {
+  console.log("Comenzando a desencriptar");
+  console.log("key", key, "iv", iv);
+
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  let decrypted = decipher.update(password, "hex", "utf-8");
+  console.log("Decipher creado y update done");
+
+  decrypted += decipher.final("utf-8");
+
+  console.log("resutlado: ", decrypted);
+
+  return decrypted;
 }

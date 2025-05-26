@@ -1,3 +1,4 @@
+import { desincriptar } from "@/backend/utils/authHelper";
 import { supabase } from "@/constants/supabase";
 import jwt from "jsonwebtoken";
 
@@ -53,7 +54,18 @@ export async function POST(request: Request): Promise<Response> {
     // Con Supabase, lo ideal es usar auth.signInWithPassword, pero para este ejemplo
     // estamos comparando passwords manualmente.
     // En un entorno real, deberías usar bcrypt para verificar las contraseñas
-    if (user.password !== password) {
+
+    let passwordDesencriptada = "";
+
+    if (user.password === "dani") {
+      passwordDesencriptada = "dani";
+    } else {
+      passwordDesencriptada = desincriptar(user.password);
+    }
+
+    console.log("contrasena desencript", passwordDesencriptada);
+
+    if (passwordDesencriptada !== password) {
       // Esto es solo para el ejemplo, NO es seguro en producción
       return new Response(
         JSON.stringify({ success: false, message: "Contraseña incorrecta" }),

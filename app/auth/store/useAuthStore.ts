@@ -1,4 +1,9 @@
-import { authCheckStatus, authLogin } from "@/core/auth/actions/auth-actions";
+import { ApiResponse } from "@/app/api/types/responses";
+import {
+  authCheckStatus,
+  authLogin,
+  authRegister,
+} from "@/core/auth/actions/auth-actions";
 import { User } from "@/core/auth/interface/user";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { create } from "zustand";
@@ -21,6 +26,13 @@ export interface AuthState {
   //Determina el estado de la autenticacion en el json o en el token
   checkStatus: () => Promise<void>;
   logout: () => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    phone: string,
+    rol: number,
+    password: string
+  ) => Promise<{ success: boolean; message: string }>;
 
   //Le tengo que poner lo de promise cuando la funcion es async
   changeStatus: (token?: string, user?: User) => Promise<boolean>;
@@ -64,6 +76,24 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   login: async (email: string, password: string) => {
     const resp = await authLogin(email, password);
     return get().changeStatus(resp?.token, resp?.user);
+  },
+
+  register: async (
+    name: string,
+    email: string,
+    phone: string,
+    rol: number,
+    password: string
+  ) => {
+    const resp: ApiResponse = await authRegister({
+      name,
+      email,
+      phone,
+      rol,
+      password,
+    });
+
+    return resp;
   },
 
   checkStatus: async () => {

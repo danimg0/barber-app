@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/app/api/types/responses";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { barberApi } from "../api/barberApi";
 import { User } from "../interface/user";
@@ -124,21 +125,31 @@ export const authCheckStatus = async () => {
 };
 
 //TODO: Registro
-export const authRegister = async () => {
+interface RegistroProps {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  rol: number;
+}
+export const authRegister = async (datos: RegistroProps) => {
   try {
-    //TODO: Add interface al post (cambiar el any)
-    const { data } = await barberApi.post<any>("/auth/register", {
-      name: "",
-      email: "",
-      phone: "",
-      password: "", //TODO: Encriptar
-      rol: "",
-      //TODO: terminar campos
+    console.log("authRegister llamado", datos);
+
+    const { data } = await barberApi.post<ApiResponse>("/auth/register", {
+      datos,
     });
 
-    return returnUserToken(data);
+    const resp: ApiResponse = data;
+
+    return resp;
   } catch (error) {
-    console.log("Error: ", error);
-    throw new Error("Error al registrarse");
+    // Si es un error de Axios, saca el mensaje del backend
+    if (error.response && error.response.data) {
+      return error.response.data; // { success: false, message: ... }
+    }
+    // Si no, lanza un error genérico
+    console.log("Error en registro en action: ", error);
+    throw new Error(`Error ${error} `);
   }
 };

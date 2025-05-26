@@ -1,5 +1,6 @@
 //TODO: Una especie de loading hasta que no cargue las imagenes
 
+import { ApiResponse } from "@/app/api/types/responses";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
@@ -15,62 +16,103 @@ import {
   ScrollView,
   View,
 } from "react-native";
+import useAuthStore from "../store/useAuthStore";
 
 export default function RegisterScreen() {
+  const { register } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [inputs, setInputs] = useState({
+    name: "",
     email: "",
+    phone: "",
     password: "",
+    tryPassword: "",
   });
 
   function handleChange(name: string, value: string) {
     setInputs((prev) => ({ ...prev, [name]: value }));
   }
 
-  const handleLogin = async () => {
-    try {
-      setLoading(true);
-      setError("");
-
-      // Validación básica
-      if (!inputs.email || !inputs.password) {
-        setError("Por favor, complete todos los campos");
-        return;
-      }
-
-      // Llamada a la API
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: inputs.email,
-          password: inputs.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data) {
-        console.log("Usuario logueado:", {
-          id: data.id,
-          email: data.email,
-          name: data.name,
-          rol: data.rol,
-          token: data.token,
-        });
-        router.push("/(barber-app)/(tabs)/(client)");
-      } else {
-        setError(data.message || "Error al iniciar sesión");
-      }
-    } catch (err) {
-      setError("Error de conexión. Inténtelo más tarde.");
-      console.error(err);
-    } finally {
-      setLoading(false);
+  const handleRegister = async () => {
+    if (
+      !inputs.email ||
+      !inputs.password ||
+      !inputs.name ||
+      !inputs.phone ||
+      !inputs.tryPassword
+    ) {
+      setError("Por favor, complete todos los campos");
+      return;
     }
+
+    if (inputs.password !== inputs.tryPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
+    // setLoading(true);
+
+    const resp: ApiResponse = await register(
+      inputs.name,
+      inputs.email,
+      inputs.phone,
+      1,
+      inputs.password
+    );
+
+    console.log("Resp recibida", resp);
+
+    if (resp.success) {
+      router.replace("/auth/login");
+    } else {
+      // Alert.alert(
+      //   "Error en el registro",
+      //   "Ha ocurrido un error al registrar el usuario"
+      // );
+      setError(resp.message);
+      router.reload();
+    }
+
+    setLoading(false);
+    // try {
+    //   setLoading(true);
+    //   setError("");
+    //   // Validación básica
+    //   if (!inputs.email || !inputs.password) {
+    //     setError("Por favor, complete todos los campos");
+    //     return;
+    //   }
+    // Llamada a la API
+    // const response = await fetch("/api/auth", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     email: inputs.email,
+    //     password: inputs.password,
+    //   }),
+    // });
+    // const data = await response.json();
+    //   if (data) {
+    //     console.log("Usuario logueado:", {
+    //       id: data.id,
+    //       email: data.email,
+    //       name: data.name,
+    //       rol: data.rol,
+    //       token: data.token,
+    //     });
+    //     router.push("/(barber-app)/(tabs)/(client)");
+    //   } else {
+    //     setError(data.message || "Error al iniciar sesión");
+    //   }
+    // } catch (err) {
+    //   setError("Error de conexión. Inténtelo más tarde.");
+    //   console.error(err);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (
@@ -110,53 +152,51 @@ export default function RegisterScreen() {
               </ThemedText>
               {/* inputs registro */}
               <ThemedTextInput
-                // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
                 placeholder="Nombre"
                 keyboardType="default"
                 autoCapitalize="none"
                 icon="person-outline"
-                // onChangeText={(value) => handleChange("email", value)}
+                value={inputs.name}
+                onChangeText={(value) => handleChange("name", value)}
               />
               {/* correo */}
               <ThemedTextInput
-                // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
                 placeholder="Correo electrónico"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 icon="mail-outline"
-                // onChangeText={(value) => handleChange("email", value)}
+                value={inputs.email}
+                onChangeText={(value) => handleChange("email", value)}
               />
               {/* telefono */}
               {/* //TODO: Poner un icono de informacion y si le pulsa, abrir modal informando de porque tiene que dar el tlf */}
               <ThemedTextInput
-                // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
                 placeholder="Teléfono"
                 keyboardType="phone-pad"
                 autoCapitalize="none"
                 icon="phone-portrait-outline"
-                // onChangeText={(value) => handleChange("email", value)}
+                value={inputs.phone}
+                onChangeText={(value) => handleChange("phone", value)}
               />
               {/* password */}
               {/* //TODO: ojito para ver la contrasena? */}
               <ThemedTextInput
-                // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Contraseña"
                 secureTextEntry
-                // onChangeText={(value) => handleChange("password", value)}
+                onChangeText={(value) => handleChange("password", value)}
                 value={inputs.password}
                 icon="lock-closed-outline"
               />
               <ThemedTextInput
-                // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Repetir contraseña"
                 secureTextEntry
-                // onChangeText={(value) => handleChange("password", value)}
-                value={inputs.password}
+                onChangeText={(value) => handleChange("tryPassword", value)}
+                value={inputs.tryPassword}
                 icon="lock-closed-outline"
               />
-              {/* boton login */}
+              {/* boton Registro */}
               <ThemedButton
-                onPress={handleLogin}
+                onPress={handleRegister}
                 disabled={loading}
                 className="bg-light-primary w-[50%]"
                 icon="log-in-outline"
