@@ -2,6 +2,7 @@ import CitaCard from "@/components/CitaCard";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import Colors from "@/constants/Colors";
 import { CitaUsuarioEntitie } from "@/core/entities/cita.entitie";
 import { useCita } from "@/hooks/citas/useCita";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
@@ -45,27 +46,49 @@ const ConfirmacionReservaScreen = () => {
     });
   };
 
+  const handleCancel = () => {
+    SecureStorageAdapter.deleteItem("citaActual");
+    router.replace("/");
+  };
+
   //TODO: añadir boton de cancelar cita
   return (
-    <ThemedView className="items-center justify-center">
-      <View className="w-[80%] mb-10 flex items-center">
+    <ThemedView className="items-center">
+      <View className="w-[80%] mb-10 flex-1 items-center justify-around ">
         <ThemedText type="h2" className="">
           Confirmar reserva
         </ThemedText>
         <CitaCard confirmacion cita={cita} />
-        <ThemedButton
-          onPress={handleSubmit}
-          icon="bookmark-outline"
-          background="primary"
-          iconColor="black"
-          disabled={citaMutation.isPending}
-        >
-          {citaMutation.isPending ? (
-            <ActivityIndicator />
-          ) : (
-            <ThemedText textBlack>Finalizar reserva</ThemedText>
-          )}
-        </ThemedButton>
+        <View className="flex flex-row gap-x-8">
+          <ThemedButton
+            onPress={handleCancel}
+            icon="close-circle-outline"
+            border
+            className="border-dark-primary"
+            iconColor={Colors.dark.primary}
+          >
+            {citaMutation.isPending ? (
+              <ActivityIndicator />
+            ) : (
+              <ThemedText className="text-dark-primary">
+                Cancelar reserva
+              </ThemedText>
+            )}
+          </ThemedButton>
+          <ThemedButton
+            onPress={handleSubmit}
+            icon="bookmark-outline"
+            background="secondary"
+            iconColor="white"
+            disabled={citaMutation.isPending}
+          >
+            {citaMutation.isPending ? (
+              <ActivityIndicator />
+            ) : (
+              <ThemedText>Finalizar reserva</ThemedText>
+            )}
+          </ThemedButton>
+        </View>
       </View>
     </ThemedView>
   );

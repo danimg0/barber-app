@@ -2,7 +2,7 @@ import { barberApi } from "@/core/auth/api/barberApi";
 
 //limit y offset para manejar paginacion
 export const getCitasByUser = async (
-  rol: number,
+  rol?: number,
   id?: number,
   limit = 4,
   offset = 0

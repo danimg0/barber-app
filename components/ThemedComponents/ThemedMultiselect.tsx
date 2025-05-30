@@ -37,7 +37,6 @@ const ThemedMultiselect = ({
         borderColor: "#d1d5db", // gris claro, igual que border-gray-300
         paddingHorizontal: 4,
         paddingVertical: 11,
-        marginBottom: 10,
         minHeight: 44,
         flexDirection: "row",
         alignItems: "center",

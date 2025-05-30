@@ -7,7 +7,8 @@ export const ESTADO_CITA = {
   CONFIRMADA: 6,
 };
 
-export const mapEstadoCita = (estadoStr: string): number => {
+export const mapEstadoCitaStrToNumber = (estadoStr: string): number => {
+  estadoStr = estadoStr.toLowerCase();
   switch (estadoStr) {
     case "pendiente":
       return ESTADO_CITA.PENDIENTE;
@@ -22,6 +23,6 @@ export const mapEstadoCita = (estadoStr: string): number => {
     case "confirmada":
       return ESTADO_CITA.CONFIRMADA;
     default:
-      return -1; // or any default number indicating unknown state
+      return -1;
   }
 };

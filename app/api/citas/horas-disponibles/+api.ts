@@ -13,8 +13,6 @@ export async function GET(request: Request) {
   const servicios = url.searchParams.get("servicios");
   const dia = url.searchParams.get("dia");
 
-  console.log("servicios recibidos", servicios);
-
   if (!id_barbero || !servicios || !dia) {
     return new Response(
       JSON.stringify({ success: false, error: "Faltan parámetros" }),
@@ -22,11 +20,7 @@ export async function GET(request: Request) {
     );
   }
 
-  console.log("servicios en api antes de split", servicios);
   const arrServicios = servicios.split(",").map((ser) => Number(ser));
-  console.log("servicios en api despues de split", servicios);
-
-  console.log("servicios:", servicios);
 
   const { data: duracionServicios, error: errorDuracion } = await supabase
     .from("servicios")
@@ -44,8 +38,6 @@ export async function GET(request: Request) {
   const { data: horarioPeluquero } = await supabase
     .from("barberos_con_horarios")
     .select("horario");
-
-  console.log(horarioPeluquero);
 
   const duracionTotal =
     //DuracionServicios es el array de objetos duracion ([{duracion: 20}, {duracion: 30}])
@@ -108,7 +100,8 @@ export async function GET(request: Request) {
         duracionTotal ?? 20,
         citasDelDia ?? [],
         tramo.hora_inicio,
-        tramo.hora_fin
+        tramo.hora_fin,
+        fechaObj
       )
     );
   }
@@ -127,9 +120,16 @@ function calculaHorasDisponibles(
   duracionServicios: number,
   citasCogidas: citaDia[],
   inicioTramo: string,
-  finTramo: string
+  finTramo: string,
+  dia: Date
 ) {
-  console.log("Calculando horas en el tramo", inicioTramo, finTramo);
+  const dateActual = new Date();
+  //3 horas de antelacion para reservar
+  const horaMinimaReserva = new Date(dateActual.getTime() + 3 * 60 * 60 * 1000);
+  const horaMinima =
+    horaMinimaReserva.getHours().toString().padStart(2, "0") +
+    ":" +
+    horaMinimaReserva.getMinutes().toString().padStart(2, "0");
 
   // Convierte una hora "HH:mm:ss" a minutos desde medianoche
   // Para hacer las comparaciones
@@ -147,6 +147,7 @@ function calculaHorasDisponibles(
   //Coger los minutos del inicio y el final del horario
   const inicioMin = horaToMinutos(inicioTramo);
   const finMin = horaToMinutos(finTramo);
+  const horaMinimaMin = horaToMinutos(horaMinima);
 
   //Se ordenan las citas por hora
   const citasOrdenadas = [...citasCogidas].sort(
@@ -158,6 +159,10 @@ function calculaHorasDisponibles(
   let actual = inicioMin;
 
   while (actual + duracionServicios <= finMin) {
+    if (actual < horaMinimaMin && esHoy(dia, dateActual)) {
+      actual += duracionServicios;
+      continue;
+    }
     //Se comprueba si la franja elegida choca con alguna cita yas cogida
     const citaSolapada = citasOrdenadas.find((cita) => {
       //En las citas que hay, se coge para cada cita, la hora de inicio
@@ -166,7 +171,6 @@ function calculaHorasDisponibles(
       const citaFin = citaInicio + cita.duracion_total;
       //Final del hueco de tiempo a evaluar
       const intervaloFin = actual + duracionServicios;
-
       //actual es el minuto actual (dede medianoche ) que se esta evaluando
       //Se comprueba si el hueco de tiempo a evaluar (actual + intervaloFin) se solapa con cita existente (citaInicio y citaFin)
       return actual < citaFin && intervaloFin > citaInicio;
@@ -184,4 +188,12 @@ function calculaHorasDisponibles(
     }
   }
   return horasDisponibles;
+}
+
+function esHoy(d1: Date, d2: Date) {
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
 }

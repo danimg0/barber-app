@@ -13,7 +13,7 @@ const ThemedTextInput = forwardRef<TextInput, Props>(
 
     return (
       <View
-        className={`w-full flex-row items-center border rounded p-1 mb-2.5 bg-white ${
+        className={`w-full flex-row items-center border rounded p-1 bg-white ${
           isActive ? "border-red-500" : "border-gray-300"
         }`}
         onTouchStart={() =>

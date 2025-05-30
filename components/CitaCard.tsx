@@ -19,6 +19,8 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
   const serviciosSeleccionados: string[] = [];
   const { deleteCitaMutation } = useCita(cita.idCita);
 
+  console.log("fecha recibida en card", cita.fechaCita);
+
   // const serviciosPrueba = data
   //   //Me quedo solo con los servicios que hay
   //   ?.filter((servicio) => cita.servicios.includes(servicio.id))
@@ -54,7 +56,9 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
       </View>
       {/* Fecha / hora */}
       <View className="mt-3 ml-3">
-        {/* <ThemedText textBlack>Fecha: {cita.fechaCita.toISOString()}</ThemedText> */}
+        <ThemedText textBlack>
+          Fecha: {cita.fechaCita.toString().split("-").reverse().join("/")}
+        </ThemedText>
         <ThemedText textBlack>Hora: {cita.horaInicio}</ThemedText>
       </View>
       {/* Servicios */}

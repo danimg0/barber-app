@@ -15,3 +15,31 @@ export interface CitaUsuarioEntitie {
   precioTotal: number;
   duracionTotal: number;
 }
+
+export interface CitaEmpleadoEntitie {
+  id: number;
+  barberoId: number;
+  fecha: Date;
+  horaInicio: string;
+  estado: Estado;
+  cliente: Cliente;
+  servicios: Servicio[];
+}
+
+export interface Cliente {
+  id: number;
+  nombre: string;
+  telefono: null;
+}
+
+export interface Estado {
+  id: number;
+  tipo: string;
+}
+
+export interface Servicio {
+  id: number;
+  nombre: string;
+  precio: number;
+  duracion: number;
+}

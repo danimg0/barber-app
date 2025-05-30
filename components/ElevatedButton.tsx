@@ -1,4 +1,4 @@
-import openWhatsApp from "@/utils/button-functions/whatsapp-open";
+import openWhatsApp from "@/utils/helpers/whatsapp-open";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, useWindowDimensions } from "react-native";

@@ -2,12 +2,41 @@ import ElevatedButton from "@/components/ElevatedButton";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
-import { router } from "expo-router";
-import React from "react";
-import { Image, useWindowDimensions, View } from "react-native";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import {
+  Alert,
+  BackHandler,
+  Image,
+  useWindowDimensions,
+  View,
+} from "react-native";
 
 const ClienteIndex = () => {
   const { height } = useWindowDimensions();
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert("Salir", "Seguro que quieres salir de la aplicación?", [
+          {
+            text: "Cancelar",
+            onPress: () => null,
+            style: "cancel",
+          },
+          { text: "Salir", onPress: () => BackHandler.exitApp() },
+        ]);
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+
+      return () => subscription.remove();
+    }, [])
+  );
 
   return (
     <ThemedView className="flex items-center">

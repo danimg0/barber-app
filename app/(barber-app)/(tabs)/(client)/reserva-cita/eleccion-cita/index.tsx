@@ -3,7 +3,6 @@ import BarberoCard from "@/components/BarberoCard";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedMultiselect from "@/components/ThemedComponents/ThemedMultiselect";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
-import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { BarberoEleccionCard } from "@/core/entities/barbero.entitie";
 import { CitaUsuarioEntitie } from "@/core/entities/cita.entitie";
@@ -20,7 +19,6 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  Modal,
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -85,14 +83,15 @@ const SeleccionCitaScreen = () => {
           servicios: [],
         }}
         onSubmit={async (citaFinal) => {
-          console.log("anadiendo fecha", citaFinal.fecha);
+          // console.log("anadiendo fecha", citaFinal.fecha);
           try {
             const citaCompleta: CitaUsuarioEntitie = {
               idBarbero: parseInt(barberoIdStr),
               nombreBarbero: barberoData.nombre,
               fotoPerfil: barberoData.foto,
               duracionTotal: 0,
-              fechaCita: new Date(citaFinal.fecha),
+              //NO CONVERTIR A FECHA QUE SE ME JODE EL CITACARD
+              fechaCita: citaFinal.fecha,
               horaFin: citaFinal.hora,
               horaInicio: citaFinal.hora,
               idCita: 0,
@@ -103,7 +102,7 @@ const SeleccionCitaScreen = () => {
               servicios: citaFinal.servicios,
             };
 
-            console.log(`Guardando cita en storage: ${citaCompleta}`);
+            // console.log(`Guardando cita en storage: ${citaCompleta}`);
 
             await SecureStorageAdapter.setItem(
               "citaActual",
@@ -113,7 +112,7 @@ const SeleccionCitaScreen = () => {
             router.replace("/reserva-cita/confirmacion-reserva");
           } catch (error) {
             Alert.alert("Error", "No se pudo guardar la cita");
-            console.error(error);
+            // console.error(error);
           }
         }}
         validate={validate}
@@ -137,37 +136,16 @@ const SeleccionCitaScreen = () => {
           return (
             <KeyboardAvoidingView className="flex-1">
               <View className="flex-1 w-[80%] items-center">
-                <ThemedTextInput
-                  className="w-full"
-                  icon="calendar-clear-outline"
-                  placeholder="Elige una fecha"
-                  value={values.fecha}
-                  onPressIn={() => setShowCalendar(true)}
-                  ref={inputRef}
-                />
-                <Modal visible={showCalendar} transparent animationType="fade">
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: "rgba(0,0,0,0.5)",
-                      justifyContent: "center",
-                      alignItems: "center",
+                <View className="mt-4">
+                  <ThemedDatePicker
+                    value={values.fecha}
+                    onChange={(date: Date) => {
+                      setFieldValue("fecha", date.toISOString().split("T")[0]);
                     }}
-                  >
-                    <View style={{ marginTop: 80 }}>
-                      <ThemedDatePicker
-                        onChange={(date: Date) => {
-                          setFieldValue(
-                            "fecha",
-                            date.toISOString().split("T")[0]
-                          );
-                          setShowCalendar(false);
-                          inputRef.current?.blur();
-                        }}
-                      />
-                    </View>
-                  </View>
-                </Modal>
+                    placeholder="Elige una fecha"
+                    inputRef={inputRef}
+                  />
+                </View>
 
                 {/* servicios */}
                 <ThemedText type="h3" className="mt-4">
@@ -209,7 +187,7 @@ const SeleccionCitaScreen = () => {
                 <ThemedText type="h3" className="mt-4">
                   Hora
                 </ThemedText>
-                {values.fecha != null && values.servicios[0] != null ? (
+                {values.fecha != "" && values.servicios[0] != null ? (
                   <View className="mt-4 min-w-[113%]">
                     <ThemedDropdown
                       elementosDespegables={
@@ -226,6 +204,7 @@ const SeleccionCitaScreen = () => {
                       icon="time-outline"
                       labelField="label"
                       valueField="value"
+                      dropdownPosition="top"
                       onChange={(item) => setFieldValue("hora", item.value)}
                       placeholder="Selecciona tu hora"
                       value={values.hora}
@@ -243,6 +222,7 @@ const SeleccionCitaScreen = () => {
                           </ThemedText>
                         </View>
                       )}
+                      data={[]}
                     />
                   </View>
                 ) : (

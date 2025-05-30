@@ -1,16 +1,16 @@
-import { ServicioEntitie } from "@/core/servicios/servicios.interface";
 import { Ionicons } from "@expo/vector-icons";
 import React, { JSXElementConstructor, ReactElement } from "react";
 import { Dropdown } from "react-native-element-dropdown";
+import { DropdownProps } from "react-native-element-dropdown/lib/typescript/components/Dropdown/model";
 
-interface Props {
+interface Props extends DropdownProps<any> {
   icon: keyof typeof Ionicons.glyphMap;
   onChange: (item: any) => void;
   renderItem?: (
     item: any,
     selected?: boolean | undefined
   ) => ReactElement<unknown, string | JSXElementConstructor<any>> | null;
-  elementosDespegables: string[] | ServicioEntitie[];
+  elementosDespegables: any[];
   value: any[] | string;
   labelField: string;
   valueField: string;
@@ -37,7 +37,6 @@ const ThemedDropdown = ({
         borderColor: "#d1d5db",
         paddingHorizontal: 4,
         paddingVertical: 11,
-        marginBottom: 10,
         minHeight: 44,
         flexDirection: "row",
         alignItems: "center",

@@ -15,3 +15,40 @@ export interface CitaBDResponse {
   precio_total: number;
   duracion_total: number;
 }
+
+export interface CitaEmpleadoDBResponse {
+  id: number;
+  id_peluquero: number;
+  fecha_cita: Date;
+  hora_inicio: string;
+  estado: Estado;
+  cliente: Cliente;
+  servicios: ServicioElement[];
+}
+
+export interface Cliente {
+  id: number;
+  usuario: Usuario;
+}
+
+export interface Usuario {
+  id: number;
+  name: string;
+  phone: null;
+}
+
+export interface Estado {
+  id: number;
+  tipo_estado: string;
+}
+
+export interface ServicioElement {
+  servicio: ServicioServicio;
+}
+
+export interface ServicioServicio {
+  id: number;
+  nombre: string;
+  precio: number;
+  duracion: number;
+}
