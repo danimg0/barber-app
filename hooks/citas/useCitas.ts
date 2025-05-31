@@ -45,7 +45,7 @@ export const useCitas = <T = any>({
     //el allPages es un arreglo de arreglos, ya que son arreglos de las paginas con los arreglos de las citas de dentro
     getNextPageParam: (lastPage, allPages) => allPages.length,
   });
-  console.log("Estado recibido para filtrar en useCitas:", estado);
+  // console.log("Estado recibido para filtrar en useCitas:", estado);
   const citasQueryEmpleado = useInfiniteQuery({
     queryKey: ["citas", "infinite", "empleado", id, estado, rol, fecha],
     queryFn: async ({ pageParam }) => {

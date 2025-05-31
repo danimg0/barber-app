@@ -2,13 +2,13 @@ import { CitaEmpleadoEntitie } from "@/core/entities/cita.entitie";
 
 //Group by fecha para el section list
 export const agruparCitas = (citas: CitaEmpleadoEntitie[]) => {
-  console.log("Citas recibidas:", citas);
+  // console.log("Citas recibidas:", citas);
 
   // Un record es como un dict de python o el map de java
   const citasAgrupadas: Record<string, CitaEmpleadoEntitie[]> = {};
 
   citas.map((cita) => {
-    console.log("Revisando cita", JSON.stringify(cita));
+    // console.log("Revisando cita", JSON.stringify(cita));
 
     const fechaEsp = new Date(cita.fecha).toLocaleDateString("es-ES");
 

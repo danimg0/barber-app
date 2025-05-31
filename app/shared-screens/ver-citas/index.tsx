@@ -24,9 +24,10 @@ import {
 } from "react-native";
 
 const VerCitasEmpleadoScreen = () => {
+  const today = parseFechaIngToEsp(new Date());
   const { user } = useAuthStore();
   const [filtroInputs, setFiltroInputs] = useState({
-    fecha: "",
+    fecha: today,
     estado: "1",
   });
   const { citasQueryEmpleado } = useCitas({
@@ -35,7 +36,7 @@ const VerCitasEmpleadoScreen = () => {
   });
   const citasAgrupadas = agruparCitas(citasQueryEmpleado.data?.pages[0] ?? []);
 
-  console.log("Citas agrupadas", citasAgrupadas);
+  // console.log("Citas agrupadas", citasAgrupadas);
 
   const handleChange = (name: string, value: string) => {
     setFiltroInputs({ ...filtroInputs, [name]: value });
@@ -68,7 +69,6 @@ const VerCitasEmpleadoScreen = () => {
       <View className="flex flex-row items-start justify-center">
         <View className="mx-4 w-[40%] ">
           <ThemedDatePicker
-            className=""
             onChange={(value) =>
               handleChange("fecha", parseFechaIngToEsp(value))
             }
@@ -81,9 +81,9 @@ const VerCitasEmpleadoScreen = () => {
           <ThemedDropdown
             position="bottom"
             elementosDespegables={[
-              { label: "Cancelada", value: ESTADO_CITA.CANCELADA },
-              { label: "Pendiente", value: ESTADO_CITA.PENDIENTE },
-              { label: "Completada", value: ESTADO_CITA.COMPLETADA },
+              { label: "Cancelada", value: ESTADO_CITA.CANCELADA.toString() },
+              { label: "Pendiente", value: ESTADO_CITA.PENDIENTE.toString() },
+              { label: "Completada", value: ESTADO_CITA.COMPLETADA.toString() },
             ]}
             icon="warning-outline"
             labelField="label"

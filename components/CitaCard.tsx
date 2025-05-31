@@ -20,7 +20,7 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
   const serviciosSeleccionados: string[] = [];
   const { deleteCitaMutation } = useCita(cita.idCita);
 
-  console.log("fecha recibida en card", cita.fechaCita);
+  // console.log("fecha recibida en card", cita.fechaCita);
 
   // const serviciosPrueba = data
   //   //Me quedo solo con los servicios que hay
@@ -31,12 +31,14 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
   // console.log("serviciosPrueba", serviciosPrueba);
 
   //guarrada historica
+  //@ts-expect-error
   if (isNaN(cita.servicios[0])) {
     cita.servicios.map((servicio) => {
       serviciosSeleccionados.push(servicio.nombre);
     });
   } else {
     data?.forEach((servicio) => {
+      //@ts-expect-error
       if (cita.servicios.includes(servicio.id)) {
         serviciosSeleccionados.push(servicio.nombre);
       }
@@ -60,6 +62,12 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
         />
         <ThemedText textBlack>Cita con {cita.nombreBarbero}</ThemedText>
       </View>
+      {cita.nombreCliente && cita.telefono ? (
+        <View className="mt-3 ml-3">
+          <ThemedText textBlack>Cliente: {cita.nombreCliente}</ThemedText>
+          <ThemedText textBlack>Telefono: {cita.telefono}</ThemedText>
+        </View>
+      ) : null}
       {/* Fecha / hora */}
       <View className="mt-3 ml-3">
         <ThemedText textBlack>

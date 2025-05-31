@@ -19,7 +19,7 @@ export const useCita = (citaId: number) => {
 
   const citaMutation = useMutation<number, Error, CitaUsuarioEntitie>({
     mutationFn: async (data) => {
-      console.log(`data recibida en mutation: ${JSON.stringify(data)}`);
+      // console.log(`data recibida en mutation: ${JSON.stringify(data)}`);
       return updateCreateCita({
         ...data,
         idCita: citaIdRef.current,

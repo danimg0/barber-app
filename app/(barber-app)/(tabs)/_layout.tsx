@@ -5,7 +5,7 @@ import Colors from "@/constants/Colors";
 import { ROLE } from "@/constants/Rols";
 import { Ionicons } from "@expo/vector-icons";
 import { router, Tabs, usePathname } from "expo-router";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Pressable } from "react-native";
 
 const TabsLayout = () => {
   const { user } = useAuthStore();
@@ -56,15 +56,28 @@ const TabsLayout = () => {
         headerTitle: ({ children }) => {
           if (route.name === "index") {
             return (
-              <ThemedText type="h2" textBlack>
-                {getHomeScreenTitle()}
-              </ThemedText>
+              <Pressable
+                onPress={() => {
+                  router.replace("/");
+                }}
+              >
+                <ThemedText type="h2" textBlack>
+                  {getHomeScreenTitle()}
+                </ThemedText>
+              </Pressable>
             );
           }
+
           return (
-            <ThemedText type="h2" textBlack>
-              {children}
-            </ThemedText>
+            <Pressable
+              onPress={() => {
+                router.replace("/");
+              }}
+            >
+              <ThemedText type="h2" textBlack>
+                {children}
+              </ThemedText>
+            </Pressable>
           );
         },
         headerRight: () => (

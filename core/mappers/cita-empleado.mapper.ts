@@ -7,7 +7,7 @@ import {
 export const MapperCitaEmpleadoDBToEntitie = (
   citaDB: CitaEmpleadoDBResponse
 ): CitaEmpleadoEntitie => {
-  console.log("Mapeando cita:", citaDB);
+  // console.log("Mapeando cita:", citaDB);
   let cliente: ClienteEntitie;
 
   if (citaDB.cliente && citaDB.cliente.usuario) {
@@ -45,7 +45,7 @@ export const MapperCitaEmpleadoDBToEntitie = (
     })),
   };
 
-  console.log("Cita mapeada", citaMapeada);
+  // console.log("Cita mapeada", citaMapeada);
 
   return citaMapeada;
 };

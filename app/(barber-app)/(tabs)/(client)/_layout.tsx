@@ -1,7 +1,22 @@
+import useAuthStore from "@/app/auth/store/useAuthStore";
+import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { ROLE } from "@/constants/Rols";
 import { Stack } from "expo-router";
 import React from "react";
+import { Text } from "react-native";
 
 export default function ClientLayout() {
+  const { user } = useAuthStore();
+
+  if (user?.rol !== ROLE.CLIENTE) {
+    console.log("rol NO ADMITIDO:", user?.rol);
+    return (
+      <ThemedView>
+        <Text>Rol no admitido</Text>
+      </ThemedView>
+    );
+  }
+
   return (
     <Stack
       screenOptions={{
@@ -20,13 +35,13 @@ export default function ClientLayout() {
       />
       {/* Otras pantallas específicas del cliente */}
       <Stack.Screen
-        name="reservar"
+        name="reserva-cita"
         options={{
           title: "Reservar cita",
         }}
       />
       <Stack.Screen
-        name="/ver-citas"
+        name="ver-citas"
         options={{
           title: "Ver citas",
         }}

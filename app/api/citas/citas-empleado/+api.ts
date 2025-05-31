@@ -13,13 +13,13 @@ export async function GET(request: Request) {
     // const fechaMax = params.get("fecha");
     // const fechaMin = params.get("fecha");
 
-    console.log("Params recibidos:", {
-      idBarbero,
-      estado,
-      fecha,
-    });
+    // console.log("Params recibidos:", {
+    //   idBarbero,
+    //   estado,
+    //   fecha,
+    // });
 
-    console.log("Estado recibido en la api:", estado);
+    // console.log("Estado recibido en la api:", estado);
 
     let query = supabase
       .from("citas_r_cliente_empleado")

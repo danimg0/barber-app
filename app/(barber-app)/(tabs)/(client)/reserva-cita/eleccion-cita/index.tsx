@@ -14,7 +14,7 @@ import { useServicios } from "@/hooks/servicios/useServicios";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { router, useLocalSearchParams } from "expo-router";
 import { Formik } from "formik";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { ActivityIndicator, Alert, Platform, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { ThemedDatePicker } from "../../../../../../components/ThemedComponents/ThemedDateInput";
@@ -23,7 +23,6 @@ import ThemedDropdown from "../../../../../../components/ThemedComponents/Themed
 const SeleccionCitaScreen = () => {
   const { barberoId } = useLocalSearchParams();
   const { user } = useAuthStore();
-  const [showCalendar, setShowCalendar] = useState(false);
   const barberoIdStr = Array.isArray(barberoId) ? barberoId[0] : barberoId;
   const inputRef = useRef<TextInput>(null);
   const { serviciosQuery } = useServicios();
@@ -241,7 +240,6 @@ const SeleccionCitaScreen = () => {
                   disabled={!(isValid && dirty)}
                   onPress={() => {
                     if (isValid && dirty) handleSubmit();
-                    router.replace("/reserva-cita/confirmacion-reserva");
                   }}
                 >
                   <ThemedText>Continuar</ThemedText>

@@ -1,8 +1,8 @@
 import VerCitasEmpleadoScreen from "@/app/shared-screens/ver-citas";
 import React from "react";
 
-const VerCitasEmpleadoIndex = () => {
+const VerCitasAdminIndex = () => {
   return <VerCitasEmpleadoScreen />;
 };
 
-export default VerCitasEmpleadoIndex;
+export default VerCitasAdminIndex;

@@ -9,6 +9,8 @@ interface reqBody {
   hora_fin: string;
   estado: number;
   servicios: number[];
+  nombreCliente?: string;
+  telefono?: string;
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -34,7 +36,7 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
-    const { user, status, error } = await getUserFromRequest(request);
+    const { status, error } = await getUserFromRequest(request);
 
     if (error) {
       return new Response(
@@ -49,17 +51,29 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
+    //Si el body.id_cliente es -1, significa que tengo que coger
+    // los datos tambien de nombreInv y telefonoInv, y el id_cliente seria null
+    const p_id_cliente = body.id_cliente === -1 ? null : body.id_cliente;
+    const p_invitado =
+      body.id_cliente === -1
+        ? {
+            nombreInv: body.nombreCliente ?? "",
+            telefonoInv: body.telefono ?? "",
+          }
+        : null;
+
     const { data, error: newError } = await supabase.rpc(
       "add_citas_con_servicio",
       {
         // Estos son los parametros que tiene la funcion de supabase
-        p_id_cliente: body.id_cliente,
+        p_id_cliente,
         p_id_peluquero: body.id_peluquero,
         p_fecha_cita: new Date(body.fecha_cita),
         p_hora_inicio: body.hora_inicio,
         p_hora_fin: body.hora_fin,
         p_estado: body.estado !== -1 ? body.estado : 1,
         p_servicios: body.servicios,
+        p_invitado,
       }
     );
 

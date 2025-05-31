@@ -4,7 +4,7 @@ export interface ServicioDBResponse {
   descripcion: string;
   precio: number;
   duracion: number;
-  activo: boolean;
+  // activo: boolean;
 }
 
 export interface ServicioEntitie {
@@ -13,5 +13,5 @@ export interface ServicioEntitie {
   descripcion: string;
   precio: number;
   duracion: number;
-  activo: boolean;
+  // activo: boolean;
 }

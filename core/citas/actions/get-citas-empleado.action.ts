@@ -16,8 +16,8 @@ export const getCitasByEmpleado = async (
 ): Promise<CitaEmpleadoEntitie[]> => {
   try {
     //endpoint
-    console.log("Fecha recibida para filtrar en action:", fecha);
-    console.log("Estado recibido para filtrar en action:", estado);
+    // console.log("Fecha recibida para filtrar en action:", fecha);
+    // console.log("Estado recibido para filtrar en action:", estado);
     const { data } = await barberApi.get<CitaEmpleadoDBResponse[]>(
       "/citas/citas-empleado",
       {
@@ -32,7 +32,7 @@ export const getCitasByEmpleado = async (
       }
     );
 
-    console.log("Data recibida:", JSON.stringify(data, null, 2));
+    // console.log("Data recibida:", JSON.stringify(data, null, 2));
 
     //Mapear aqui
     const citasMapeada: CitaEmpleadoEntitie[] =

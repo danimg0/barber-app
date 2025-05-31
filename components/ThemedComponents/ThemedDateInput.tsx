@@ -20,7 +20,7 @@ export function ThemedDatePicker({
 }: Props) {
   const [showCalendar, setShowCalendar] = useState(false);
 
-  console.log("fecha recibida primero", value);
+  // console.log("fecha recibida primero", value);
 
   return (
     <>
@@ -88,7 +88,7 @@ const DatePicker: React.FC<{
   }
 
   let fechaElegida = new Date();
-  console.log("fecha recibida", value);
+  // console.log("fecha recibida", value);
   if (value) {
     fechaElegida = new Date(value) ?? "";
   }

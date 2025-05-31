@@ -1,4 +1,4 @@
-import { View, type ViewProps } from "react-native";
+import { Platform, View, type ViewProps } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type ThemedViewProps = ViewProps & {
@@ -15,7 +15,15 @@ export function ThemedView({
   ...otherProps
 }: ThemedViewProps) {
   //useDimensions
-  const top = useSafeAreaInsets().top;
+
+  const insets = useSafeAreaInsets();
+
+  let top;
+  if (Platform.OS === "web") {
+    top = 20; // calcular mejor de cara a la web
+  } else {
+    top = insets.top;
+  }
 
   return (
     <View

@@ -1,9 +1,11 @@
+import useAuthStore from "@/app/auth/store/useAuthStore";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import {
+  ActivityIndicator,
   Alert,
   BackHandler,
   Image,
@@ -13,6 +15,8 @@ import {
 
 const BarberIndex = () => {
   const { height } = useWindowDimensions();
+
+  const { user } = useAuthStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -37,6 +41,15 @@ const BarberIndex = () => {
     }, [])
   );
 
+  if (!user) {
+    return (
+      <View>
+        <ThemedText>Cargando usuario</ThemedText>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   return (
     <ThemedView className="flex items-center">
       <View style={{ top: height * 0.1 }} className="gap-y-3">
@@ -51,7 +64,12 @@ const BarberIndex = () => {
           icon="bookmark-outline"
           border
           background="secondary"
-          onPress={() => router.replace("/crear-cita")}
+          onPress={() =>
+            router.replace({
+              pathname: "/crear-cita/datos-cita",
+              params: { barberoId: user.id },
+            })
+          }
         >
           <ThemedText>Crear cita</ThemedText>
         </ThemedButton>

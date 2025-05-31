@@ -14,6 +14,7 @@ export interface CitaUsuarioEntitie {
   servicios: ServicioEntitie[];
   precioTotal: number;
   duracionTotal: number;
+  telefono?: string;
 }
 
 export interface CitaEmpleadoEntitie {

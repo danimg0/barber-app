@@ -10,6 +10,8 @@ interface CitaParaDB {
   hora_fin?: string;
   estado?: string;
   servicios?: number[];
+  nombreCliente?: string;
+  telefono?: string;
 }
 
 export const updateCreateCita = (cita: CitaUsuarioEntitie) => {
@@ -26,8 +28,10 @@ export const updateCreateCita = (cita: CitaUsuarioEntitie) => {
     hora_inicio: cita.horaInicio,
     hora_fin: cita.horaFin,
     estado: cita.tipoEstado,
-    //
+    //@ts-expect-error
     servicios: cita.servicios,
+    nombreCliente: cita.nombreCliente,
+    telefono: cita.telefono,
   };
 
   if (cita.idCita && cita.idCita !== 0) {

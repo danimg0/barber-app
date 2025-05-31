@@ -13,6 +13,8 @@ export async function GET(request: Request) {
   const servicios = url.searchParams.get("servicios");
   const dia = url.searchParams.get("dia");
 
+  console.log("Params recibidos en horas:", id_barbero, servicios, dia);
+
   if (!id_barbero || !servicios || !dia) {
     return new Response(
       JSON.stringify({ success: false, error: "Faltan parámetros" }),
@@ -37,7 +39,8 @@ export async function GET(request: Request) {
 
   const { data: horarioPeluquero } = await supabase
     .from("barberos_con_horarios")
-    .select("horario");
+    .select("horario")
+    .eq("id", id_barbero);
 
   const duracionTotal =
     //DuracionServicios es el array de objetos duracion ([{duracion: 20}, {duracion: 30}])
@@ -48,11 +51,14 @@ export async function GET(request: Request) {
       (acumulador, servicio) => acumulador + servicio.duracion, // Se va sumando cada elemento al acumulador
       0 // Este es el valor inicial del acumulador
     );
+  const fechaObj = new Date(dia);
+  const diaStr = fechaObj.toISOString().split("T")[0];
+  // console.log("fecha", diaStr);
 
   const { data: citas, error: errorCitas } = await supabase
     .from("citas_con_servicios")
     .select("*")
-    .eq("fecha_cita", dia)
+    .eq("fecha_cita", diaStr)
     .eq("id_peluquero", id_barbero);
 
   if (errorCitas) {
@@ -62,6 +68,7 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
+  // console.log("Citas recuperadas para el día", dia, citas);
   const citasDelDia = citas?.map((cita): citaDia => {
     return {
       id_cita: cita.id_cita,
@@ -81,7 +88,6 @@ export async function GET(request: Request) {
     "sabado",
   ];
 
-  const fechaObj = new Date(dia);
   const diaSemana = diasSemana[fechaObj.getDay()];
 
   const horarioObj = horarioPeluquero?.[0]?.horario ?? {};
@@ -187,6 +193,7 @@ function calculaHorasDisponibles(
       actual += duracionServicios;
     }
   }
+  // console.log("Horas disponibles", horasDisponibles);
   return horasDisponibles;
 }
 
