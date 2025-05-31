@@ -4,16 +4,17 @@ import { TextInput, TextInputProps, View } from "react-native";
 
 interface Props extends TextInputProps {
   icon?: keyof typeof Ionicons.glyphMap;
+  classNameView?: string;
 }
 
 const ThemedTextInput = forwardRef<TextInput, Props>(
-  ({ icon, ...rest }, ref) => {
+  ({ icon, classNameView, ...rest }, ref) => {
     const [isActive, setIsActive] = useState(false);
     // Al pulsar en el view cuenta como que está fuera del inputText, por ello creamos este ref
 
     return (
       <View
-        className={`w-full flex-row items-center border rounded p-1 bg-white ${
+        className={` ${classNameView} w-full flex-row items-center border rounded p-1 bg-white ${
           isActive ? "border-red-500" : "border-gray-300"
         }`}
         onTouchStart={() =>

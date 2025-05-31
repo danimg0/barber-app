@@ -2,10 +2,11 @@ import { CitaUsuarioEntitie } from "@/core/entities/cita.entitie";
 import { useCita } from "@/hooks/citas/useCita";
 import { useServicios } from "@/hooks/servicios/useServicios";
 import React, { useState } from "react";
-import { FlatList, Image, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import ThemedButton from "./ThemedComponents/ThemedButton";
 import ThemedDeleteModal from "./ThemedComponents/ThemedDeleteModal";
 import ThemedText from "./ThemedComponents/ThemedText";
+import { ThemedView } from "./ThemedComponents/ThemedView";
 
 interface Props {
   cita: CitaUsuarioEntitie;
@@ -42,7 +43,12 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
     });
   }
 
-  if (!serviciosSeleccionados) return null;
+  if (!serviciosSeleccionados)
+    return (
+      <ThemedView>
+        <Text>No existe usuario</Text>
+      </ThemedView>
+    );
 
   return (
     <View className="bg-blue-300 p-3 rounded-lg w-full mt-5">

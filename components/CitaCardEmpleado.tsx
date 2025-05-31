@@ -39,7 +39,7 @@ const CitaCardEmpleado = ({
 
   return (
     //Todo: cambiar este mt-2 por el contentStyle en la flatlist o lo que se haga
-    <View className="mt-2">
+    <View className={`mt-2 lg:w-[80%]`}>
       <View className="flex flex-row justify-between">
         <ThemedText type="h3">{hora}</ThemedText>
         <ThemedText type="h3">{estado}</ThemedText>
@@ -54,7 +54,7 @@ const CitaCardEmpleado = ({
             </ThemedText>
             <ThemedText textBlack>{nombre}</ThemedText>
           </View>
-          {servicios && (
+          {servicios ? (
             <View className="flex flex-row">
               <ThemedText className="min-w-[25%]" textBlack>
                 Servicios:
@@ -71,7 +71,7 @@ const CitaCardEmpleado = ({
                 />
               </View>
             </View>
-          )}
+          ) : null}
         </View>
         {/* Acciones */}
         <View className="flex flex-col justify-between">
@@ -97,14 +97,14 @@ const CitaCardEmpleado = ({
             onPress={() => setAbrirDelete(true)}
           />
         </View>
-        {abrirDelete && (
+        {abrirDelete ? (
           <ThemedDeleteModal
             loading={false}
             onClose={() => setAbrirDelete(false)}
             onConfirm={handleDelCita}
             textBody="Seguro que quieres borrar/cancelar esta cita"
           />
-        )}
+        ) : null}
       </View>
     </View>
   );

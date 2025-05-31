@@ -6,7 +6,7 @@ import { ROLE } from "@/constants/Rols";
 import { mapCitasDBToCitasEntities } from "@/core/mappers/cita.mapper";
 import { useCitas } from "@/hooks/citas/useCitas";
 import React from "react";
-import { ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator, FlatList, Platform, View } from "react-native";
 
 const CitasClienteScreen = () => {
   const { user } = useAuthStore();
@@ -31,24 +31,24 @@ const CitasClienteScreen = () => {
 
   return (
     <ThemedView className="items-center">
-      {/* <ScrollView className="w-full pb-40"> */}
       <ThemedText type="h2">Tus citas</ThemedText>
 
       {citasQuery.data?.pages.flatMap((page) => page).length === 0 ? (
         <ThemedText>Sin citas</ThemedText>
       ) : (
         <FlatList
-          className="w-[90%]"
+          className={`${Platform.OS !== "web" ? "w-[90%]" : "w-[40%]"}`}
           data={citasQuery.data?.pages.flatMap((page) => page) ?? []}
           keyExtractor={(item) => item.idCita.toString()}
           renderItem={({ item }) => <CitaCard cita={item} />}
-          ListFooterComponent={<ThemedView className="h-24" />}
+          ListFooterComponent={
+            <View>
+              <ThemedView className="h-24" />
+            </View>
+          }
           showsVerticalScrollIndicator={false}
         />
       )}
-
-      {/* </ScrollView> */}
-      {/* <View className="h-10" /> */}
     </ThemedView>
   );
 };

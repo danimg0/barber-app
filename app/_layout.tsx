@@ -8,6 +8,8 @@ import { useFonts } from "expo-font";
 
 import "../global.css";
 
+import ThemedText from "@/components/ThemedComponents/ThemedText";
+import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -45,8 +47,13 @@ export default function RootLayout() {
   }, []);
 
   if (!loaded) {
+    console.log("NO CARGADO");
     // Async font loading only occurs in development.
-    return null;
+    return (
+      <ThemedView>
+        <ThemedText>Error al cargar</ThemedText>
+      </ThemedView>
+    );
   }
 
   //TODO: revisar video pantalla registro de fernando para el parpadeo

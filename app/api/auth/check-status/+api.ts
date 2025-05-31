@@ -64,7 +64,7 @@ export async function GET(request: Request): Promise<Response> {
 
     // Generar un nuevo token (renovación)
     const newToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "360d", // Extendemos la duración en la renovación
+      expiresIn: "360d",
     });
 
     // Construir respuesta

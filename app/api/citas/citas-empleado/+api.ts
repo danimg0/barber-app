@@ -40,7 +40,8 @@ export async function GET(request: Request) {
       ),
       servicios:r_cita_servicio (
         servicio:servicios ( id, nombre, precio, duracion )
-      )
+      ),
+      invitado
       `
       )
       .order("fecha_cita");

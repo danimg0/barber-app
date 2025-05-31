@@ -40,17 +40,14 @@ const ThemedMultiselect = ({
         minHeight: 44,
         flexDirection: "row",
         alignItems: "center",
-      }}
-      containerStyle={{
-        borderRadius: 16, // <-- redondea el menú desplegable
-        backgroundColor: "white",
-        overflow: "hidden",
+        justifyContent: "flex-start",
       }}
       //TODO: cambiar fontFamily a merriweather
       placeholderStyle={{
         color: "#5c5c5c", // igual que placeholderTextColor
         fontSize: 14,
       }}
+      alwaysRenderSelectedItem
       //Container de abajo
       selectedStyle={{
         borderRadius: 16,
@@ -62,7 +59,7 @@ const ThemedMultiselect = ({
         fontSize: 13,
       }}
       //Esto es para los contenedores de abajo
-      //   renderSelectedItem={() => <ThemedText>hola</ThemedText>}
+      // renderSelectedItem={() => <ThemedText>hola</ThemedText>}
       //Items del dropdown
       renderItem={renderItem}
       renderLeftIcon={() => (
@@ -74,6 +71,7 @@ const ThemedMultiselect = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      visibleSelectedItem={value.length !== 0}
     />
   );
 };

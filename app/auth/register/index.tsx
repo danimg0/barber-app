@@ -152,6 +152,7 @@ export default function RegisterScreen() {
               </ThemedText>
               {/* inputs registro */}
               <ThemedTextInput
+                classNameView="mb-5"
                 placeholder="Nombre"
                 keyboardType="default"
                 autoCapitalize="none"
@@ -161,6 +162,7 @@ export default function RegisterScreen() {
               />
               {/* correo */}
               <ThemedTextInput
+                classNameView="mb-5"
                 placeholder="Correo electrónico"
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -171,6 +173,7 @@ export default function RegisterScreen() {
               {/* telefono */}
               {/* //TODO: Poner un icono de informacion y si le pulsa, abrir modal informando de porque tiene que dar el tlf */}
               <ThemedTextInput
+                classNameView="mb-5"
                 placeholder="Teléfono"
                 keyboardType="phone-pad"
                 autoCapitalize="none"
@@ -181,6 +184,7 @@ export default function RegisterScreen() {
               {/* password */}
               {/* //TODO: ojito para ver la contrasena? */}
               <ThemedTextInput
+                classNameView="mb-5"
                 placeholder="Contraseña"
                 secureTextEntry
                 onChangeText={(value) => handleChange("password", value)}
@@ -188,6 +192,7 @@ export default function RegisterScreen() {
                 icon="lock-closed-outline"
               />
               <ThemedTextInput
+                classNameView="mb-5"
                 placeholder="Repetir contraseña"
                 secureTextEntry
                 onChangeText={(value) => handleChange("tryPassword", value)}

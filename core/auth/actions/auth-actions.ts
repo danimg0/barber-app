@@ -47,7 +47,7 @@ export const authLogin = async (email: string, password: string) => {
   email = email.toLowerCase();
 
   //ASI SERIA CON AXIOS
-  console.log("Logeando con axios");
+  console.log("Login en axios en auth-actions con", email, password);
   try {
     // setTimeout(() => {
     //   return null;
@@ -145,8 +145,13 @@ export const authRegister = async (datos: RegistroProps) => {
     return resp;
   } catch (error) {
     // Si es un error de Axios, saca el mensaje del backend
-    if (error.response && error.response.data) {
-      return error.response.data; // { success: false, message: ... }
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as any).response?.data
+    ) {
+      return (error as any).response.data;
     }
     // Si no, lanza un error genérico
     console.log("Error en registro en action: ", error);

@@ -15,6 +15,7 @@ interface Props extends DropdownProps<any> {
   labelField: string;
   valueField: string;
   placeholder: string;
+  position?: "top" | "bottom" | "auto";
 }
 
 const ThemedDropdown = ({
@@ -26,6 +27,7 @@ const ThemedDropdown = ({
   value,
   valueField,
   placeholder,
+  position = "auto",
 }: Props) => {
   return (
     <Dropdown
@@ -40,11 +42,7 @@ const ThemedDropdown = ({
         minHeight: 44,
         flexDirection: "row",
         alignItems: "center",
-      }}
-      containerStyle={{
-        borderRadius: 16,
-        backgroundColor: "white",
-        overflow: "hidden",
+        justifyContent: "flex-start",
       }}
       //TODO: cambiar fontFamily a merriweather
       placeholderStyle={{
@@ -65,6 +63,7 @@ const ThemedDropdown = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      dropdownPosition={position}
     />
   );
 };

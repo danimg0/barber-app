@@ -30,13 +30,17 @@ export function ThemedDatePicker({
         style={{ width: "100%" }}
       >
         <ThemedTextInput
-          className={className}
+          // className={className}
           icon="calendar-clear-outline"
           placeholder={placeholder}
           value={value}
           ref={inputRef}
           editable={false}
           pointerEvents="none"
+          style={{
+            width: "100%",
+            minHeight: 41,
+          }}
         />
       </TouchableOpacity>
 

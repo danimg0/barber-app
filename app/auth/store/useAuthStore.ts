@@ -74,6 +74,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   //En los gestores de estado es donde normalmente llamaremos a las actions
   //Metodos (en verda en zunstand se les llama acciones)
   login: async (email: string, password: string) => {
+    console.log("Login en useAuthStore:", email, password);
     const resp = await authLogin(email, password);
     return get().changeStatus(resp?.token, resp?.user);
   },

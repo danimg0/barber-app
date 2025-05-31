@@ -26,10 +26,15 @@ export interface CitaEmpleadoEntitie {
   servicios: Servicio[];
 }
 
+export interface InvitadoEntitie {
+  nombreInv: string;
+  telefonoInv: string;
+}
+
 export interface Cliente {
-  id: number;
+  id: number | null;
   nombre: string;
-  telefono: null;
+  telefono: string;
 }
 
 export interface Estado {

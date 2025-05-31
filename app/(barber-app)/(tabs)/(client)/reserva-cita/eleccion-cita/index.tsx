@@ -15,12 +15,7 @@ import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.ad
 import { router, useLocalSearchParams } from "expo-router";
 import { Formik } from "formik";
 import React, { useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  View,
-} from "react-native";
+import { ActivityIndicator, Alert, Platform, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { ThemedDatePicker } from "../../../../../../components/ThemedComponents/ThemedDateInput";
 import ThemedDropdown from "../../../../../../components/ThemedComponents/ThemedDropdown";
@@ -63,80 +58,84 @@ const SeleccionCitaScreen = () => {
 
   return (
     <ThemedView className="items-center">
-      <ThemedText type="h2">Selecciona tu cita</ThemedText>
-      <BarberoCard
-        disponible={barberoData.disponible}
-        foto={barberoData.foto}
-        nombre={barberoData.nombre}
-        onPress={() => {}}
-        seleccionado
-        className={"w-[90%]"}
-      />
-      <ThemedText className="my-4" type="h3">
-        Fecha
-      </ThemedText>
-      <Formik
-        initialValues={{
-          idBarbero: "",
-          fecha: "",
-          hora: "",
-          servicios: [],
-        }}
-        onSubmit={async (citaFinal) => {
-          // console.log("anadiendo fecha", citaFinal.fecha);
-          try {
-            const citaCompleta: CitaUsuarioEntitie = {
-              idBarbero: parseInt(barberoIdStr),
-              nombreBarbero: barberoData.nombre,
-              fotoPerfil: barberoData.foto,
-              duracionTotal: 0,
-              //NO CONVERTIR A FECHA QUE SE ME JODE EL CITACARD
-              fechaCita: citaFinal.fecha,
-              horaFin: citaFinal.hora,
-              horaInicio: citaFinal.hora,
-              idCita: 0,
-              idCliente: user?.id || -1,
-              nombreCliente: user?.name || "",
-              precioTotal: 0,
-              tipoEstado: "",
-              servicios: citaFinal.servicios,
-            };
-
-            // console.log(`Guardando cita en storage: ${citaCompleta}`);
-
-            await SecureStorageAdapter.setItem(
-              "citaActual",
-              JSON.stringify(citaCompleta)
-            );
-
-            router.replace("/reserva-cita/confirmacion-reserva");
-          } catch (error) {
-            Alert.alert("Error", "No se pudo guardar la cita");
-            // console.error(error);
-          }
-        }}
-        validate={validate}
+      <View
+        className={Platform.OS === "web" ? "w-[50%] mt-10 h-full " : undefined}
       >
-        {/* Propiedades de formik para el formulario */}
-        {({
-          values,
-          handleSubmit,
-          handleChange,
-          setFieldValue,
-          //La combinacion de los 2 sirve para validar que todo este bien y para que el form no se envie vacio o sin cambios
-          isValid, // cuando todos los campos pasan las reglas de validacion
-          dirty, // es true si el usuario ha cambiado algo de los valores iniciales, si no es false
-        }) => {
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          const { horasCitaDisponiblesQuery } = useCitaHorasDisponibles(
-            Number(barberoId),
-            values.servicios,
-            new Date(values.fecha)
-          );
-          return (
-            <KeyboardAvoidingView className="flex-1">
-              <View className="flex-1 w-[80%] items-center">
-                <View className="mt-4">
+        <ThemedText type="h2">Selecciona tu cita</ThemedText>
+        <BarberoCard
+          disponible={barberoData.disponible}
+          foto={barberoData.foto}
+          nombre={barberoData.nombre}
+          onPress={() => {}}
+          seleccionado
+          className={"w-[90%]"}
+        />
+
+        <Formik
+          initialValues={{
+            idBarbero: "",
+            fecha: "",
+            hora: "",
+            servicios: [],
+          }}
+          onSubmit={async (citaFinal) => {
+            // console.log("anadiendo fecha", citaFinal.fecha);
+            try {
+              const citaCompleta: CitaUsuarioEntitie = {
+                idBarbero: parseInt(barberoIdStr),
+                nombreBarbero: barberoData.nombre,
+                fotoPerfil: barberoData.foto,
+                duracionTotal: 0,
+                //NO CONVERTIR A FECHA QUE SE ME JODE EL CITACARD
+                //@ts-expect-error
+                fechaCita: citaFinal.fecha,
+                horaFin: citaFinal.hora,
+                horaInicio: citaFinal.hora,
+                idCita: 0,
+                idCliente: user?.id || -1,
+                nombreCliente: user?.name || "",
+                precioTotal: 0,
+                tipoEstado: "1",
+                servicios: citaFinal.servicios,
+              };
+
+              // console.log(`Guardando cita en storage: ${citaCompleta}`);
+
+              await SecureStorageAdapter.setItem(
+                "citaActual",
+                JSON.stringify(citaCompleta)
+              );
+
+              router.replace("/reserva-cita/confirmacion-reserva");
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error) {
+              Alert.alert("Error", "No se pudo guardar la cita");
+              // console.error(error);
+            }
+          }}
+          validate={validate}
+        >
+          {/* Propiedades de formik para el formulario */}
+          {({
+            values,
+
+            handleSubmit,
+            handleChange,
+            setFieldValue,
+            //La combinacion de los 2 sirve para validar que todo este bien y para que el form no se envie vacio o sin cambios
+            isValid, // cuando todos los campos pasan las reglas de validacion
+            dirty, // es true si el usuario ha cambiado algo de los valores iniciales, si no es false
+          }) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const { horasCitaDisponiblesQuery } = useCitaHorasDisponibles(
+              Number(barberoId),
+              values.servicios,
+              new Date(values.fecha)
+            );
+            return (
+              <View className="flex-1 items-center w-[90%]">
+                <ThemedText type="h3">Fecha</ThemedText>
+                <View className="w-full">
                   <ThemedDatePicker
                     value={values.fecha}
                     onChange={(date: Date) => {
@@ -151,7 +150,7 @@ const SeleccionCitaScreen = () => {
                 <ThemedText type="h3" className="mt-4">
                   Servicios
                 </ThemedText>
-                <View className="mt-4 min-w-[113%]">
+                <View className="w-full">
                   <ThemedMultiselect
                     value={values.servicios}
                     placeholder="Selecciona uno o más servicios"
@@ -187,9 +186,10 @@ const SeleccionCitaScreen = () => {
                 <ThemedText type="h3" className="mt-4">
                   Hora
                 </ThemedText>
-                {values.fecha != "" && values.servicios[0] != null ? (
-                  <View className="mt-4 min-w-[113%]">
+                {values.fecha !== "" && values.servicios[0] != null ? (
+                  <View className="w-full">
                     <ThemedDropdown
+                      position="top"
                       elementosDespegables={
                         (horasCitaDisponiblesQuery.data?.horasDisponibles ?? [])
                           .length > 0
@@ -204,14 +204,13 @@ const SeleccionCitaScreen = () => {
                       icon="time-outline"
                       labelField="label"
                       valueField="value"
-                      dropdownPosition="top"
                       onChange={(item) => setFieldValue("hora", item.value)}
                       placeholder="Selecciona tu hora"
                       value={values.hora}
                       renderItem={(item, selected) => (
                         <View
                           key={item.value}
-                          className={`my-1 overflow-hidden flex flex-row justify-between items-center p-4 mx-2 rounded-lg ${
+                          className={`my-1 overflow-hidden flex flex-row justify-start items-center p-4 mx-2 rounded-lg ${
                             selected && "bg-dark-secondary"
                           }`}
                         >
@@ -248,10 +247,10 @@ const SeleccionCitaScreen = () => {
                   <ThemedText>Continuar</ThemedText>
                 </ThemedButton>
               </View>
-            </KeyboardAvoidingView>
-          );
-        }}
-      </Formik>
+            );
+          }}
+        </Formik>
+      </View>
     </ThemedView>
   );
 };

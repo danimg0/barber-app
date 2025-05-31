@@ -22,17 +22,22 @@ export interface CitaEmpleadoDBResponse {
   fecha_cita: Date;
   hora_inicio: string;
   estado: Estado;
-  cliente: Cliente;
+  cliente: Cliente | null;
   servicios: ServicioElement[];
+  invitado: Invitado | null;
+}
+export interface Invitado {
+  nombreInv: string;
+  telefonoInv: string;
 }
 
 export interface Cliente {
-  id: number;
+  id: number | null;
   usuario: Usuario;
 }
 
 export interface Usuario {
-  id: number;
+  id: number | null;
   name: string;
   phone: null;
 }

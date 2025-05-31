@@ -16,11 +16,27 @@ type LoginResponse = {
   token?: string;
 };
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export async function POST(request: Request): Promise<Response> {
+  // Manejar preflight OPTIONS
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  }
+
   try {
     // Parsear el cuerpo de la solicitud
     const body: LoginRequest = await request.json();
     const { email, password } = body;
+
+    console.log("Login recibida en la api", email, password);
 
     // Validar los datos de entrada
     if (!email || !password) {
@@ -29,7 +45,10 @@ export async function POST(request: Request): Promise<Response> {
           success: false,
           message: "Correo electrónico y contraseña son requeridos",
         }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -47,7 +66,10 @@ export async function POST(request: Request): Promise<Response> {
           message: "Usuario no encontrado",
           userError,
         }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -69,7 +91,10 @@ export async function POST(request: Request): Promise<Response> {
       // Esto es solo para el ejemplo, NO es seguro en producción
       return new Response(
         JSON.stringify({ success: false, message: "Contraseña incorrecta" }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
       );
     }
 
@@ -98,7 +123,10 @@ export async function POST(request: Request): Promise<Response> {
     console.error("Error en login:", error);
     return new Response(
       JSON.stringify({ success: false, message: "Error interno del servidor" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
     );
   }
 }

@@ -35,6 +35,8 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     const { email, password } = inputs;
+    console.log("HandleLogin en loginIndex:", email, password);
+
     setError("");
     // Validación básica
     if (!inputs.email || !inputs.password) {
@@ -45,6 +47,7 @@ export default function LoginScreen() {
     //Con esto evito el doble tap
     setIsPosting(true);
     const wasSuccessful = await login(email, password);
+    console.log("wasSuccesful:", wasSuccessful);
     setIsPosting(false);
 
     if (wasSuccessful) {
@@ -92,7 +95,7 @@ export default function LoginScreen() {
             <ThemedText type="h2" className="mb-5">
               Inicio de sesión
             </ThemedText>
-            <View className="px-8 pb-8 w-11/12 max-w-md items-center">
+            <View className="px-8 pb-8 w-11/12 max-w-md items-center ">
               {error ? (
                 <Text className="text-white bg-light-primary px-4 py-2 rounded-lg mb-4">
                   {error}
@@ -102,6 +105,7 @@ export default function LoginScreen() {
               <ThemedTextInput
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-white"
                 placeholder="Correo electrónico"
+                classNameView="mb-5"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 icon="mail-outline"
@@ -112,6 +116,7 @@ export default function LoginScreen() {
                 // className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 bg-white"
                 placeholder="Contraseña"
                 secureTextEntry
+                classNameView="mb-5"
                 autoCapitalize="none"
                 onChangeText={(value) => handleChange("password", value)}
                 value={inputs.password}

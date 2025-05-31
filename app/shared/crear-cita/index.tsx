@@ -60,12 +60,12 @@ const CrearCitaEmpleadoScreen = () => {
                 <ThemedTextInput
                   icon="person-outline"
                   placeholder="Nombre y apellidos del cliente"
-                ></ThemedTextInput>
+                />
                 {/* telefono cliente */}
                 <ThemedTextInput
                   icon="call-outline"
                   placeholder="Telefono del cliente"
-                ></ThemedTextInput>
+                />
                 {/* fecha cita */}
                 <ThemedDatePicker
                   onChange={() => {}}
@@ -90,6 +90,7 @@ const CrearCitaEmpleadoScreen = () => {
                   labelField=""
                   onChange={() => {}}
                   placeholder="Horas disponibles"
+                  dropdownPosition="top"
                   value={""}
                   valueField=""
                   data={[]}

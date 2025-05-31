@@ -1,4 +1,3 @@
-import { mapEstadoCita } from "@/constants/EstadoCita";
 import { barberApi } from "@/core/auth/api/barberApi";
 import { CitaUsuarioEntitie } from "@/core/entities/cita.entitie";
 
@@ -9,7 +8,7 @@ interface CitaParaDB {
   fecha_cita?: Date;
   hora_inicio?: string;
   hora_fin?: string;
-  estado?: number;
+  estado?: string;
   servicios?: number[];
 }
 
@@ -17,6 +16,7 @@ export const updateCreateCita = (cita: CitaUsuarioEntitie) => {
   //Valida que esos campos sean numeros
   //   cita.precio = isNaN(Number(cita.precio)) ? 0 : Number(cita.precio);
   //   cita.duracion = isNaN(Number(cita.duracion)) ? 0 : Number(cita.duracion);
+  console.log("estado", cita.tipoEstado);
 
   const citaMapeada: CitaParaDB = {
     id_cita: cita.idCita,
@@ -25,7 +25,8 @@ export const updateCreateCita = (cita: CitaUsuarioEntitie) => {
     fecha_cita: cita.fechaCita,
     hora_inicio: cita.horaInicio,
     hora_fin: cita.horaFin,
-    estado: mapEstadoCita(cita.tipoEstado ?? ""),
+    estado: cita.tipoEstado,
+    //
     servicios: cita.servicios,
   };
 

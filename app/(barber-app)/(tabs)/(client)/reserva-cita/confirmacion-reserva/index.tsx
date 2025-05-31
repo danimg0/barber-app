@@ -8,7 +8,7 @@ import { useCita } from "@/hooks/citas/useCita";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, View } from "react-native";
+import { ActivityIndicator, Alert, Platform, Text, View } from "react-native";
 
 const ConfirmacionReservaScreen = () => {
   const [cita, setCita] = useState<CitaUsuarioEntitie>();
@@ -32,7 +32,11 @@ const ConfirmacionReservaScreen = () => {
   }, []);
 
   if (!cita) {
-    return null;
+    return (
+      <ThemedView>
+        <Text>No existe cita</Text>
+      </ThemedView>
+    );
   }
 
   const handleSubmit = () => {
@@ -40,6 +44,7 @@ const ConfirmacionReservaScreen = () => {
       onSuccess: () => {
         router.replace("/reserva-cita/final-reserva");
       },
+      //Dejar este y quitar el de useCitas
       onError: (error) => {
         Alert.alert("Error", "No se pudo guardar la cita");
       },
@@ -54,7 +59,11 @@ const ConfirmacionReservaScreen = () => {
   //TODO: añadir boton de cancelar cita
   return (
     <ThemedView className="items-center">
-      <View className="w-[80%] mb-10 flex-1 items-center justify-around ">
+      <View
+        className={`mb-10 flex-1 items-center justify-around 
+      ${Platform.OS === "web" ? "w-[40%]" : "w-[80%]  "}
+      `}
+      >
         <ThemedText type="h2" className="">
           Confirmar reserva
         </ThemedText>
@@ -66,14 +75,11 @@ const ConfirmacionReservaScreen = () => {
             border
             className="border-dark-primary"
             iconColor={Colors.dark.primary}
+            disabled={citaMutation.isPending}
           >
-            {citaMutation.isPending ? (
-              <ActivityIndicator />
-            ) : (
-              <ThemedText className="text-dark-primary">
-                Cancelar reserva
-              </ThemedText>
-            )}
+            <ThemedText className="text-dark-primary">
+              Cancelar reserva
+            </ThemedText>
           </ThemedButton>
           <ThemedButton
             onPress={handleSubmit}

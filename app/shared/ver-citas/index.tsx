@@ -15,9 +15,15 @@ import {
 } from "@/utils/helpers/parseFecha";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { ActivityIndicator, SectionList, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  SectionList,
+  Text,
+  View,
+} from "react-native";
 
-const CrearCitaScreen = () => {
+const VerCitasEmpleadoScreen = () => {
   const { user } = useAuthStore();
   const [filtroInputs, setFiltroInputs] = useState({
     fecha: "",
@@ -29,6 +35,8 @@ const CrearCitaScreen = () => {
   });
   const citasAgrupadas = agruparCitas(citasQueryEmpleado.data?.pages[0] ?? []);
 
+  console.log("Citas agrupadas", citasAgrupadas);
+
   const handleChange = (name: string, value: string) => {
     setFiltroInputs({ ...filtroInputs, [name]: value });
     if (name === "estado") {
@@ -36,10 +44,21 @@ const CrearCitaScreen = () => {
     }
   };
 
+  if (!user) {
+    return (
+      <ThemedView>
+        <Text>No existe usuario</Text>
+      </ThemedView>
+    );
+  }
+
   if (user?.rol !== ROLE.ADMIN && user?.rol !== ROLE.EMPLEADO) {
     console.log("rol:", user?.rol);
-
-    return null;
+    return (
+      <ThemedView>
+        <Text>Rol no admitido</Text>
+      </ThemedView>
+    );
   }
   return (
     <ThemedView className="items-center">
@@ -49,6 +68,7 @@ const CrearCitaScreen = () => {
       <View className="flex flex-row items-start justify-center">
         <View className="mx-4 w-[40%] ">
           <ThemedDatePicker
+            className=""
             onChange={(value) =>
               handleChange("fecha", parseFechaIngToEsp(value))
             }
@@ -59,7 +79,7 @@ const CrearCitaScreen = () => {
         </View>
         <View className="w-[40%]">
           <ThemedDropdown
-            dropdownPosition="bottom"
+            position="bottom"
             elementosDespegables={[
               { label: "Cancelada", value: ESTADO_CITA.CANCELADA },
               { label: "Pendiente", value: ESTADO_CITA.PENDIENTE },
@@ -75,7 +95,7 @@ const CrearCitaScreen = () => {
               <View
                 key={item.value}
                 className={`my-1 overflow-hidden flex flex-row justify-between items-center p-4 mx-2 rounded-lg ${
-                  selected && "bg-dark-secondary"
+                  selected ? "bg-dark-secondary" : null
                 }`}
               >
                 <ThemedText className={!selected ? "text-black" : undefined}>
@@ -106,26 +126,34 @@ const CrearCitaScreen = () => {
           <ActivityIndicator />
         </View>
       ) : (
-        <View className="w-full px-8">
-          {citasAgrupadas.length === 0 ? (
-            <View className="flex mt-48 items-center justify-center">
-              <ThemedText>No ha citas para mostrar</ThemedText>
-            </View>
-          ) : (
-            <SectionList
-              sections={citasAgrupadas}
-              keyExtractor={(item, index) => item.id.toString()}
-              renderSectionHeader={({ section: { title } }) => (
-                <ThemedText type="h3" className="text-center mt-6 text-white">
-                  {title} -{" "}
-                  {citasAgrupadas
-                    .find((section) => section.title === title)
-                    ?.data.length.toString() ?? ""}{" "}
-                  citas
-                </ThemedText>
-              )}
-              renderItem={({ item }) => (
+        <View className="w-[95%] lg:w-[50%] px-8 h-[60vh] overflow-auto bg-gray-800 my-5 p-4 rounded-xl">
+          <SectionList
+            sections={citasAgrupadas}
+            keyExtractor={(item, index) =>
+              item.id.toString() ?? Math.random().toString(36).substring(2, 10)
+            }
+            ListEmptyComponent={
+              <View className="flex mt-48 items-center justify-center">
+                <ThemedText>No ha citas para mostrar</ThemedText>
+              </View>
+            }
+            renderSectionHeader={({ section: { title } }) => (
+              <ThemedText type="h3" className="text-center mt-6 text-white">
+                {title} -{" "}
+                {citasAgrupadas
+                  .find((section) => section.title === title)
+                  ?.data.length.toString() ?? ""}{" "}
+                citas
+              </ThemedText>
+            )}
+            renderItem={({ item }) => (
+              <View
+                className={`${
+                  Platform.OS === "web" ? "flex items-center" : ""
+                }`}
+              >
                 <CitaCardEmpleado
+                  // esWeb={Platform.OS === "web"}
                   id={item.id}
                   estado={
                     item.estado.tipo.charAt(0).toUpperCase() +
@@ -136,13 +164,13 @@ const CrearCitaScreen = () => {
                   servicios={item.servicios.map((ser) => ser.nombre)}
                   telefono={item.cliente.telefono ?? ""} //todo: const enum con los tlf, poner tlf del admin
                 />
-              )}
-            />
-          )}
+              </View>
+            )}
+          />
         </View>
       )}
     </ThemedView>
   );
 };
 
-export default CrearCitaScreen;
+export default VerCitasEmpleadoScreen;

@@ -7,7 +7,13 @@ import { useBarberos } from "@/hooks/barberos/useBarberos";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { ActivityIndicator, Alert, ScrollView, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Platform,
+  ScrollView,
+  View,
+} from "react-native";
 import BarberoCard from "../../../../../../components/BarberoCard";
 
 const EleccionBarberoScreen = () => {
@@ -59,7 +65,11 @@ const EleccionBarberoScreen = () => {
         </View>
       </View>
 
-      <View className="bg-gray-600 my-8 min-h-[45%] h-[65%] max-h-[65%] rounded-3xl w-[90%] shadow-lg">
+      <View
+        className={`bg-gray-600 my-8 min-h-[45%] h-[65%] max-h-[65%] rounded-3xl ${
+          Platform.OS === "web" ? "w-[40%]" : "w-[90%]"
+        } shadow-lg`}
+      >
         <ScrollView
           className="flex-1"
           contentContainerStyle={{ alignItems: "center" }}
