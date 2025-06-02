@@ -1,3 +1,4 @@
+import { getUserFromRequest } from "@/backend/utils/authHelper";
 import { supabase } from "@/constants/supabase";
 
 interface citaDia {
@@ -13,6 +14,16 @@ export async function GET(request: Request) {
   const servicios = url.searchParams.get("servicios");
   const dia = url.searchParams.get("dia");
 
+  //Comprobar usuario beare
+
+  const { status, error } = await getUserFromRequest(request);
+  if (error) {
+    return new Response(JSON.stringify({ success: false, message: error }), {
+      status,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   //console.log("Params recibidos en horas:", id_barbero, servicios, dia);
 
   if (!id_barbero || !servicios || !dia) {
@@ -22,7 +33,29 @@ export async function GET(request: Request) {
     );
   }
 
-  const arrServicios = servicios.split(",").map((ser) => Number(ser));
+  const arrServicios = servicios
+    .split(",")
+    .map((ser) => Number(ser))
+    .filter((n) => !isNaN(n));
+
+  if (arrServicios.length === 0) {
+    return new Response(
+      JSON.stringify({ success: false, error: "No hay servicios válidos" }),
+      { status: 400 }
+    );
+  }
+
+  if (arrServicios.length > 10) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: "Demasiados servicios seleccionados",
+      }),
+      { status: 400 }
+    );
+  }
+
+  console.log("DEBUG: Servicios seleccionados:", arrServicios);
 
   const { data: duracionServicios, error: errorDuracion } = await supabase
     .from("servicios")
@@ -37,10 +70,14 @@ export async function GET(request: Request) {
     );
   }
 
+  console.log("DEBUG: Duración de servicios:", duracionServicios);
+
   const { data: horarioPeluquero } = await supabase
     .from("barberos_con_horarios")
     .select("horario")
     .eq("id", id_barbero);
+
+  console.log("DEBUG: Horario del peluquero:", horarioPeluquero);
 
   const duracionTotal =
     //DuracionServicios es el array de objetos duracion ([{duracion: 20}, {duracion: 30}])
@@ -55,16 +92,37 @@ export async function GET(request: Request) {
   const diaStr = fechaObj.toISOString().split("T")[0];
   // console.log("fecha", diaStr);
 
+  // const { data: citas, error: errorCitas } = await supabase
+  //   .from("citas_con_servicios")
+  //   .select("id_cita, hora_inicio, duracion_total, tipo_estado")
+  //   .eq("fecha_cita", diaStr)
+  //   .eq("id_peluquero", id_barbero);
   const { data: citas, error: errorCitas } = await supabase
-    .from("citas_con_servicios")
-    .select("*")
+    .from("citas_disponibilidad")
+    .select("id_cita, hora_inicio, duracion_total, tipo_estado")
     .eq("fecha_cita", diaStr)
     .eq("id_peluquero", id_barbero);
 
+  console.log("DEBUG: Citas recuperadas:", citas);
+
   if (errorCitas) {
-    console.error("Error en consulta de citas:", errorCitas);
+    console.error("Error en consulta de citas:", {
+      message: errorCitas.message,
+      details: errorCitas.details,
+      hint: errorCitas.hint,
+      code: errorCitas.code,
+      raw: errorCitas,
+    });
     return new Response(
-      JSON.stringify({ success: false, error: errorCitas.message }),
+      JSON.stringify({
+        success: false,
+        error: {
+          message: errorCitas.message,
+          details: errorCitas.details,
+          hint: errorCitas.hint,
+          code: errorCitas.code,
+        },
+      }),
       { status: 500 }
     );
   }

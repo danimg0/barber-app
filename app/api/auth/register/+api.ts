@@ -6,6 +6,72 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const onlyBody = body.datos;
+    //Comprobar si existe usuario con ese email o telefono
+    // if (!onlyBody || !onlyBody.name || !onlyBody.email || !onlyBody.phone) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "Faltan campos por rellenar",
+    //     }),
+    //     {
+    //       status: 400,
+    //     }
+    //   );
+    // }
+
+    // // Comprobar si el email ya existe
+    // const { data: existingUser, error: emailError } = await supabase
+    //   .from("usuarios")
+    //   .select("email")
+    //   .eq("email", onlyBody.email)
+    //   .single();
+
+    // if (emailError) {
+    //   console.error("Error al comprobar email:", emailError);
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "Error al comprobar el email",
+    //     }),
+    //     { status: 500 }
+    //   );
+    // }
+    // if (existingUser) {
+    //   console.log("El email ya está registrado");
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "El email ya está registrado",
+    //     }),
+    //     { status: 400 }
+    //   );
+    // }
+    // // Comprobar si el teléfono ya existe
+    // const { data: existingPhone, error: phoneError } = await supabase
+    //   .from("usuarios")
+    //   .select("phone")
+    //   .eq("phone", onlyBody.phone)
+    //   .single();
+    // if (phoneError) {
+    //   console.error("Error al comprobar teléfono:", phoneError);
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "Error al comprobar el teléfono",
+    //     }),
+    //     { status: 500 }
+    //   );
+    // }
+    // if (existingPhone) {
+    //   console.log("El teléfono ya está registrado");
+    //   return new Response(
+    //     JSON.stringify({
+    //       success: false,
+    //       message: "El teléfono ya está registrado",
+    //     }),
+    //     { status: 400 }
+    //   );
+    // }
 
     console.log("body recibido en la api", body.datos);
 
@@ -51,17 +117,7 @@ export async function POST(request: Request) {
     if (error) {
       console.log("Error en la api", error);
       // Si el error es por email duplicado
-      if (error.code === "23505") {
-        console.log("error con codigo 23505");
 
-        return new Response(
-          JSON.stringify({
-            success: false,
-            message: "El email ya está registrado",
-          }),
-          { status: 400 }
-        );
-      }
       return new Response(JSON.stringify({ success: false, message: error }), {
         status: 400,
       });

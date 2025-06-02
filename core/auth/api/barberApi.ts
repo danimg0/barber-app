@@ -2,20 +2,19 @@ import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.ad
 import axios from "axios";
 import { Platform } from "react-native";
 
+// Detecta si estás en desarrollo o producción
 const STAGE = process.env.EXPO_PUBLIC_STAGE || "dev";
 
-const fixProtocol = (url: string | undefined) => {
-  if (!url) return undefined;
-  return url.replace("exp://", "http://");
-};
-
-export const API_URL = fixProtocol(
+// Usa IP local en desarrollo móvil, y rutas relativas en producción
+const API_URL =
   STAGE === "prod"
-    ? process.env.EXPO_PUBLIC_API_URL
+    ? "" // rutas relativas en producción
     : Platform.OS === "ios"
     ? process.env.EXPO_PUBLIC_API_URL_IOS
-    : process.env.EXPO_PUBLIC_API_URL_ANDROID
-);
+    : process.env.EXPO_PUBLIC_API_URL_ANDROID;
+
+console.log("API_URL seleccionada:", API_URL);
+
 const barberApi = axios.create({
   baseURL: API_URL,
   headers: {
