@@ -2,6 +2,8 @@ export interface BarberoConHorario {
   id: number;
   nombre: string;
   email: string;
+  phone: string;
+  password?: string; // opcional, solo si se necesita para crear o actualizar
   disponible: boolean;
   foto: string;
   rol: number;

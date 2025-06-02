@@ -1,4 +1,5 @@
 import { ServicioEntitie } from "@/core/servicios/servicios.interface";
+import { useServicio } from "@/hooks/servicios/useServicio";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, Platform, Pressable, View } from "react-native";
@@ -7,6 +8,7 @@ import ThemedDeleteModal from "./ThemedComponents/ThemedDeleteModal";
 import ThemedText from "./ThemedComponents/ThemedText";
 
 const ServicioCard = (servicio: ServicioEntitie) => {
+  const { servicioMutation, deleteServicioMutation } = useServicio(servicio.id);
   const [modalVisible, setModalVisible] = useState(false);
   const [servicioEdit, setServicioEdit] = useState<any | null>(null);
 
@@ -16,7 +18,7 @@ const ServicioCard = (servicio: ServicioEntitie) => {
   };
 
   const eliminarServicio = () => {
-    console.log(`Eliminando servicio: ${servicio.nombre}`);
+    deleteServicioMutation.mutate();
     setModalVisible(false);
   };
 
@@ -96,7 +98,11 @@ const ServicioCard = (servicio: ServicioEntitie) => {
                 }
               }
               onSubmit={(values) => {
-                // lógica para crear o editar
+                console.log("Valores del formulario:", values, servicio.id);
+                servicioMutation.mutate({
+                  ...values,
+                  id: servicio.id,
+                });
                 setModalVisible(false);
               }}
               submitText={servicioEdit ? "Editar servicio" : "Crear servicio"}

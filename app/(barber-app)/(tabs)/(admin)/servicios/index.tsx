@@ -3,6 +3,7 @@ import ServicioForm from "@/components/ServicioForm";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { useServicio } from "@/hooks/servicios/useServicio";
 import { useServicios } from "@/hooks/servicios/useServicios";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -10,6 +11,7 @@ import { FlatList, Modal, Platform, Pressable, View } from "react-native";
 
 const ServiciosViewAdmin = () => {
   const { serviciosQuery } = useServicios();
+  const { servicioMutation } = useServicio(0); // 0 para crear un nuevo servicio
   const [modalVisible, setModalVisible] = React.useState(false);
   const [servicioEdit, setServicioEdit] = React.useState<any | null>(null);
 
@@ -72,6 +74,7 @@ const ServiciosViewAdmin = () => {
           />
         )}
       />
+      {/* Modal de creacion */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -100,7 +103,11 @@ const ServiciosViewAdmin = () => {
                 }
               }
               onSubmit={(values) => {
-                // lógica para crear o editar
+                console.log("Valores del formulario:", values);
+
+                servicioMutation.mutate({
+                  ...values,
+                });
                 setModalVisible(false);
               }}
               submitText={servicioEdit ? "Editar servicio" : "Crear servicio"}

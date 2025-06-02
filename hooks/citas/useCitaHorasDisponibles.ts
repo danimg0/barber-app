@@ -6,7 +6,7 @@ export const useCitaHorasDisponibles = (
   servicios: number[],
   dia: Date
 ) => {
-  console.log("Servicios en useCitaHoras", servicios);
+  //console.log("Servicios en useCitaHoras", servicios);
 
   const horasCitaDisponiblesQuery = useQuery({
     queryKey: ["cita", "horas", idBarbero, servicios, dia], // al poner esos params se relanza la query

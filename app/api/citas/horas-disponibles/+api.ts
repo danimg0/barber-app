@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   const servicios = url.searchParams.get("servicios");
   const dia = url.searchParams.get("dia");
 
-  console.log("Params recibidos en horas:", id_barbero, servicios, dia);
+  //console.log("Params recibidos en horas:", id_barbero, servicios, dia);
 
   if (!id_barbero || !servicios || !dia) {
     return new Response(
@@ -68,7 +68,7 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-  // console.log("Citas recuperadas para el día", dia, citas);
+  //console.log("Citas recuperadas para el día", dia, citas);
   const citasDelDia = citas?.map((cita): citaDia => {
     return {
       id_cita: cita.id_cita,
@@ -88,9 +88,12 @@ export async function GET(request: Request) {
     "sabado",
   ];
 
-  const diaSemana = diasSemana[fechaObj.getDay()];
-
   const horarioObj = horarioPeluquero?.[0]?.horario ?? {};
+  // Asegura que todas las claves existen
+  diasSemana.forEach((dia) => {
+    if (!horarioObj[dia]) horarioObj[dia] = [];
+  });
+  const diaSemana = diasSemana[fechaObj.getDay()];
   const tramos = horarioObj[diaSemana] ?? [];
 
   if (!tramos.length) {
@@ -193,7 +196,7 @@ function calculaHorasDisponibles(
       actual += duracionServicios;
     }
   }
-  // console.log("Horas disponibles", horasDisponibles);
+  //console.log("Horas disponibles", horasDisponibles);
   return horasDisponibles;
 }
 

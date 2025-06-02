@@ -57,7 +57,7 @@ export default function RegisterScreen() {
       inputs.name,
       inputs.email,
       inputs.phone,
-      1,
+      3, // Rol 3 para cliente
       inputs.password
     );
 

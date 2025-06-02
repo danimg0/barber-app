@@ -1,7 +1,9 @@
+import { createUpdateBarberoByIdAction } from "@/core/barberos/actions/create-update-barbero-by-id.action";
+import { deleteBarberoPorIdAction } from "@/core/barberos/actions/delete-barbero.action";
 import { getBarberoByIdConHorario } from "@/core/barberos/actions/get-barbero-by-id-con-horario.action";
 import { BarberoBackendResponse } from "@/core/barberos/interface/barberos.interface";
 import { BarberoConHorario } from "@/core/entities/barbero.entitie";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
 type useBarberoProps<T> = {
@@ -10,6 +12,9 @@ type useBarberoProps<T> = {
 };
 
 export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
+  //Con esto puedo invalidar el cache
+  const queryCliente = useQueryClient();
+
   const barberoConHorarioPorIdQuery = useQuery({
     queryKey: ["barbero", id],
     queryFn: async () => {
@@ -27,16 +32,36 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
   //mutacion
   const barberoMutation = useMutation({
     mutationFn: async (data: BarberoConHorario) => {
-      //todo: disparar la accion de guardar
-      console.log({ data });
-
+      //si no tiene id, es un nuevo barbero
+      await createUpdateBarberoByIdAction(data);
       return data;
     },
 
     onSuccess(data: BarberoConHorario) {
-      //invalidar barberos querys e invalidar cache
+      console.log("Barbero guardado:", data);
 
+      //invalidar barberos querys e invalidar cache
+      queryCliente.invalidateQueries({ queryKey: ["barberos"] });
+      queryCliente.invalidateQueries({ queryKey: ["barbero", id] });
       Alert.alert("Barbero guardado", `${data.nombre} guardado to perfe`);
+    },
+    onError(error: Error) {
+      Alert.alert("Error al guardar el barbero", error.message);
+    },
+  });
+
+  const deleteBarberoMutation = useMutation({
+    mutationFn: async () => deleteBarberoPorIdAction(id),
+    onSuccess() {
+      queryCliente.invalidateQueries({ queryKey: ["barberos"] });
+      queryCliente.invalidateQueries({ queryKey: ["barbero", id] });
+      Alert.alert(
+        "Barbero eliminado",
+        "El barbero se ha eliminado correctamente"
+      );
+    },
+    onError(error: Error) {
+      Alert.alert("Error al eliminar el barbero", error.message);
     },
   });
 
@@ -45,5 +70,6 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
   return {
     barberoConHorarioPorIdQuery,
     barberoMutation,
+    deleteBarberoMutation,
   };
 };

@@ -15,7 +15,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import useAuthStore from "./auth/store/useAuthStore";
 
@@ -50,8 +50,9 @@ export default function RootLayout() {
     console.log("NO CARGADO");
     // Async font loading only occurs in development.
     return (
-      <ThemedView>
-        <ThemedText>Error al cargar</ThemedText>
+      <ThemedView className="items-center justify-center ">
+        <ThemedText className="text-white">Cargando...</ThemedText>
+        <ActivityIndicator />
       </ThemedView>
     );
   }

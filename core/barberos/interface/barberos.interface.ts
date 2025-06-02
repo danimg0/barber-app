@@ -1,11 +1,13 @@
 //repuesta backend
 
 export interface BarberoBackendResponse {
-  id: number;
+  id?: number;
   name: string;
   email: string;
-  disponible: boolean;
-  foto_perfil: string;
+  password?: string;
+  disponible?: boolean;
+  foto_perfil?: string;
+  phone?: string;
   rol: number;
   horario: Horario;
 }

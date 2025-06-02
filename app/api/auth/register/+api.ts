@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       name: onlyBody.name,
       email: onlyBody.email,
       phone: onlyBody.phone,
-      rol: onlyBody.rol ?? 1,
+      rol: onlyBody.rol ?? 3,
       password: onlyBody.password,
     };
 
@@ -35,12 +35,12 @@ export async function POST(request: Request) {
       );
     }
 
-    //todo: codificar contrasena
     let passwordEncriptada = encriptar(usuarioARegistrar.password);
     usuarioARegistrar.password = passwordEncriptada;
 
     console.log("Password encriptada");
 
+    //En Supabase hay un trigger que luego guarda en empleados o cliente en funcion del rol
     const { data, error } = await supabase
       .from("usuarios")
       .insert(usuarioARegistrar)

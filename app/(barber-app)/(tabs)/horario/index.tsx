@@ -2,6 +2,8 @@ import HorarioItem from "@/components/HorarioItem";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { openPhoneCall } from "@/utils/helpers/phonecall-open";
+import openWhatsApp from "@/utils/helpers/whatsapp-open";
 import { Image, Platform, ScrollView, View } from "react-native";
 
 const Horarios = () => {
@@ -48,6 +50,7 @@ const Horarios = () => {
               elevation={5}
               background="primary"
               icon="call-outline"
+              onPress={() => openPhoneCall({ phone: "+34671788518" })}
               border
             >
               <ThemedText>Llamar</ThemedText>
@@ -57,6 +60,7 @@ const Horarios = () => {
               background="secondary"
               icon="logo-whatsapp"
               border
+              onPress={() => openWhatsApp({ phoneNumber: "+34671788518" })}
             >
               <ThemedText>WhatsApp</ThemedText>
             </ThemedButton>
