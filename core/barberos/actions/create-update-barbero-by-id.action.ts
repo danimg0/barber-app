@@ -1,4 +1,3 @@
-import { ApiResponse } from "@/app/api/types/responses";
 import { DEFAULT_PASSWORD } from "@/constants/PasswordsDefault";
 import { barberApi } from "@/core/auth/api/barberApi";
 import { BarberoConHorario } from "@/core/entities/barbero.entitie";
@@ -23,7 +22,7 @@ export const createUpdateBarberoByIdAction = async (
 const updateBarbero = async (barbero: Partial<BarberoConHorario>) => {
   const { id, ...rest } = barbero;
   try {
-    const { data } = await barberApi.patch<ApiResponse>(`/barbero/${id}`, {
+    const { data } = await barberApi.patch(`/barbero/${id}`, {
       name: rest.nombre,
       email: rest.email,
       phone: rest.phone,
@@ -45,7 +44,7 @@ const createBarbero = async (barbero: Partial<BarberoConHorario>) => {
   try {
     const { id, ...rest } = barbero;
 
-    const { data } = await barberApi.post<ApiResponse>(`/barbero`, {
+    const { data } = await barberApi.post(`/barbero`, {
       name: rest.nombre || "",
       email: rest.email || "",
       phone: rest.phone || "",

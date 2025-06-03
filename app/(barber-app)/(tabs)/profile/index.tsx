@@ -2,6 +2,7 @@ import useAuthStore from "@/app/auth/store/useAuthStore";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { Link } from "expo-router";
 import React, { useState } from "react";
 import { Platform, Switch, Text, View } from "react-native";
 
@@ -89,6 +90,22 @@ const UserSettings = () => {
         >
           <ThemedText className="">Cerrar sesión</ThemedText>
         </ThemedButton>
+      </View>
+      <View className="flex mb-3 items-center justify-center">
+        <ThemedText className="text-sm text-white text-center">
+          Puedes consultar las políticas de privdacidad de la app en el
+          siguiente
+        </ThemedText>
+        {/* https://danimg0.github.io/barber-politicas/ */}
+        <Text className="text-sm ">
+          <Link
+            href="https://danimg0.github.io/barber-politicas/"
+            target="_blank"
+            className="text-blue-200"
+          >
+            Ver políticas de privacidad
+          </Link>
+        </Text>
       </View>
     </ThemedView>
   );

@@ -1,4 +1,3 @@
-import { ApiResponse } from "@/app/api/types/responses";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { barberApi } from "../api/barberApi";
 import { User } from "../interface/user";
@@ -136,11 +135,11 @@ export const authRegister = async (datos: RegistroProps) => {
   try {
     console.log("authRegister llamado", datos);
 
-    const { data } = await barberApi.post<ApiResponse>("/auth/register", {
+    const { data } = await barberApi.post("/auth/register", {
       datos,
     });
 
-    const resp: ApiResponse = data;
+    const resp = data;
 
     return resp;
   } catch (error) {
