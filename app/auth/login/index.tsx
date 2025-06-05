@@ -3,6 +3,7 @@ import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedLink from "@/components/ThemedComponents/ThemedLink";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
+import { ROLE } from "@/constants/Rols";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -20,13 +21,24 @@ import {
 import useAuthStore from "../store/useAuthStore";
 
 export default function LoginScreen() {
-  const { login } = useAuthStore();
+  const { user, login } = useAuthStore();
   const [error, setError] = useState("");
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
-  //TODO: Usar tanstack query para esto en vez de un estado
+
+  if (user) {
+    // Si ya hay un usuario autenticado, redirigir a la página correspondiente
+    if (user.rol === ROLE.ADMIN) {
+      router.replace("/(barber-app)/(tabs)/(admin)");
+    } else if (user.rol === ROLE.EMPLEADO) {
+      router.replace("/(barber-app)/(tabs)/(barber)");
+    } else if (user.rol === ROLE.CLIENTE) {
+      router.replace("/(barber-app)/(tabs)/(client)");
+    }
+  }
+
   const [isPosting, setIsPosting] = useState(false);
 
   function handleChange(name: string, value: string) {
@@ -47,12 +59,10 @@ export default function LoginScreen() {
     //Con esto evito el doble tap
     setIsPosting(true);
     const wasSuccessful = await login(email, password);
-    console.log("wasSuccesful:", wasSuccessful);
     setIsPosting(false);
 
     if (wasSuccessful) {
       const { user } = useAuthStore.getState();
-      console.log("wasSuccesful, usuario: ", user);
       if (user?.rol === 1) {
         router.replace("/(barber-app)/(tabs)/(admin)");
       } else if (user?.rol === 2) {
@@ -62,7 +72,6 @@ export default function LoginScreen() {
       }
       return;
     }
-
     Alert.alert("Error", "Usuario o contraseña no son correctos");
   };
 
@@ -127,7 +136,10 @@ export default function LoginScreen() {
               </Text>
               <Text className="text-white text-center mb-5">
                 Recuperala{" "}
-                <ThemedLink href={"/"} className="underline font-bold">
+                <ThemedLink
+                  href={"/auth/request-reset-password"}
+                  className="underline font-bold"
+                >
                   aquí
                 </ThemedLink>
               </Text>

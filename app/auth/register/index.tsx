@@ -1,9 +1,9 @@
 //TODO: Una especie de loading hasta que no cargue las imagenes
 
-import { ApiResponse } from "@/app/api/types/responses";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
+import { ROLE } from "@/constants/Rols";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -19,7 +19,7 @@ import {
 import useAuthStore from "../store/useAuthStore";
 
 export default function RegisterScreen() {
-  const { register } = useAuthStore();
+  const { user, register } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [inputs, setInputs] = useState({
@@ -29,6 +29,17 @@ export default function RegisterScreen() {
     password: "",
     tryPassword: "",
   });
+
+  if (user) {
+    // Si ya hay un usuario autenticado, redirigir a la página correspondiente
+    if (user.rol === ROLE.ADMIN) {
+      router.replace("/(barber-app)/(tabs)/(admin)");
+    } else if (user.rol === ROLE.EMPLEADO) {
+      router.replace("/(barber-app)/(tabs)/(barber)");
+    } else if (user.rol === ROLE.CLIENTE) {
+      router.replace("/(barber-app)/(tabs)/(client)");
+    }
+  }
 
   function handleChange(name: string, value: string) {
     setInputs((prev) => ({ ...prev, [name]: value }));
@@ -53,15 +64,13 @@ export default function RegisterScreen() {
 
     // setLoading(true);
 
-    const resp: ApiResponse = await register(
+    const resp = await register(
       inputs.name,
       inputs.email,
       inputs.phone,
       3, // Rol 3 para cliente
       inputs.password
     );
-
-    console.log("Resp recibida", resp);
 
     if (resp.success) {
       router.replace("/auth/login");

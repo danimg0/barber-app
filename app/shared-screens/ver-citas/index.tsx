@@ -6,7 +6,6 @@ import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import Colors from "@/constants/Colors";
 import { ESTADO_CITA } from "@/constants/EstadoCita";
-import { ROLE } from "@/constants/Rols";
 import { useCitas } from "@/hooks/citas/useCitas";
 import { agruparCitas } from "@/utils/helpers/agruparCitas";
 import {
@@ -53,14 +52,6 @@ const VerCitasEmpleadoScreen = () => {
     );
   }
 
-  if (user?.rol !== ROLE.ADMIN && user?.rol !== ROLE.EMPLEADO) {
-    console.log("rol:", user?.rol);
-    return (
-      <ThemedView>
-        <Text>Rol no admitido</Text>
-      </ThemedView>
-    );
-  }
   return (
     <ThemedView className="items-center">
       <ThemedText type="h2" className="py-4">

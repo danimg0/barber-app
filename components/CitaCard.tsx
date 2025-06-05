@@ -73,7 +73,7 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
         <ThemedText textBlack>
           Fecha: {cita.fechaCita.toString().split("-").reverse().join("/")}
         </ThemedText>
-        <ThemedText textBlack>Hora: {cita.horaInicio}</ThemedText>
+        <ThemedText textBlack>Hora: {cita.horaInicio.slice(0, 5)}</ThemedText>
       </View>
       {/* Servicios */}
       <View className="mt-5 ml-3">

@@ -1,0 +1,15 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.danimg0.barberapp",
+            "sha256_cert_fingerprints": [
+                "94:4B:DE:F6:A3:02:6C:1C:59:AC:BF:5B:8E:98:E5:32:63:58:BB:02:B0:7B:66:51:91:6B:12:52:91:D3:70:6D",
+                "9A:04:C6:BE:5E:A1:77:C9:14:D9:3C:79:61:E6:15:D7:2E:77:E7:82:B9:01:08:97:17:2B:CB:BA:63:3B:21:73"
+            ]
+        }
+    }
+]

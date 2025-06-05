@@ -6,7 +6,7 @@ export const deleteBarberoPorIdAction = async (id: number) => {
 
     return data;
   } catch (error) {
-    console.error(`Error al eliminar el barbero: ${error}`);
+    //console.error(`Error al eliminar el barbero: ${error}`);
     throw new Error(`Imposible eliminar barbero ${error}`);
   }
 };

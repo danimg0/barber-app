@@ -1,12 +1,11 @@
 import { updateCreateCita } from "@/core/citas/actions/create-update-cita.action";
 import { deleteCita } from "@/core/citas/actions/delete-cita-by-id.action";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
 import { Alert } from "react-native";
 import { CitaUsuarioEntitie } from "../../core/entities/cita.entitie";
 
 export const useCita = (citaId: number) => {
-  const citaIdRef = useRef(citaId); // cuando creo el producto puede ser //new | id de verdad
+  // const citaIdRef = useRef(citaId); // cuando creo el producto puede ser //new | id de verdad
 
   const queryCliente = useQueryClient();
 
@@ -22,11 +21,12 @@ export const useCita = (citaId: number) => {
       // console.log(`data recibida en mutation: ${JSON.stringify(data)}`);
       return updateCreateCita({
         ...data,
-        idCita: citaIdRef.current,
+        // idCita: citaIdRef.current,
+        idCita: citaId,
       });
     },
     onSuccess(id) {
-      citaIdRef.current = id;
+      // citaIdRef.current = id;
       queryCliente.invalidateQueries({ queryKey: ["cita", id] });
       // Alert.alert("Cita guardada", `${id} guardado correctamente`);
     },

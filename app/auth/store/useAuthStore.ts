@@ -1,4 +1,3 @@
-import { ApiResponse } from "@/app/api/types/responses";
 import {
   authCheckStatus,
   authLogin,
@@ -7,6 +6,12 @@ import {
 import { User } from "@/core/auth/interface/user";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { create } from "zustand";
+
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  data?: any;
+}
 
 export type AuthStatus =
   | "unauthenticated"
@@ -22,7 +27,7 @@ export interface AuthState {
   //Se va a usar zunstand para el manejo de estados
 
   // Regresa un booleano si el login fue bien
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<ApiResponse | boolean>;
   //Determina el estado de la autenticacion en el json o en el token
   checkStatus: () => Promise<void>;
   logout: () => Promise<void>;
@@ -74,9 +79,12 @@ const useAuthStore = create<AuthState>()((set, get) => ({
   //En los gestores de estado es donde normalmente llamaremos a las actions
   //Metodos (en verda en zunstand se les llama acciones)
   login: async (email: string, password: string) => {
-    console.log("Login en useAuthStore:", email, password);
-    const resp = await authLogin(email, password);
-    return get().changeStatus(resp?.token, resp?.user);
+    try {
+      const resp = await authLogin(email, password);
+      return get().changeStatus(resp?.token, resp?.user);
+    } catch (error) {
+      return false; // Si hay un error, retornamos false
+    }
   },
 
   register: async (
@@ -86,7 +94,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
     rol: number,
     password: string
   ) => {
-    const resp: ApiResponse = await authRegister({
+    const resp = await authRegister({
       name,
       email,
       phone,

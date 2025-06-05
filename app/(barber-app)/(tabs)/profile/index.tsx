@@ -1,7 +1,10 @@
 import useAuthStore from "@/app/auth/store/useAuthStore";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
+import ThemedModalGeneral from "@/components/ThemedComponents/ThemedModalGeneral";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
+import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { useUsuario } from "@/hooks/auth/useUsuario";
 import { Link } from "expo-router";
 import React, { useState } from "react";
 import { Platform, Switch, Text, View } from "react-native";
@@ -9,6 +12,19 @@ import { Platform, Switch, Text, View } from "react-native";
 const UserSettings = () => {
   const { user, logout } = useAuthStore();
   const [switchState, setSwitchState] = useState(false);
+  const [abrirModal, setAbrirModal] = useState(false);
+  const { changePasswordMutation } = useUsuario();
+  const [inputsPassword, setInputsPassword] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  function handleChangePassword(
+    name: keyof typeof inputsPassword,
+    value: string
+  ) {
+    setInputsPassword((prev) => ({ ...prev, [name]: value }));
+  }
 
   if (!user) {
     return (
@@ -76,7 +92,7 @@ const UserSettings = () => {
           )}
         </View>
         <ThemedButton
-          onPress={() => {}}
+          onPress={() => setAbrirModal(true)}
           className=" bg-[#2C2C2C] w-full p-2"
           elevation={5}
         >
@@ -107,6 +123,63 @@ const UserSettings = () => {
           </Link>
         </Text>
       </View>
+      <ThemedModalGeneral
+        visible={abrirModal}
+        onClose={() => setAbrirModal(false)}
+      >
+        <View className="flex items-center w-full gap-y-4">
+          <ThemedText textBlack>Escriba la nueva contraseña</ThemedText>
+          <ThemedTextInput
+            placeholder="Nueva contraseña"
+            secureTextEntry
+            autoCapitalize="none"
+            icon="lock-closed-outline"
+            value={inputsPassword.newPassword}
+            onChangeText={(value) => handleChangePassword("newPassword", value)}
+          />
+          <ThemedTextInput
+            placeholder="Repite la contraseña"
+            secureTextEntry
+            autoCapitalize="none"
+            icon="lock-closed-outline"
+            value={inputsPassword.confirmPassword}
+            onChangeText={(value) =>
+              handleChangePassword("confirmPassword", value)
+            }
+          />
+          <ThemedButton
+            onPress={() => {
+              if (
+                inputsPassword.newPassword !== inputsPassword.confirmPassword
+              ) {
+                alert("Las contraseñas no coinciden");
+                return;
+              }
+              changePasswordMutation.mutate(
+                {
+                  newPassword: inputsPassword.newPassword,
+                },
+                {
+                  onSuccess: () => {
+                    alert("Contraseña cambiada correctamente");
+                    setAbrirModal(false);
+                  },
+                  onError: (error) => {
+                    // console.error("Error al cambiar la contraseña:", error);
+                    alert("Error al cambiar la contraseña");
+                    setAbrirModal(false);
+                  },
+                }
+              );
+              setInputsPassword({ newPassword: "", confirmPassword: "" });
+            }}
+            className="bg-light-secondary w-full p-2 mt-3"
+            elevation={5}
+          >
+            <ThemedText type="semi-bold">Cambiar contraseña</ThemedText>
+          </ThemedButton>
+        </View>
+      </ThemedModalGeneral>
     </ThemedView>
   );
 };

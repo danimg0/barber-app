@@ -31,7 +31,7 @@ const updateBarbero = async (barbero: Partial<BarberoConHorario>) => {
     if (!data || data.success === false) {
       const msg =
         data?.message || "No se pudo crear el barbero, datos no válidos";
-      console.error(`Error al crear el barbero: ${msg}`);
+      // console.error(`Error al crear el barbero: ${msg}`);
       throw new Error(msg);
     }
     return data;
@@ -59,7 +59,7 @@ const createBarbero = async (barbero: Partial<BarberoConHorario>) => {
     if (!data || data.success === false) {
       const msg =
         data?.message || "No se pudo crear el barbero, datos no válidos";
-      console.error(`Error al crear el barbero: ${msg}`);
+      // console.error(`Error al crear el barbero: ${msg}`);
       throw new Error(msg);
     }
 

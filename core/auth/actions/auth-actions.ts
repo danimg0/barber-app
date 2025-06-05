@@ -45,17 +45,16 @@ const returnUserToken = async (data: AuthResponse) => {
 export const authLogin = async (email: string, password: string) => {
   email = email.toLowerCase();
 
-  //ASI SERIA CON AXIOS
-  console.log("Login en axios en auth-actions con", email, password);
   try {
-    // setTimeout(() => {
-    //   return null;
-    // }, 5000);
+    setTimeout(() => {
+      return null;
+    }, 5000);
+
     const { data } = await barberApi.post<AuthResponse>("/auth/login", {
       email,
       password,
     });
-    console.log("Logeo terminado");
+
     return returnUserToken(data);
   } catch (error) {
     console.log("error:", error);
@@ -118,7 +117,7 @@ export const authCheckStatus = async () => {
 
     return returnUserToken(data);
   } catch (error) {
-    console.error("Error checking auth status:", error);
+    //console.error("Error checking auth status:", error);
     return null;
   }
 };
@@ -155,5 +154,43 @@ export const authRegister = async (datos: RegistroProps) => {
     // Si no, lanza un error genérico
     console.log("Error en registro en action: ", error);
     throw new Error(`Error ${error} `);
+  }
+};
+
+export const requestResetPassword = async (email: string) => {
+  try {
+    const { data } = await barberApi.post("/auth/reset-password-email", {
+      email,
+    });
+    return data;
+  } catch (error) {
+    //console.error("Error requesting reset password:", error);
+    throw new Error("Error requesting reset password");
+  }
+};
+
+export const resetPassword = async (token: string, password: string) => {
+  try {
+    const { data } = await barberApi.post("/auth/reset-password", {
+      token,
+      password,
+    });
+
+    return data;
+  } catch (error) {
+    //console.error("Error resetting password:", error);
+    throw new Error("Error resetting password");
+  }
+};
+
+export const changePassword = async (newPassword: string) => {
+  try {
+    const { data } = await barberApi.patch("/auth/change-password", {
+      newPassword,
+    });
+    return data;
+  } catch (error) {
+    //console.error("Error changing password:", error);
+    throw new Error("Error changing password");
   }
 };

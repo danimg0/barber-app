@@ -27,7 +27,7 @@ const CitasClienteScreen = () => {
     );
   }
 
-  const citas = citasQuery.data?.pages?.flatMap((page) => page) ?? [];
+  const citas = citasQuery.data?.pages.flatMap((page) => page) ?? [];
 
   return (
     <ThemedView className="items-center">
@@ -37,7 +37,9 @@ const CitasClienteScreen = () => {
         <ThemedText>Sin citas</ThemedText>
       ) : (
         <FlatList
-          className={`${Platform.OS !== "web" ? "w-[90%]" : "w-[40%]"}`}
+          className={`${
+            Platform.OS !== "web" ? "w-[90%]" : "w-[90%]  md:w-[40%]"
+          }`}
           data={citasQuery.data?.pages.flatMap((page) => page) ?? []}
           keyExtractor={(item) => item.idCita.toString()}
           renderItem={({ item }) => <CitaCard cita={item} />}
