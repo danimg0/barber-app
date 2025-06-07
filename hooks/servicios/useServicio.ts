@@ -67,7 +67,7 @@ export const useServicio = (servicioId: number) => {
       console.log("Error al eliminar el servicio", error);
       Toast.show({
         type: "error",
-        text1: "Error al eliminar el servicio",
+        text1: error.message || "Error al eliminar el servicio",
         position: "bottom",
         visibilityTime: 3000,
       });

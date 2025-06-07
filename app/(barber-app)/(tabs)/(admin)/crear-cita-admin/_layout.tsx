@@ -9,13 +9,13 @@ const CrearCitaAdminLayout = () => {
       }}
     >
       <Stack.Screen
-        name="datos-cita-admin"
+        name="datos-cita-admin/index"
         options={{
           title: "Datos cita admin",
         }}
       ></Stack.Screen>
       <Stack.Screen
-        name="confirmacion-cita-admin"
+        name="confirmacion-cita-admin/index"
         options={{
           title: "Confirmacion cita admin",
         }}

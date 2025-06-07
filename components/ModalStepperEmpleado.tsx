@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import React, { useRef, useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Platform, Pressable, ScrollView, View } from "react-native";
 import {
   TimerPickerModal,
   TimerPickerModalRef,
 } from "react-native-timer-picker";
+import Toast from "react-native-toast-message";
 import ThemedButton from "./ThemedComponents/ThemedButton";
 import ThemedModalGeneral from "./ThemedComponents/ThemedModalGeneral";
 import ThemedText from "./ThemedComponents/ThemedText";
@@ -32,6 +34,7 @@ type ModalStepperEmpleadoProps = {
     email?: string;
     phone?: string;
     horario?: Horario;
+    disponible?: boolean;
   };
   isEdit?: boolean;
   onSaveUser: (form: {
@@ -39,6 +42,7 @@ type ModalStepperEmpleadoProps = {
     email: string;
     phone: string;
     horario: Horario;
+    disponible: boolean;
   }) => Promise<void>;
   loading: boolean;
 };
@@ -62,6 +66,7 @@ export default function ModalStepperEmpleado({
     email: initialValues.email || "",
     phone: initialValues.phone || "",
     horario: initialValues.horario || {},
+    disponible: initialValues.disponible || true,
   });
   const [horario, setHorario] = useState(form.horario);
   const [pickerVisible, setPickerVisible] = useState(false);
@@ -93,7 +98,11 @@ export default function ModalStepperEmpleado({
     if (campo === "hora_fin") {
       const horaInicio = horario[dia][idx].hora_inicio;
       if (horaInicio && !esHoraMayor(valor, horaInicio)) {
-        alert("La hora fin debe ser mayor que la hora inicio.");
+        Toast.show({
+          type: "error",
+          text1: "Error de horario",
+          text2: "La hora fin debe ser mayor que la hora inicio.",
+        });
         return;
       }
     }
@@ -101,17 +110,14 @@ export default function ModalStepperEmpleado({
     if (campo === "hora_inicio") {
       const horaFin = horario[dia][idx].hora_fin;
       if (horaFin && !esHoraMayor(horaFin, valor)) {
-        alert("La hora inicio debe ser menor que la hora fin.");
+        Toast.show({
+          type: "error",
+          text1: "Error de horario",
+          text2: "La hora inicio debe ser menor que la hora fin.",
+        });
         return;
       }
     }
-    console.log(`Todos los campos: ${JSON.stringify(form)}`);
-
-    console.log(`Horario actual: ${JSON.stringify(horario)}`);
-
-    console.log(
-      `Cambiando tramo: ${dia}, idx: ${idx}, campo: ${campo}, valor: ${valor}`
-    );
 
     setHorario((prev) => ({
       ...prev,
@@ -200,6 +206,33 @@ export default function ModalStepperEmpleado({
         onChangeText={(v) => setForm({ ...form, phone: v })}
         keyboardType="phone-pad"
       />
+      <Picker
+        selectedValue={form.disponible}
+        onValueChange={(value, index) => {
+          setForm({ ...form, disponible: value });
+        }}
+        style={
+          // Platform.OS === "web"
+          /* ? */ {
+            height: 60,
+            width: 180,
+            backgroundColor: "transparent",
+          }
+
+          // : { height: 50, width: 155 }
+        }
+        mode="dropdown"
+        dropdownIconColor={Platform.OS === "web" ? "black" : "black"}
+      >
+        <Picker.Item color="green" label="Disponible" value={true} />
+        <Picker.Item
+          // si es modo claro, negro, si no, blanco
+          color="red"
+          label="No disponible"
+          value={false}
+        />
+        {/* <Picker.Item label="Ausente" value={ESTADO_CITA.NO_PRESENTADO} /> */}
+      </Picker>
       <ThemedButton
         background="secondary"
         className="mt-4"
@@ -328,7 +361,6 @@ export default function ModalStepperEmpleado({
           // minutes={pickerValue.minutes}
           // theme="light"
           modalTitle="Selecciona hora"
-          // Puedes personalizar más props aquí
         />
       )}
     </ThemedModalGeneral>

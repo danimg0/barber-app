@@ -1,5 +1,3 @@
-//Rederigir a citas del tiron, sin nada de reserva completada, pero si mostrar un alert o un snackbar diciendo que todo perfe
-
 import useAuthStore from "@/app/auth/store/useAuthStore";
 import CitaCard from "@/components/CitaCard";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
@@ -12,7 +10,8 @@ import { useCita } from "@/hooks/citas/useCita";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Platform, Text, View } from "react-native";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const ConfirmacionReservaScreen = () => {
   const [cita, setCita] = useState<CitaUsuarioEntitie>();
@@ -32,7 +31,11 @@ const ConfirmacionReservaScreen = () => {
           console.log(`Cita en useState: ${JSON.stringify(cita)}`);
         }
       } catch (error) {
-        Alert.alert("Error", "No se pudo cargar la cita");
+        Toast.show({
+          type: "error",
+          text1: "Error al cargar la cita",
+          text2: "No se pudo recuperar la cita actual.",
+        });
         router.back();
       }
     };
@@ -51,6 +54,11 @@ const ConfirmacionReservaScreen = () => {
   const handleSubmit = () => {
     citaMutation.mutate(cita, {
       onSuccess: () => {
+        Toast.show({
+          type: "success",
+          text1: "Reserva confirmada",
+          text2: "Tu cita ha sido confirmada correctamente.",
+        });
         if (user?.rol === ROLE.ADMIN) {
           router.replace("/ver-citas-admin");
         } else if (user?.rol === ROLE.EMPLEADO) {
@@ -59,7 +67,13 @@ const ConfirmacionReservaScreen = () => {
       },
       //Dejar este y quitar el de useCitas
       onError: (error) => {
-        Alert.alert("Error", "No se pudo guardar la cita");
+        console.error("Error al confirmar la cita:", error);
+        Toast.show({
+          type: "error",
+          text1: "Error al confirmar la cita",
+          text2:
+            "No se pudo completar la reserva. Por favor, inténtalo de nuevo más tarde.",
+        });
       },
     });
   };

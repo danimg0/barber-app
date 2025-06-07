@@ -20,7 +20,13 @@ const Horarios = () => {
 
   const content = (
     <ThemedView className="lg:items-center lg:justify-center">
-      <View className="lg:flex-row lg:items-center lg:justify-center lg:gap-x-20">
+      <View
+        className={`${
+          Platform.OS === "web"
+            ? "pt-10 pb-16 lg:flex-row lg:items-center lg:justify-center lg:gap-x-20"
+            : ""
+        } `}
+      >
         <View
           className="
             w-full max-w-xl
@@ -73,13 +79,14 @@ const Horarios = () => {
 
   return (
     <ThemedView className="lg:items-center lg:justify-center -m-14">
-      <View className="lg:flex-row lg:items-center lg:justify-center lg:gap-x-20">
-        {Platform.OS === "web" ? (
-          <View className="w-full">{content}</View>
-        ) : (
-          <ScrollView className="w-full">{content}</ScrollView>
-        )}
-      </View>
+      <ScrollView
+        className="flex-1 w-full h-full"
+        // contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View className="lg:flex-row lg:items-center lg:justify-center lg:gap-x-20">
+          {content}
+        </View>
+      </ScrollView>
     </ThemedView>
   );
 };

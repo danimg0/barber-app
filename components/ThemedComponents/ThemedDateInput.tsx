@@ -9,6 +9,7 @@ interface Props {
   className?: string;
   placeholder?: string;
   inputRef?: React.RefObject<any>;
+  disabledDates?: Date[];
 }
 
 export function ThemedDatePicker({
@@ -17,6 +18,7 @@ export function ThemedDatePicker({
   className = "w-full",
   placeholder = "Elige una fecha",
   inputRef,
+  disabledDates = [],
 }: Props) {
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -66,6 +68,7 @@ export function ThemedDatePicker({
                 setShowCalendar(false);
               }}
               value={value}
+              disabledDates={disabledDates}
             />
           </View>
         </TouchableOpacity>
@@ -77,13 +80,14 @@ export function ThemedDatePicker({
 const DatePicker: React.FC<{
   onChange: (date: Date) => void;
   value?: string;
-}> = ({ onChange, value }) => {
+  disabledDates?: Date[];
+}> = ({ onChange, value, disabledDates = [] }) => {
   const defaultStyles = useDefaultStyles();
   const today = new Date();
 
-  function getDateInTwoWeeks(): Date {
+  function getDateInOneMonth(): Date {
     const maxDate = new Date(today);
-    maxDate.setDate(maxDate.getDate() + 14);
+    maxDate.setDate(maxDate.getDate() + 30);
     return maxDate;
   }
 
@@ -97,14 +101,15 @@ const DatePicker: React.FC<{
     <DateTimePicker
       className="bg-gray-600 p-2  w-[300px] rounded-3xl shadow-2xl"
       disableYearPicker
-      //TODO: meter las fechas donde el barbero no trabaja
-      disabledDates={[new Date(2025, 5, 13), new Date(2025, 5, 19)]}
+      //TODO: meter las fechas donde el barbero no trabaja o no hay citas
+      // disabledDates={[new Date(2025, 5, 13), new Date(2025, 5, 19)]}
+      disabledDates={disabledDates}
       mode="single"
       locale="es-ES"
       minDate={today}
-      maxDate={getDateInTwoWeeks()}
+      maxDate={getDateInOneMonth()}
       firstDayOfWeek={1}
-      date={fechaElegida} // no va
+      date={fechaElegida}
       onChange={({ date }) => {
         if (date instanceof Date) {
           // Corregir problema de zona horaria

@@ -8,7 +8,7 @@ interface CitaParaDB {
   fecha_cita?: Date;
   hora_inicio?: string;
   hora_fin?: string;
-  estado?: string;
+  estado?: number;
   servicios?: number[];
   nombreCliente?: string;
   telefono?: string;
@@ -45,9 +45,12 @@ const updateCita = async (cita: Partial<CitaParaDB>) => {
   const { id_cita, ...rest } = cita;
   try {
     //El patch es para actualizar
-    const { data } = await barberApi.patch<number>(`/citas/${id_cita}`, {
-      ...rest,
-    });
+    const { data } = await barberApi.patch<number>(
+      `/citas/cita-cliente/${id_cita}`,
+      {
+        ...rest,
+      }
+    );
 
     return data;
   } catch (error) {

@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
+import "react-native-url-polyfill/auto";
 import useAuthStore from "./auth/store/useAuthStore";
 
 //LAYOUT RAIZ

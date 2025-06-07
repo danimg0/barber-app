@@ -61,13 +61,13 @@ export default function ClientLayout() {
         }}
       />
       <Stack.Screen
-        name="reserva-cita/eleccion-cita"
+        name="reserva-cita/eleccion-cita/index"
         options={{
           title: "Reservar cita",
         }}
       />
       <Stack.Screen
-        name="ver-citas"
+        name="ver-citas/index"
         options={{
           title: "Ver citas",
         }}

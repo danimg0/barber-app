@@ -8,7 +8,8 @@ import { useCita } from "@/hooks/citas/useCita";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Platform, Text, View } from "react-native";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const ConfirmacionReservaScreen = () => {
   const [cita, setCita] = useState<CitaUsuarioEntitie>();
@@ -23,7 +24,11 @@ const ConfirmacionReservaScreen = () => {
           console.log(`Cita en useState: ${JSON.stringify(cita)}`);
         }
       } catch (error) {
-        Alert.alert("Error", "No se pudo cargar la cita");
+        Toast.show({
+          type: "error",
+          text1: "Error al cargar la cita",
+          text2: "No se pudo recuperar la cita actual.",
+        });
         router.back();
       }
     };
@@ -42,11 +47,22 @@ const ConfirmacionReservaScreen = () => {
   const handleSubmit = () => {
     citaMutation.mutate(cita, {
       onSuccess: () => {
+        Toast.show({
+          type: "success",
+          text1: "Reserva confirmada",
+          text2: "Tu cita ha sido confirmada correctamente.",
+        });
         router.replace("/reserva-cita/final-reserva");
       },
       //Dejar este y quitar el de useCitas
       onError: (error) => {
-        Alert.alert("Error", "No se pudo guardar la cita");
+        console.error("Error al confirmar la cita:", error);
+        Toast.show({
+          type: "error",
+          text1: "Error al confirmar la cita",
+          text2:
+            "No se pudo confirmar la cita. Por favor, inténtelo de nuevo más tarde.",
+        });
       },
     });
   };
@@ -61,7 +77,7 @@ const ConfirmacionReservaScreen = () => {
     <ThemedView className="items-center">
       <View
         className={`mb-10 flex-1 items-center justify-around 
-      ${Platform.OS === "web" ? "w-[40%]" : "w-[80%]  "}
+      ${Platform.OS === "web" ? "w-full px-4 lg:w-[40%]" : "w-[80%]  "}
       `}
       >
         <ThemedText type="h2" className="">

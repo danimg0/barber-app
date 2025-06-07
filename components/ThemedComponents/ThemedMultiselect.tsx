@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import { ServicioEntitie } from "@/core/servicios/servicios.interface";
 import { Ionicons } from "@expo/vector-icons";
 import React, { JSXElementConstructor, ReactElement } from "react";
@@ -52,7 +53,7 @@ const ThemedMultiselect = ({
       //Container de abajo
       selectedStyle={{
         borderRadius: 16,
-        backgroundColor: "grey",
+        backgroundColor: Colors.dark.secondary,
       }}
       //Texto de los containers de abajo
       selectedTextStyle={{

@@ -10,7 +10,7 @@ export interface CitaUsuarioEntitie {
   nombreBarbero: string;
   nombreCliente: string;
   fotoPerfil: string;
-  tipoEstado?: string;
+  tipoEstado?: number;
   servicios: ServicioEntitie[];
   precioTotal: number;
   duracionTotal: number;

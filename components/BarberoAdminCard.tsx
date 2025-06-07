@@ -44,7 +44,7 @@ const BarberoAdminCard = ({
         phone: form.phone,
         foto: foto || "",
         horario: form.horario,
-        disponible,
+        disponible: form.disponible,
         rol,
       });
     } finally {
@@ -140,6 +140,7 @@ const BarberoAdminCard = ({
           email,
           phone,
           horario,
+          disponible,
         }}
         isEdit={true}
         onSaveUser={handleSaveUser}

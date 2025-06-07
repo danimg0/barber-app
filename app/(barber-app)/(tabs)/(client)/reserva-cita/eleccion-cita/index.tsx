@@ -4,19 +4,23 @@ import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedMultiselect from "@/components/ThemedComponents/ThemedMultiselect";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
-import { BarberoEleccionCard } from "@/core/entities/barbero.entitie";
+import { BarberoConHorario } from "@/core/entities/barbero.entitie";
 import { CitaUsuarioEntitie } from "@/core/entities/cita.entitie";
-import { mapBarberoDBToBarberoEleccion } from "@/core/mappers/barbero.mapper";
 import { ServicioEntitie } from "@/core/servicios/servicios.interface";
 import { useBarbero } from "@/hooks/barberos/useBarbero";
 import { useCitaHorasDisponibles } from "@/hooks/citas/useCitaHorasDisponibles";
 import { useServicios } from "@/hooks/servicios/useServicios";
 import { SecureStorageAdapter } from "@/utils/helpers/adapters/secure-storage.adaptar";
+import {
+  getDiasTrabaja,
+  getDisabledDates,
+} from "@/utils/helpers/get-disabled-dates";
 import { router, useLocalSearchParams } from "expo-router";
 import { Formik } from "formik";
 import React, { useRef } from "react";
-import { ActivityIndicator, Alert, Platform, View } from "react-native";
+import { ActivityIndicator, Platform, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 import { ThemedDatePicker } from "../../../../../../components/ThemedComponents/ThemedDateInput";
 import ThemedDropdown from "../../../../../../components/ThemedComponents/ThemedDropdown";
 
@@ -28,9 +32,8 @@ const SeleccionCitaScreen = () => {
   const { serviciosQuery } = useServicios();
   const { barberoConHorarioPorIdQuery } = useBarbero({
     id: parseInt(barberoIdStr),
-    mapper: mapBarberoDBToBarberoEleccion,
   });
-  const barberoData: BarberoEleccionCard = barberoConHorarioPorIdQuery.data;
+  const barberoData: BarberoConHorario = barberoConHorarioPorIdQuery.data;
   const serviciosDisponibles: ServicioEntitie[] = serviciosQuery.data ?? [];
 
   if (barberoConHorarioPorIdQuery.isLoading || serviciosQuery.isLoading) {
@@ -40,6 +43,12 @@ const SeleccionCitaScreen = () => {
       </ThemedView>
     );
   }
+
+  console.log("Barbero data:", barberoData);
+
+  //@ts-expect-error
+  const diasTrabaja = getDiasTrabaja(barberoData[0].horario);
+  const disabledDates = getDisabledDates(diasTrabaja);
 
   const validate = (values: {
     fecha: string;
@@ -58,15 +67,22 @@ const SeleccionCitaScreen = () => {
   return (
     <ThemedView className="items-center">
       <View
-        className={Platform.OS === "web" ? "w-[50%] mt-10 h-full" : undefined}
+        className={
+          Platform.OS === "web"
+            ? "w-full items-center lg:w-[50%] mt-10 h-full"
+            : undefined
+        }
       >
         <ThemedText type="h2" className="text-white text-center">
           Selecciona tu cita
         </ThemedText>
         <BarberoCard
-          disponible={barberoData.disponible}
-          foto={barberoData.foto}
-          nombre={barberoData.nombre}
+          //@ts-expect-error
+          disponible={barberoData[0].disponible}
+          //@ts-expect-error
+          foto={barberoData[0].foto_perfil}
+          //@ts-expect-error
+          nombre={barberoData[0].name}
           onPress={() => {}}
           seleccionado
           className={"w-[90%]"}
@@ -96,7 +112,7 @@ const SeleccionCitaScreen = () => {
                 idCliente: user?.id || -1,
                 nombreCliente: user?.name || "",
                 precioTotal: 0,
-                tipoEstado: "1",
+                tipoEstado: 1,
                 servicios: citaFinal.servicios,
               };
 
@@ -110,7 +126,12 @@ const SeleccionCitaScreen = () => {
               router.replace("/reserva-cita/confirmacion-reserva");
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
-              Alert.alert("Error", "No se pudo guardar la cita");
+              Toast.show({
+                type: "error",
+                text1: "Error al seleccionar cita",
+                text2:
+                  "No se pudo guardar la cita. Por favor, inténtalo de nuevo más tarde.",
+              });
               // console.error(error);
             }
           }}
@@ -119,7 +140,7 @@ const SeleccionCitaScreen = () => {
           {/* Propiedades de formik para el formulario */}
           {({
             values,
-
+            errors,
             handleSubmit,
             handleChange,
             setFieldValue,
@@ -175,6 +196,7 @@ const SeleccionCitaScreen = () => {
                 <ThemedText type="h3">Fecha</ThemedText>
                 <View className="w-full">
                   <ThemedDatePicker
+                    disabledDates={disabledDates}
                     value={values.fecha}
                     onChange={(date: Date) => {
                       setFieldValue("fecha", date.toISOString().split("T")[0]);
@@ -247,6 +269,29 @@ const SeleccionCitaScreen = () => {
                 >
                   <ThemedText>Continuar</ThemedText>
                 </ThemedButton>
+
+                {/* Mostrar error de validación si el botón está deshabilitado */}
+                {!isValid && (
+                  <View className="mt-2">
+                    {errors.fecha && (
+                      <ThemedText className="text-red-500 text-center">
+                        {errors.fecha}
+                      </ThemedText>
+                    )}
+                    {errors.hora && (
+                      <ThemedText className="text-red-500 text-center">
+                        {errors.hora}
+                      </ThemedText>
+                    )}
+                    {errors.servicios && (
+                      <ThemedText className="text-red-500 text-center">
+                        {Array.isArray(errors.servicios)
+                          ? errors.servicios.join(", ")
+                          : errors.servicios}
+                      </ThemedText>
+                    )}
+                  </View>
+                )}
               </View>
             );
           }}

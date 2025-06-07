@@ -27,6 +27,7 @@ const updateBarbero = async (barbero: Partial<BarberoConHorario>) => {
       email: rest.email,
       phone: rest.phone,
       horario: rest.horario,
+      disponible: rest.disponible,
     });
     if (!data || data.success === false) {
       const msg =

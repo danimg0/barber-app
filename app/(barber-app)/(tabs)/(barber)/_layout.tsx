@@ -29,7 +29,7 @@ export default function BarberLayout() {
     }
   };
 
-  if (user?.rol !== ROLE.ADMIN || user?.rol !== ROLE.EMPLEADO) {
+  if (user?.rol !== ROLE.EMPLEADO) {
     return (
       <ThemedView className="items-center justify-center">
         <View className="bg-white p-8 rounded-lg elevation-lg flex items-center justify-center">
@@ -63,9 +63,15 @@ export default function BarberLayout() {
       />
       {/* Otras pantallas específicas del barbero */}
       <Stack.Screen
-        name="reservas"
+        name="ver-citas/index"
         options={{
           title: "Mis Citas",
+        }}
+      />
+      <Stack.Screen
+        name="crear-cita"
+        options={{
+          title: "Crear cita",
         }}
       />
     </Stack>

@@ -33,6 +33,8 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
   const barberoMutation = useMutation({
     mutationFn: async (data: BarberoConHorario) => {
       //si no tiene id, es un nuevo barbero
+      console.log("Guardando barbero:", data);
+
       await createUpdateBarberoByIdAction(data);
       return data;
     },
@@ -71,10 +73,9 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
       });
     },
     onError(error: Error) {
-      console.log("Error al eliminar el barbero:", error);
       Toast.show({
         type: "error",
-        text1: "Error al eliminar el barbero",
+        text1: "Error: " + error.message || "Error al eliminar el barbero",
       });
     },
   });

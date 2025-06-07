@@ -8,6 +8,7 @@ import { useUsuario } from "@/hooks/auth/useUsuario";
 import { Link } from "expo-router";
 import React, { useState } from "react";
 import { Platform, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const UserSettings = () => {
   const { user, logout } = useAuthStore();
@@ -82,9 +83,11 @@ const UserSettings = () => {
                   onChange={() => {
                     setSwitchState(!switchState);
                     !switchState &&
-                      alert(
-                        "A partir de ahora recibiras notificaciones para tus citas"
-                      );
+                      Toast.show({
+                        type: "info",
+                        text1: "Notificaciones activadas",
+                        text2: "Recibirás notificaciones sobre tus próximas citas.",
+                      });
                   }}
                 /> */}
               </View>
@@ -156,7 +159,11 @@ const UserSettings = () => {
               if (
                 inputsPassword.newPassword !== inputsPassword.confirmPassword
               ) {
-                alert("Las contraseñas no coinciden");
+                Toast.show({
+                  type: "error",
+                  text1: "Las contraseñas no coinciden",
+                  text2: "Por favor, verifica que las contraseñas son iguales.",
+                });
                 return;
               }
               changePasswordMutation.mutate(
@@ -165,12 +172,20 @@ const UserSettings = () => {
                 },
                 {
                   onSuccess: () => {
-                    alert("Contraseña cambiada correctamente");
+                    Toast.show({
+                      type: "success",
+                      text1: "Contraseña cambiada",
+                      text2: "Tu contraseña ha sido cambiada correctamente.",
+                    });
                     setAbrirModal(false);
                   },
                   onError: (error) => {
                     // console.error("Error al cambiar la contraseña:", error);
-                    alert("Error al cambiar la contraseña");
+                    Toast.show({
+                      type: "error",
+                      text1: "Error al cambiar la contraseña",
+                      text2: "Por favor, inténtalo de nuevo más tarde.",
+                    });
                     setAbrirModal(false);
                   },
                 }

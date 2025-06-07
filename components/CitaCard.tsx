@@ -1,3 +1,4 @@
+import { ESTADO_CITA } from "@/constants/EstadoCita";
 import { CitaUsuarioEntitie } from "@/core/entities/cita.entitie";
 import { useCita } from "@/hooks/citas/useCita";
 import { useServicios } from "@/hooks/servicios/useServicios";
@@ -18,7 +19,7 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
   const { serviciosQuery } = useServicios();
   const { data } = serviciosQuery;
   const serviciosSeleccionados: string[] = [];
-  const { deleteCitaMutation } = useCita(cita.idCita);
+  const { citaMutation } = useCita(cita.idCita);
 
   // console.log("fecha recibida en card", cita.fechaCita);
 
@@ -85,7 +86,7 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
           keyExtractor={(i) => i}
           renderItem={(servicio) => (
             <View className="ml-2">
-              <ThemedText className="text-gray-700">{`\u2023 ${servicio.item}`}</ThemedText>
+              <ThemedText className="text-gray-700">{`\u2023 ${servicio?.item}`}</ThemedText>
             </View>
           )}
         />
@@ -93,10 +94,14 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
       <ThemedDeleteModal
         visible={abrirModal}
         textBody="¿Seguro que quieres cancelar tu cita? Esta acción es irreversible?"
-        loading={deleteCitaMutation.isPending}
+        loading={citaMutation.isPending}
         onConfirm={() => {
-          deleteCitaMutation.mutate(cita.idCita);
-          if (deleteCitaMutation.isSuccess) {
+          //todo: cambiar delete por patch estado
+          citaMutation.mutate({
+            tipoEstado: ESTADO_CITA.CANCELADA,
+            idCita: cita.idCita,
+          });
+          if (citaMutation.isSuccess) {
             setAbrirModal(false);
           }
         }}
@@ -104,7 +109,7 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
       />
       {!confirmacion &&
         //TODO: Hacer el tipado para los estados
-        (cita.tipoEstado === "terminada" ? (
+        (cita.tipoEstado === ESTADO_CITA.COMPLETADA ? (
           <View className="flex flex-row justify-end">
             <ThemedButton className="w-fit p-2 bg-gray-500" disabled>
               <ThemedText className="text-gray-300" textBlack>

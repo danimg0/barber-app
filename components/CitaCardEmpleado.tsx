@@ -1,20 +1,21 @@
+import { ESTADO_CITA } from "@/constants/EstadoCita";
 import { useCita } from "@/hooks/citas/useCita";
 import { openPhoneCall } from "@/utils/helpers/phonecall-open";
 import openWhatsApp from "@/utils/helpers/whatsapp-open";
 import { Ionicons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import { Platform, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ThemedDeleteModal from "./ThemedComponents/ThemedDeleteModal";
 import ThemedText from "./ThemedComponents/ThemedText";
-
 interface Props {
   id: number;
   nombre: string;
   servicios: string[];
   telefono: string;
   hora: string;
-  estado: string;
+  estado: number;
 }
 
 const CitaCardEmpleado = ({
@@ -26,7 +27,8 @@ const CitaCardEmpleado = ({
   estado,
 }: Props) => {
   const [abrirDelete, setAbrirDelete] = useState(false);
-  const { deleteCitaMutation } = useCita(id);
+  const { deleteCitaMutation, citaMutation } = useCita(id);
+  const [selectedEstado, setSelectedEstado] = useState(estado);
 
   const handleDelCita = () => {
     deleteCitaMutation.mutate(id);
@@ -37,6 +39,15 @@ const CitaCardEmpleado = ({
     }
   };
 
+  const handleUpdateCita = (value: number) => {
+    setSelectedEstado(value);
+    citaMutation.mutate({
+      idCita: id,
+      tipoEstado: value,
+      // servicios: servicios,
+    });
+  };
+
   return (
     //Todo: cambiar este mt-2 por el contentStyle en la flatlist o lo que se haga
     <View
@@ -44,9 +55,49 @@ const CitaCardEmpleado = ({
         Platform.OS === "web" ? "w-full lg:w-[80%]" : "w-full"
       } mt-2 `}
     >
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between items-center">
         <ThemedText type="h3">{hora}</ThemedText>
-        <ThemedText type="h3">{estado}</ThemedText>
+        <Picker
+          selectedValue={selectedEstado}
+          onValueChange={(value, index) => {
+            handleUpdateCita(value);
+          }}
+          style={
+            // Platform.OS === "web"
+            /* ? */ {
+              height: 50,
+              width: 180,
+              color: "white",
+              backgroundColor: "transparent",
+              borderWidth: 0,
+              outline: "none",
+              boxShadow: "none",
+            }
+
+            // : { height: 50, width: 155 }
+          }
+          mode="dropdown"
+          dropdownIconColor={Platform.OS === "web" ? "white" : "white"}
+        >
+          <Picker.Item
+            color="red"
+            label="Cancelada"
+            value={ESTADO_CITA.CANCELADA}
+          />
+          <Picker.Item
+            // si es modo claro, negro, si no, blanco
+            color="orange"
+            label="Pendiente"
+            value={ESTADO_CITA.PENDIENTE}
+          />
+          <Picker.Item
+            color="green"
+            label="Completada"
+            value={ESTADO_CITA.COMPLETADA}
+          />
+          {/* <Picker.Item label="Ausente" value={ESTADO_CITA.NO_PRESENTADO} /> */}
+        </Picker>
+        {/* <ThemedText type="h3">{estado}</ThemedText> */}
       </View>
 
       <View className="p-2 rounded-lg flex flex-row bg-blue-300">

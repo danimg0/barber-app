@@ -16,18 +16,17 @@ export const useCita = (citaId: number) => {
   //   });
   //   console.log("Reserva en curso:", data);
 
-  const citaMutation = useMutation<number, Error, CitaUsuarioEntitie>({
+  const citaMutation = useMutation<number, Error, Partial<CitaUsuarioEntitie>>({
     mutationFn: async (data) => {
       // console.log(`data recibida en mutation: ${JSON.stringify(data)}`);
       return updateCreateCita({
         ...data,
-        // idCita: citaIdRef.current,
         idCita: citaId,
-      });
+      } as CitaUsuarioEntitie);
     },
     onSuccess(id) {
-      // citaIdRef.current = id;
       queryCliente.invalidateQueries({ queryKey: ["cita", id] });
+      queryCliente.invalidateQueries({ queryKey: ["citas"] });
       Toast.show({
         type: "success",
         text1: "Cita guardada",
