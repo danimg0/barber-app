@@ -4,7 +4,7 @@ import { getBarberoByIdConHorario } from "@/core/barberos/actions/get-barbero-by
 import { BarberoBackendResponse } from "@/core/barberos/interface/barberos.interface";
 import { BarberoConHorario } from "@/core/entities/barbero.entitie";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 
 type useBarberoProps<T> = {
   id: number;
@@ -43,10 +43,19 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
       //invalidar barberos querys e invalidar cache
       queryCliente.invalidateQueries({ queryKey: ["barberos"] });
       queryCliente.invalidateQueries({ queryKey: ["barbero", id] });
-      Alert.alert("Barbero guardado", `${data.nombre} guardado to perfe`);
+      Toast.show({
+        type: "success",
+        text1: "Barbero guardado",
+        text2: "El barbero se ha guardado correctamente",
+      });
     },
     onError(error: Error) {
-      Alert.alert("Error al guardar el barbero", error.message);
+      console.log("Error al guardar el barbero:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error al guardar el barbero",
+        text2: error.message,
+      });
     },
   });
 
@@ -55,13 +64,18 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
     onSuccess() {
       queryCliente.invalidateQueries({ queryKey: ["barberos"] });
       queryCliente.invalidateQueries({ queryKey: ["barbero", id] });
-      Alert.alert(
-        "Barbero eliminado",
-        "El barbero se ha eliminado correctamente"
-      );
+      Toast.show({
+        type: "success",
+        text1: "Barbero eliminado",
+        text2: "El barbero se ha eliminado correctamente",
+      });
     },
     onError(error: Error) {
-      Alert.alert("Error al eliminar el barbero", error.message);
+      console.log("Error al eliminar el barbero:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error al eliminar el barbero",
+      });
     },
   });
 

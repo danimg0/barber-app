@@ -180,14 +180,7 @@ const CrearCitaEmpleadoScreen = () => {
                   }}
                   placeholder="Telefono del cliente"
                 />
-                {/* fecha cita */}
-                <ThemedDatePicker
-                  value={values.fecha}
-                  onChange={(date: Date) => {
-                    setFieldValue("fecha", date.toISOString().split("T")[0]);
-                  }}
-                  placeholder="Fecha de la cita"
-                />
+
                 {/* servicios cita */}
                 <ThemedMultiselect
                   value={values.servicios}
@@ -219,6 +212,14 @@ const CrearCitaEmpleadoScreen = () => {
                   }}
                   elementosDespegables={serviciosDisponibles}
                 />
+                {/* fecha cita */}
+                <ThemedDatePicker
+                  value={values.fecha}
+                  onChange={(date: Date) => {
+                    setFieldValue("fecha", date.toISOString().split("T")[0]);
+                  }}
+                  placeholder="Fecha de la cita"
+                />
                 {/* hora cita */}
                 {values.fecha !== "" && values.servicios[0] != null ? (
                   <ThemedDropdown
@@ -233,7 +234,7 @@ const CrearCitaEmpleadoScreen = () => {
                           )
                         : [{ label: "No hay horas", value: "" }]
                     }
-                    position="top"
+                    position="bottom"
                     icon="time-outline"
                     labelField="label"
                     valueField="value"

@@ -1,7 +1,7 @@
 import { updateCreateCita } from "@/core/citas/actions/create-update-cita.action";
 import { deleteCita } from "@/core/citas/actions/delete-cita-by-id.action";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 import { CitaUsuarioEntitie } from "../../core/entities/cita.entitie";
 
 export const useCita = (citaId: number) => {
@@ -28,10 +28,19 @@ export const useCita = (citaId: number) => {
     onSuccess(id) {
       // citaIdRef.current = id;
       queryCliente.invalidateQueries({ queryKey: ["cita", id] });
-      // Alert.alert("Cita guardada", `${id} guardado correctamente`);
+      Toast.show({
+        type: "success",
+        text1: "Cita guardada",
+        text2: "La cita ha sido guardada correctamente",
+      });
     },
     onError: (error) => {
-      Alert.alert("Error", error.message ?? "No se pudo guardar la cita");
+      console.error("Error al guardar la cita:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error al guardar la cita",
+        text2: "No se pudo guardar la cita, inténtalo de nuevo más tarde",
+      });
     },
   });
 
@@ -41,10 +50,18 @@ export const useCita = (citaId: number) => {
     },
     onSuccess: () => {
       queryCliente.invalidateQueries({ queryKey: ["citas"] });
-      Alert.alert("Cita eliminada", "Cita eliminada correctamente");
+      Toast.show({
+        type: "success",
+        text1: "Cita eliminada",
+        text2: "La cita ha sido eliminada correctamente",
+      });
     },
     onError: () => {
-      Alert.alert("Error al eliminar", "Error al eliminar la cita");
+      Toast.show({
+        type: "error",
+        text1: "Error al eliminar la cita",
+        text2: "No se pudo eliminar la cita, inténtalo de nuevo más tarde",
+      });
     },
   });
 

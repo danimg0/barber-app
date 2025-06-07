@@ -3,6 +3,7 @@ import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { ROLE } from "@/constants/Rols";
+import { useBackRedirect } from "@/hooks/useBackRedirect";
 import { router, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
@@ -25,6 +26,8 @@ export default function AdminLayout() {
       router.replace("/");
     }
   };
+
+  useBackRedirect("/(barber-app)/(tabs)/(admin)");
 
   if (user?.rol !== ROLE.ADMIN) {
     return (

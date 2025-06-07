@@ -78,15 +78,15 @@ const ServicioCard = (servicio: ServicioEntitie) => {
         className="flex justify-center items-center w-[50%] "
       >
         <View
-          className="flex-1 justify-center items-center"
+          className="flex-1 justify-center items-center bg-red-500"
           style={{
             backgroundColor: "#00000080",
           }}
         >
           <View
             className={`${
-              Platform.OS === "web" ? "max-w-[50%]" : "w-full"
-            } w-[90%] bg-white rounded-[10px] p-5 flex justify-center items-center`}
+              Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full"
+            }  bg-white rounded-[10px] p-5 flex justify-center items-center`}
           >
             <ServicioForm
               initialValues={

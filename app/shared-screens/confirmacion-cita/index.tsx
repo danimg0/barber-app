@@ -74,7 +74,7 @@ const ConfirmacionReservaScreen = () => {
     <ThemedView className="items-center">
       <View
         className={`mb-10 flex-1 items-center justify-around 
-      ${Platform.OS === "web" ? "w-[40%]" : "w-[80%]  "}
+      ${Platform.OS === "web" ? "w-full lg:w-[40%] p-4" : "w-[80%]"}
       `}
       >
         <ThemedText type="h2" className="">

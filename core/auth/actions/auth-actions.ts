@@ -5,7 +5,9 @@ import { User } from "../interface/user";
 export interface AuthResponse {
   id: number;
   email: string;
+  phone: string;
   name: string;
+  notifications: boolean;
   rol: number;
   token: string;
 }
@@ -18,13 +20,15 @@ export interface AuthResponse {
  * @returns
  */
 const returnUserToken = async (data: AuthResponse) => {
-  const { id, email, name, rol, token } = data;
+  const { id, email, name, rol, token, notifications, phone } = data;
 
   const user: User = {
-    id,
-    email,
-    name,
-    rol,
+    id: id,
+    email: email,
+    phone: phone,
+    name: name,
+    notifications: notifications,
+    rol: rol,
   };
 
   return {
@@ -162,10 +166,16 @@ export const requestResetPassword = async (email: string) => {
     const { data } = await barberApi.post("/auth/reset-password-email", {
       email,
     });
+    console.log("data:", data);
+
+    if (!data.success) {
+      throw new Error(data.error || "Error requesting reset password");
+    }
+
     return data;
-  } catch (error) {
-    //console.error("Error requesting reset password:", error);
-    throw new Error("Error requesting reset password");
+  } catch (error: any) {
+    //El .message es el mensaje del error que lanzo arriba
+    throw new Error(error.message);
   }
 };
 

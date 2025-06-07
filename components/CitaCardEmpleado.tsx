@@ -3,7 +3,7 @@ import { openPhoneCall } from "@/utils/helpers/phonecall-open";
 import openWhatsApp from "@/utils/helpers/whatsapp-open";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ThemedDeleteModal from "./ThemedComponents/ThemedDeleteModal";
 import ThemedText from "./ThemedComponents/ThemedText";
@@ -39,7 +39,11 @@ const CitaCardEmpleado = ({
 
   return (
     //Todo: cambiar este mt-2 por el contentStyle en la flatlist o lo que se haga
-    <View className={`mt-2 lg:w-[80%]`}>
+    <View
+      className={`${
+        Platform.OS === "web" ? "w-full lg:w-[80%]" : "w-full"
+      } mt-2 `}
+    >
       <View className="flex flex-row justify-between">
         <ThemedText type="h3">{hora}</ThemedText>
         <ThemedText type="h3">{estado}</ThemedText>

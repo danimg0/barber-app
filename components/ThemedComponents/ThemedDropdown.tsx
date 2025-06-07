@@ -31,6 +31,8 @@ const ThemedDropdown = ({
 }: Props) => {
   return (
     <Dropdown
+      maxHeight={200}
+      autoScroll={false}
       style={{
         backgroundColor: "white",
         width: "100%",

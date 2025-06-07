@@ -97,6 +97,8 @@ const DatePicker: React.FC<{
     <DateTimePicker
       className="bg-gray-600 p-2  w-[300px] rounded-3xl shadow-2xl"
       disableYearPicker
+      //TODO: meter las fechas donde el barbero no trabaja
+      disabledDates={[new Date(2025, 5, 13), new Date(2025, 5, 19)]}
       mode="single"
       locale="es-ES"
       minDate={today}

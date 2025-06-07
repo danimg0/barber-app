@@ -29,6 +29,7 @@ const ThemedMultiselect = ({
 }: Props) => {
   return (
     <MultiSelect
+      maxHeight={400}
       style={{
         backgroundColor: "white",
         width: "100%",

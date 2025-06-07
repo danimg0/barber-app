@@ -70,6 +70,7 @@ export default function ModalStepperEmpleado({
     idx: number;
     campo: "hora_inicio" | "hora_fin";
   } | null>(null);
+  const [error, setError] = useState(""); // <-- Añade estado para error
   const timerPickerRef = useRef<TimerPickerModalRef>(null);
 
   // Para cada día, array de tramos [{inicio, fin}]
@@ -179,6 +180,9 @@ export default function ModalStepperEmpleado({
       <ThemedText type="h2" className="text-center mb-2">
         {isEdit ? "Editar empleado" : "Nuevo empleado"}
       </ThemedText>
+      {error ? (
+        <ThemedText className="text-red-500 text-center">{error}</ThemedText>
+      ) : null}
       <ThemedTextInput
         placeholder="Nombre"
         value={form.name}
@@ -200,6 +204,24 @@ export default function ModalStepperEmpleado({
         background="secondary"
         className="mt-4"
         onPress={async () => {
+          // Validación antes de pasar al siguiente paso
+          if (!form.name || !form.email || !form.phone) {
+            setError("Nombre, email y teléfono no pueden estar vacíos");
+            return;
+          }
+          if (
+            !/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(form.email)
+          ) {
+            setError("Email no es válido");
+            return;
+          }
+          if (!/^\+\d{6,15}$/.test(form.phone)) {
+            setError(
+              "Teléfono no es válido. Debe empezar con '+' y tener entre 6 y 15 dígitos."
+            );
+            return;
+          }
+          setError("");
           setStep(2);
         }}
         disabled={loading}

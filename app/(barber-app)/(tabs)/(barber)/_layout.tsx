@@ -3,12 +3,16 @@ import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { ROLE } from "@/constants/Rols";
+import { useBackRedirect } from "@/hooks/useBackRedirect";
 import { router, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
 
 export default function BarberLayout() {
   const { user } = useAuthStore();
+
+  useBackRedirect("/(barber-app)/(tabs)/(barber)");
+
   const handleRedirect = () => {
     if (user?.rol === ROLE.ADMIN) {
       // Redirigir al panel de administración

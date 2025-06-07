@@ -16,6 +16,8 @@ import {
   ScrollView,
   View,
 } from "react-native";
+
+import Toast from "react-native-toast-message";
 import useAuthStore from "../store/useAuthStore";
 
 export default function RegisterScreen() {
@@ -44,6 +46,10 @@ export default function RegisterScreen() {
   function handleChange(name: string, value: string) {
     setInputs((prev) => ({ ...prev, [name]: value }));
   }
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const isValidPhone = (phone: string) => /^\+\d{6,15}$/.test(phone); // Debe empezar con '+' y tener entre 6 y 15 dígitos
 
   const handleRegister = async () => {
     if (
@@ -56,7 +62,15 @@ export default function RegisterScreen() {
       setError("Por favor, complete todos los campos");
       return;
     }
+    if (!isValidEmail(inputs.email)) {
+      setError("Introduce un correo electrónico válido");
+      return;
+    }
 
+    if (!isValidPhone(inputs.phone)) {
+      setError("Introduce un número de teléfono válido (ej: +34612345678)");
+      return;
+    }
     if (inputs.password !== inputs.tryPassword) {
       setError("Las contraseñas no coinciden");
       return;
@@ -73,12 +87,14 @@ export default function RegisterScreen() {
     );
 
     if (resp.success) {
+      Toast.show({
+        type: "success",
+        text1: "Registro exitoso",
+        text2: "Ahora puedes iniciar sesión",
+        position: "bottom",
+      });
       router.replace("/auth/login");
     } else {
-      // Alert.alert(
-      //   "Error en el registro",
-      //   "Ha ocurrido un error al registrar el usuario"
-      // );
       setError(resp.message);
       router.reload();
     }

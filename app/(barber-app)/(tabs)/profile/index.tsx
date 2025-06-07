@@ -7,7 +7,7 @@ import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { useUsuario } from "@/hooks/auth/useUsuario";
 import { Link } from "expo-router";
 import React, { useState } from "react";
-import { Platform, Switch, Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 
 const UserSettings = () => {
   const { user, logout } = useAuthStore();
@@ -37,7 +37,11 @@ const UserSettings = () => {
   return (
     <ThemedView className="items-center justify-between">
       {/* <ScrollView className="w-full pb-40"> */}
-      <View className={`${Platform.OS === "web" ? "w-[40%]" : "w-[90%] "}`}>
+      <View
+        className={`${
+          Platform.OS === "web" ? "w-[90%] lg:w-[40%]" : "w-[90%] "
+        }`}
+      >
         <ThemedText type="h2" className="text-center">
           Perfil
         </ThemedText>
@@ -65,14 +69,14 @@ const UserSettings = () => {
             style={{ borderWidth: 0.75 }}
             className="rounded-lg p-2 mt-2"
           >
-            671788417
+            {user.phone}
           </ThemedText>
         </View>
         <View className="mb-10">
           {Platform.OS !== "web" && (
             <>
               <View className="flex flex-row items-center justify-between pr-5">
-                <ThemedText type="h3">Notificaciones</ThemedText>
+                {/* <ThemedText type="h3">Notificaciones</ThemedText>
                 <Switch
                   value={switchState}
                   onChange={() => {
@@ -82,12 +86,12 @@ const UserSettings = () => {
                         "A partir de ahora recibiras notificaciones para tus citas"
                       );
                   }}
-                />
+                /> */}
               </View>
-              <ThemedText>
+              {/* <ThemedText>
                 Mantenlo activado para recibir notificaciones sobre tus próximas
                 citas
-              </ThemedText>
+              </ThemedText> */}
             </>
           )}
         </View>

@@ -6,6 +6,7 @@ import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import Colors from "@/constants/Colors";
 import { ESTADO_CITA } from "@/constants/EstadoCita";
+import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
 import { useCitas } from "@/hooks/citas/useCitas";
 import { agruparCitas } from "@/utils/helpers/agruparCitas";
 import {
@@ -117,7 +118,11 @@ const VerCitasEmpleadoScreen = () => {
           <ActivityIndicator />
         </View>
       ) : (
-        <View className="w-[95%] lg:w-[50%] px-8 h-[60vh] overflow-auto bg-gray-800 my-5 p-4 rounded-xl">
+        <View
+          className={`${
+            Platform.OS === "web" ? "w-[95%] lg:w-[50%]" : "w-[95%]"
+          }   px-8 h-[60vh] overflow-auto bg-gray-800 my-5 p-4 rounded-xl`}
+        >
           <SectionList
             sections={citasAgrupadas}
             keyExtractor={(item, index) =>
@@ -153,7 +158,7 @@ const VerCitasEmpleadoScreen = () => {
                   hora={item.horaInicio.replace(/:00$/, "")}
                   nombre={item.cliente.nombre}
                   servicios={item.servicios.map((ser) => ser.nombre)}
-                  telefono={item.cliente.telefono ?? ""} //todo: const enum con los tlf, poner tlf del admin
+                  telefono={item.cliente.telefono ?? MAIN_PELUQUERO}
                 />
               </View>
             )}

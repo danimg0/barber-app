@@ -4,7 +4,7 @@ import { deleteServicio } from "@/core/servicios/actions/delete-servicio-by-id.a
 import { getServicioById } from "@/core/servicios/actions/get-servicio-by-id";
 import { ServicioEntitie } from "@/core/servicios/servicios.interface";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 
 export const useServicio = (servicioId: number) => {
   //new | id de verdad
@@ -33,11 +33,22 @@ export const useServicio = (servicioId: number) => {
         queryKey: ["servicio", data.id],
       });
       //Tambien podria invalidar aqui mismo lo de los getServicios
-
-      Alert.alert("Servicio guardado", `${data.nombre} guardado correctamente`);
+      Toast.show({
+        type: "success",
+        text1: `Servicio '${data.nombre}' añadido correctamente`,
+        position: "top",
+        visibilityTime: 3000,
+      });
     },
     onError(error: Error) {
-      Alert.alert("Error al guardar el servicio", error.message);
+      console.log("Error al guardar el servicio", error);
+
+      Toast.show({
+        type: "error",
+        text1: "Error al guardar el servicio",
+        position: "top",
+        visibilityTime: 3000,
+      });
     },
   });
 
@@ -45,13 +56,21 @@ export const useServicio = (servicioId: number) => {
     mutationFn: async () => deleteServicio(servicioId),
     onSuccess() {
       queryCliente.invalidateQueries({ queryKey: ["servicios"] });
-      Alert.alert(
-        "Servicio eliminado",
-        "El servicio se ha eliminado correctamente"
-      );
+      Toast.show({
+        type: "success",
+        text1: "Servicio eliminado correctamente",
+        position: "top",
+        visibilityTime: 3000,
+      });
     },
     onError(error: Error) {
-      Alert.alert("Error al eliminar el servicio", error.message);
+      console.log("Error al eliminar el servicio", error);
+      Toast.show({
+        type: "error",
+        text1: "Error al eliminar el servicio",
+        position: "bottom",
+        visibilityTime: 3000,
+      });
     },
   });
 

@@ -1,7 +1,7 @@
 import { useBarbero } from "@/hooks/barberos/useBarbero";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, Platform, View } from "react-native";
 import ModalStepperEmpleado from "./ModalStepperEmpleado";
 import ThemedDeleteModal from "./ThemedComponents/ThemedDeleteModal";
 import ThemedText from "./ThemedComponents/ThemedText";
@@ -56,7 +56,9 @@ const BarberoAdminCard = ({
 
   return (
     <View
-      className={`flex-row items-center rounded-xl shadow p-4
+      className={` ${
+        Platform.OS === "web" ? "w-full lg:w-[60%]" : "w-full"
+      } flex-row items-center rounded-xl p-4
     ${rol === 1 ? "bg-red-400" : "bg-blue-300"} `}
     >
       <View className="mr-4">
@@ -121,21 +123,9 @@ const BarberoAdminCard = ({
       <ThemedDeleteModal
         visible={modalDelete}
         textBody={`¿Estás seguro de que quieres eliminar a ${name}?`}
-        onConfirm={async () => {
-          try {
-            await deleteBarberoMutation.mutateAsync();
-          } finally {
-            if (deleteBarberoMutation.isSuccess) {
-              setModalDelete(false);
-            }
-            if (deleteBarberoMutation.isError) {
-              console.error(
-                "Error al eliminar el barbero:",
-                deleteBarberoMutation.error
-              );
-              setModalDelete(false);
-            }
-          }
+        onConfirm={() => {
+          deleteBarberoMutation.mutate();
+          setModalDelete(false);
         }}
         onClose={() => setModalDelete(false)}
         loading={deleteBarberoMutation.isPending}

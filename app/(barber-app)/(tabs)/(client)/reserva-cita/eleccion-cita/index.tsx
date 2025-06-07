@@ -58,9 +58,11 @@ const SeleccionCitaScreen = () => {
   return (
     <ThemedView className="items-center">
       <View
-        className={Platform.OS === "web" ? "w-[50%] mt-10 h-full " : undefined}
+        className={Platform.OS === "web" ? "w-[50%] mt-10 h-full" : undefined}
       >
-        <ThemedText type="h2">Selecciona tu cita</ThemedText>
+        <ThemedText type="h2" className="text-white text-center">
+          Selecciona tu cita
+        </ThemedText>
         <BarberoCard
           disponible={barberoData.disponible}
           foto={barberoData.foto}
@@ -133,23 +135,11 @@ const SeleccionCitaScreen = () => {
             );
             return (
               <View className="flex-1 items-center w-[90%]">
-                <ThemedText type="h3">Fecha</ThemedText>
-                <View className="w-full">
-                  <ThemedDatePicker
-                    value={values.fecha}
-                    onChange={(date: Date) => {
-                      setFieldValue("fecha", date.toISOString().split("T")[0]);
-                    }}
-                    placeholder="Elige una fecha"
-                    inputRef={inputRef}
-                  />
-                </View>
-
                 {/* servicios */}
                 <ThemedText type="h3" className="mt-4">
                   Servicios
                 </ThemedText>
-                <View className="w-full">
+                <View className="w-full mb-2">
                   <ThemedMultiselect
                     value={values.servicios}
                     placeholder="Selecciona uno o más servicios"
@@ -181,6 +171,19 @@ const SeleccionCitaScreen = () => {
                     elementosDespegables={serviciosDisponibles}
                   />
                 </View>
+
+                <ThemedText type="h3">Fecha</ThemedText>
+                <View className="w-full">
+                  <ThemedDatePicker
+                    value={values.fecha}
+                    onChange={(date: Date) => {
+                      setFieldValue("fecha", date.toISOString().split("T")[0]);
+                    }}
+                    placeholder="Elige una fecha"
+                    inputRef={inputRef}
+                  />
+                </View>
+
                 {/* hora */}
                 <ThemedText type="h3" className="mt-4">
                   Hora
@@ -188,7 +191,7 @@ const SeleccionCitaScreen = () => {
                 {values.fecha !== "" && values.servicios[0] != null ? (
                   <View className="w-full">
                     <ThemedDropdown
-                      position="top"
+                      position="bottom"
                       elementosDespegables={
                         (horasCitaDisponiblesQuery.data?.horasDisponibles ?? [])
                           .length > 0

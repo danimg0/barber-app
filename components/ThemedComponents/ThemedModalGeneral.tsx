@@ -25,7 +25,7 @@ const ThemedModalGeneral = ({ onClose, visible, children }: Props) => {
       >
         <View
           className={`${
-            Platform.OS === "web" ? "max-w-[50%]" : "w-full"
+            Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full"
           } w-[90%] bg-white rounded-[10px] p-5 flex justify-center items-center`}
         >
           {children}

@@ -88,8 +88,8 @@ const EmpleadosViewAdmin = () => {
         data={barberos}
         keyExtractor={(item) => item.id.toString()}
         className={`${
-          Platform.OS === "web" ? "min-w-[50%] max-w-[50%]" : "w-full px-4"
-        }`}
+          Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full "
+        } px-4`}
         ItemSeparatorComponent={() => {
           return <View className="h-4" />;
         }}

@@ -36,12 +36,12 @@ const ServiciosViewAdmin = () => {
         Servicios
       </ThemedText>
       <ThemedText type="normal" className="mb-4">
-        Aquí puedes ver, editar o eliminar los servicios disponibles.
+        Aquí puedes ver, editar o eliminar los servicios disponibles
       </ThemedText>
       <View
         className={`${
-          Platform.OS === "web" ? "max-w-[50%]" : "w-full px-4"
-        } mb-4`}
+          Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full "
+        } mb-4 px-4`}
       >
         <ThemedButton
           border
@@ -56,8 +56,8 @@ const ServiciosViewAdmin = () => {
         data={servicios}
         keyExtractor={(item) => item.id.toString()}
         className={`${
-          Platform.OS === "web" ? "min-w-[50%] max-w-[50%]" : "w-full px-4"
-        }`}
+          Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full "
+        } px-4`}
         ItemSeparatorComponent={() => {
           return <View className="h-4" />;
         }}
@@ -90,7 +90,7 @@ const ServiciosViewAdmin = () => {
         >
           <View
             className={`${
-              Platform.OS === "web" ? "max-w-[50%]" : "w-full"
+              Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full"
             } w-[90%] bg-white rounded-[10px] p-5 flex justify-center items-center`}
           >
             <ServicioForm

@@ -63,7 +63,7 @@ const ServicioForm: React.FC<ServicioFormProps> = ({
         touched,
         isSubmitting,
       }) => (
-        <View className="gap-y-4">
+        <View className="gap-y-4 w-full">
           <ThemedText type="h2" className="mb-4 text-center">
             {initialValues?.nombre ? "Editar servicio" : "Crear servicio"}
           </ThemedText>

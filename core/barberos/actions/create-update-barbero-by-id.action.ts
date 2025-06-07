@@ -51,7 +51,9 @@ const createBarbero = async (barbero: Partial<BarberoConHorario>) => {
       rol: 2,
       password: DEFAULT_PASSWORD,
       horario: rest.horario || {},
-      foto_perfil: rest.foto || "",
+      foto_perfil:
+        rest.foto ||
+        "https://i.ibb.co/zT82pnHR/default-avatar-icon-of-social-media-user-vector.jpg",
     });
 
     console.log(`data: ${data}`);
