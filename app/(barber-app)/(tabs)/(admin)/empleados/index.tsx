@@ -23,6 +23,7 @@ const EmpleadosViewAdmin = () => {
     phone?: string;
     foto_perfil?: string;
     horario?: Horario;
+    disponible?: boolean;
   };
 
   const [empleadoEdit, setEmpleadoEdit] = useState<
@@ -42,7 +43,7 @@ const EmpleadosViewAdmin = () => {
         phone: userData.phone || "",
         foto: userData.foto_perfil || "",
         horario: userData?.horario || {}, // Mantener el horario existente si se está editando
-        disponible: true,
+        disponible: userData.disponible || true,
         rol: ROLE.EMPLEADO, // Rol de empleado
       });
       setModalVisible(false);
@@ -88,8 +89,8 @@ const EmpleadosViewAdmin = () => {
         data={barberos}
         keyExtractor={(item) => item.id.toString()}
         className={`${
-          Platform.OS === "web" ? "min-w-[50%] max-w-[50%]" : "w-full px-4"
-        }`}
+          Platform.OS === "web" ? "w-full lg:max-w-[50%]" : "w-full "
+        } px-4`}
         ItemSeparatorComponent={() => {
           return <View className="h-4" />;
         }}

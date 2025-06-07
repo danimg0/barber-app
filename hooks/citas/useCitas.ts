@@ -1,7 +1,11 @@
+import { supabase } from "@/constants/supabase";
 import { getCitasByEmpleado } from "@/core/citas/actions/get-citas-empleado.action";
 import { getCitasByUser } from "@/core/citas/actions/get-citas.actions";
 import { CitaBDResponse } from "@/core/citas/interface/citas.interface";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import Toast from "react-native-toast-message";
 
 type useCitasProps<T> = {
   rol?: number;
@@ -22,6 +26,55 @@ export const useCitas = <T = any>({
   estado,
   fecha,
 }: useCitasProps<T>) => {
+  const queryClient = useQueryClient();
+  //Solo funciona en web
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Suscribiendo al canal de citas");
+      const channel = supabase
+        .channel("citas-all")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "citas_r_cliente_empleado",
+          },
+          (payload) => {
+            console.log("Nueva cita:", payload);
+            Toast.show({
+              type: "success",
+              text1: "Nueva cita",
+              text2: `Se ha creado una nueva cita`,
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["citas"],
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["citas", "infinite", rol, id],
+            });
+            queryClient.invalidateQueries({
+              queryKey: [
+                "citas",
+                "infinite",
+                "empleado",
+                id,
+                estado,
+                rol,
+                fecha,
+              ],
+            });
+          }
+        )
+        .subscribe();
+
+      return () => {
+        console.log("Canal eliminado");
+        supabase.removeChannel(channel);
+      };
+    }, [rol, id, queryClient])
+  );
+
   const citasQuery = useInfiniteQuery({
     //Identificador por si acaso en otro componente requiere traer la misma informacion de ese query, y asi ayudamos a trabajar con el cache
     queryKey: ["citas", "infinite", rol, id],

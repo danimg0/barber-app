@@ -17,6 +17,8 @@ import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
+import "react-native-url-polyfill/auto";
 import useAuthStore from "./auth/store/useAuthStore";
 
 //LAYOUT RAIZ
@@ -31,6 +33,23 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Configuracion deep linking
+const linking = {
+  prefixes: [
+    "barberapp://", // Esquema personalizado para abrir la app
+    "https://tudominio.com", // Tu dominio web (ajusta esto)
+  ],
+  config: {
+    screens: {
+      auth: {
+        screens: {
+          "reset-password": "auth/reset-password",
+        },
+      },
+    },
+  },
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -74,8 +93,10 @@ export default function RootLayout() {
                 animation: "fade", // Usar animación fade en vez de slide
               }}
             />
+            <Toast />
           </View>
           {/* <StatusBar style="auto" /> */}
+          {/* </ToastManager> */}
         </ThemeProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

@@ -3,12 +3,16 @@ import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { ROLE } from "@/constants/Rols";
+import { useBackRedirect } from "@/hooks/useBackRedirect";
 import { router, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
 
 export default function BarberLayout() {
   const { user } = useAuthStore();
+
+  useBackRedirect("/(barber-app)/(tabs)/(barber)");
+
   const handleRedirect = () => {
     if (user?.rol === ROLE.ADMIN) {
       // Redirigir al panel de administración
@@ -25,7 +29,7 @@ export default function BarberLayout() {
     }
   };
 
-  if (user?.rol !== ROLE.ADMIN || user?.rol !== ROLE.EMPLEADO) {
+  if (user?.rol !== ROLE.EMPLEADO) {
     return (
       <ThemedView className="items-center justify-center">
         <View className="bg-white p-8 rounded-lg elevation-lg flex items-center justify-center">
@@ -59,9 +63,15 @@ export default function BarberLayout() {
       />
       {/* Otras pantallas específicas del barbero */}
       <Stack.Screen
-        name="reservas"
+        name="ver-citas/index"
         options={{
           title: "Mis Citas",
+        }}
+      />
+      <Stack.Screen
+        name="crear-cita"
+        options={{
+          title: "Crear cita",
         }}
       />
     </Stack>

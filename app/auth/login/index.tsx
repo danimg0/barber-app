@@ -5,10 +5,9 @@ import ThemedText from "@/components/ThemedComponents/ThemedText";
 import ThemedTextInput from "@/components/ThemedComponents/ThemedTextInput";
 import { ROLE } from "@/constants/Rols";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
@@ -18,6 +17,7 @@ import {
   Text,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import useAuthStore from "../store/useAuthStore";
 
 export default function LoginScreen() {
@@ -28,16 +28,17 @@ export default function LoginScreen() {
     password: "",
   });
 
-  if (user) {
-    // Si ya hay un usuario autenticado, redirigir a la página correspondiente
-    if (user.rol === ROLE.ADMIN) {
-      router.replace("/(barber-app)/(tabs)/(admin)");
-    } else if (user.rol === ROLE.EMPLEADO) {
-      router.replace("/(barber-app)/(tabs)/(barber)");
-    } else if (user.rol === ROLE.CLIENTE) {
-      router.replace("/(barber-app)/(tabs)/(client)");
+  useEffect(() => {
+    if (user) {
+      if (user.rol === ROLE.ADMIN) {
+        router.replace("/(barber-app)/(tabs)/(admin)");
+      } else if (user.rol === ROLE.EMPLEADO) {
+        router.replace("/(barber-app)/(tabs)/(barber)");
+      } else if (user.rol === ROLE.CLIENTE) {
+        router.replace("/(barber-app)/(tabs)/(client)");
+      }
     }
-  }
+  }, [user]);
 
   const [isPosting, setIsPosting] = useState(false);
 
@@ -72,7 +73,11 @@ export default function LoginScreen() {
       }
       return;
     }
-    Alert.alert("Error", "Usuario o contraseña no son correctos");
+    Toast.show({
+      type: "error",
+      text1: "Error de inicio de sesión",
+      text2: "Correo electrónico o contraseña incorrectos.",
+    });
   };
 
   return (

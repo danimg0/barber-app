@@ -57,7 +57,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
     if (!token || !user) {
       console.log("Deslogeandose por token:", token, " o user:", user);
       //Si la respuesta es nula, no esta autenticado. Hacemos limpieza de valores
-      console.log("Usuario NO autenticado");
+      // console.log("Usuario NO autenticado");
       set({ status: "unauthenticated", token: undefined, user: undefined });
       await SecureStorageAdapter.deleteItem("token");
       return false;

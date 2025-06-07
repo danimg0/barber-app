@@ -3,6 +3,7 @@ import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { ROLE } from "@/constants/Rols";
+import { useBackRedirect } from "@/hooks/useBackRedirect";
 import { router, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
@@ -25,6 +26,8 @@ export default function ClientLayout() {
       router.replace("/");
     }
   };
+
+  useBackRedirect("/(barber-app)/(tabs)/(client)");
 
   if (user?.rol !== ROLE.CLIENTE) {
     return (
@@ -57,15 +60,14 @@ export default function ClientLayout() {
           title: "Cliente",
         }}
       />
-      {/* Otras pantallas específicas del cliente */}
       <Stack.Screen
-        name="reserva-cita"
+        name="reserva-cita/eleccion-cita/index"
         options={{
           title: "Reservar cita",
         }}
       />
       <Stack.Screen
-        name="ver-citas"
+        name="ver-citas/index"
         options={{
           title: "Ver citas",
         }}

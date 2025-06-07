@@ -5,7 +5,8 @@ import ThemedDropdown from "@/components/ThemedComponents/ThemedDropdown";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import Colors from "@/constants/Colors";
-import { ESTADO_CITA } from "@/constants/EstadoCita";
+import { ESTADO_CITA, mapEstadoCitaStrToNumber } from "@/constants/EstadoCita";
+import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
 import { useCitas } from "@/hooks/citas/useCitas";
 import { agruparCitas } from "@/utils/helpers/agruparCitas";
 import {
@@ -13,10 +14,11 @@ import {
   parseFechaStrEspToIng,
 } from "@/utils/helpers/parseFecha";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Platform,
+  RefreshControl,
   SectionList,
   Text,
   View,
@@ -25,6 +27,8 @@ import {
 const VerCitasEmpleadoScreen = () => {
   const today = parseFechaIngToEsp(new Date());
   const { user } = useAuthStore();
+  const [refreshing, setRefreshing] = useState(false);
+
   const [filtroInputs, setFiltroInputs] = useState({
     fecha: today,
     estado: "1",
@@ -33,9 +37,20 @@ const VerCitasEmpleadoScreen = () => {
     fecha: parseFechaStrEspToIng(filtroInputs.fecha),
     estado: parseInt(filtroInputs.estado),
   });
-  const citasAgrupadas = agruparCitas(citasQueryEmpleado.data?.pages[0] ?? []);
+  const citasAgrupadas = agruparCitas(
+    citasQueryEmpleado.data?.pages.flat() ?? []
+  );
 
-  // console.log("Citas agrupadas", citasAgrupadas);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    citasQueryEmpleado.refetch();
+  }, [citasQueryEmpleado]);
+
+  useEffect(() => {
+    if (!citasQueryEmpleado.isFetching) {
+      setRefreshing(false);
+    }
+  }, [citasQueryEmpleado.isFetching]);
 
   const handleChange = (name: string, value: string) => {
     setFiltroInputs({ ...filtroInputs, [name]: value });
@@ -117,8 +132,15 @@ const VerCitasEmpleadoScreen = () => {
           <ActivityIndicator />
         </View>
       ) : (
-        <View className="w-[95%] lg:w-[50%] px-8 h-[60vh] overflow-auto bg-gray-800 my-5 p-4 rounded-xl">
+        <View
+          className={`${
+            Platform.OS === "web" ? "w-[95%] lg:w-[50%]" : "w-[95%]"
+          }   px-8 h-[60vh] overflow-auto bg-gray-800 my-5 p-4 rounded-xl`}
+        >
           <SectionList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             sections={citasAgrupadas}
             keyExtractor={(item, index) =>
               item.id.toString() ?? Math.random().toString(36).substring(2, 10)
@@ -137,26 +159,32 @@ const VerCitasEmpleadoScreen = () => {
                 citas
               </ThemedText>
             )}
-            renderItem={({ item }) => (
-              <View
-                className={`${
-                  Platform.OS === "web" ? "flex items-center" : ""
-                }`}
-              >
-                <CitaCardEmpleado
-                  // esWeb={Platform.OS === "web"}
-                  id={item.id}
-                  estado={
-                    item.estado.tipo.charAt(0).toUpperCase() +
-                    item.estado.tipo.slice(1)
-                  }
-                  hora={item.horaInicio.replace(/:00$/, "")}
-                  nombre={item.cliente.nombre}
-                  servicios={item.servicios.map((ser) => ser.nombre)}
-                  telefono={item.cliente.telefono ?? ""} //todo: const enum con los tlf, poner tlf del admin
-                />
-              </View>
-            )}
+            renderItem={({ item }) => {
+              console.log("estado en index:", item.estado.tipo);
+
+              const estadoMapeado = mapEstadoCitaStrToNumber(item.estado.tipo);
+              return (
+                <View
+                  className={`${
+                    Platform.OS === "web" ? "flex items-center" : ""
+                  }`}
+                >
+                  <CitaCardEmpleado
+                    // esWeb={Platform.OS === "web"}
+                    id={item.id}
+                    estado={
+                      estadoMapeado
+                      // item.estado.tipo.charAt(0).toUpperCase() +
+                      // item.estado.tipo.slice(1)
+                    }
+                    hora={item.horaInicio.replace(/:00$/, "")}
+                    nombre={item.cliente.nombre}
+                    servicios={item.servicios.map((ser) => ser.nombre)}
+                    telefono={item.cliente.telefono ?? MAIN_PELUQUERO}
+                  />
+                </View>
+              );
+            }}
           />
         </View>
       )}

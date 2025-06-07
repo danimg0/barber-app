@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/logo-store.png",
     "scheme": "barberapp",
+    "platforms": ["ios", "android", "web"],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

@@ -58,6 +58,9 @@ const TabsLayout = () => {
             return (
               <Pressable
                 onPress={() => {
+                  // console.log("Pressed home button", pathname);
+
+                  // if (pathname === "/") return;
                   router.replace("/");
                 }}
               >
@@ -71,6 +74,9 @@ const TabsLayout = () => {
           return (
             <Pressable
               onPress={() => {
+                // Si ya esta en el menu, no hay redireccion
+                if (pathname === "/") return;
+
                 router.replace("/");
               }}
             >

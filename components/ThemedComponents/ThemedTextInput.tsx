@@ -30,6 +30,7 @@ const ThemedTextInput = forwardRef<TextInput, Props>(
             <Ionicons name={icon} size={24} className="ml-2 mr-3 text-black" />
           )}
           <TextInput
+            autoComplete="off"
             ref={ref}
             className="flex-1 text-black"
             placeholderTextColor={"#5c5c5c"}

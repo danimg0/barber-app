@@ -1,4 +1,5 @@
-import { Alert, Linking } from "react-native";
+import { Linking } from "react-native";
+import Toast from "react-native-toast-message";
 
 interface Props {
   phoneNumber: string;
@@ -23,11 +24,11 @@ const openWhatsApp = async ({ phoneNumber, message }: Props) => {
       let whatsapp2try = `https://wa.me/${formattedNumber}?text=hola`;
       await Linking.openURL(whatsapp2try);
     } catch (e) {
-      Alert.alert(
-        "Error al abrir WhatsApp",
-        "Por favor asegurate de que se encuentra instalado",
-        [{ text: "OK" }]
-      );
+      Toast.show({
+        type: "error",
+        text1: "Error al abrir WhatsApp",
+        text2: "Asegúrate de tener WhatsApp instalado en tu dispositivo.",
+      });
     }
   }
 };

@@ -7,13 +7,8 @@ import { useBarberos } from "@/hooks/barberos/useBarberos";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Platform,
-  ScrollView,
-  View,
-} from "react-native";
+import { ActivityIndicator, Platform, ScrollView, View } from "react-native";
+import Toast from "react-native-toast-message";
 import BarberoCard from "../../../../../../components/BarberoCard";
 
 const EleccionBarberoScreen = () => {
@@ -35,10 +30,11 @@ const EleccionBarberoScreen = () => {
 
   const eleccion = (barbero: any) => {
     if (!barbero.disponible) {
-      Alert.alert(
-        "Barbero no disponible",
-        `${barbero.nombre} no esta disponible actualmente. Selecciona otro por favor`
-      );
+      Toast.show({
+        type: "error",
+        text1: "Barbero no disponible",
+        text2: `${barbero.nombre} no está disponible actualmente. Selecciona otro por favor.`,
+      });
       return;
     }
 
@@ -67,7 +63,7 @@ const EleccionBarberoScreen = () => {
 
       <View
         className={`bg-gray-600 my-8 min-h-[45%] h-[65%] max-h-[65%] rounded-3xl ${
-          Platform.OS === "web" ? "w-[40%]" : "w-[90%]"
+          Platform.OS === "web" ? "w-[90%] lg:w-[40%]" : "w-[90%]"
         } shadow-lg`}
       >
         <ScrollView

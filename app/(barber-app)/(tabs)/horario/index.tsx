@@ -2,6 +2,7 @@ import HorarioItem from "@/components/HorarioItem";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
 import { openPhoneCall } from "@/utils/helpers/phonecall-open";
 import openWhatsApp from "@/utils/helpers/whatsapp-open";
 import { Image, Platform, ScrollView, View } from "react-native";
@@ -19,7 +20,13 @@ const Horarios = () => {
 
   const content = (
     <ThemedView className="lg:items-center lg:justify-center">
-      <View className="lg:flex-row lg:items-center lg:justify-center lg:gap-x-20">
+      <View
+        className={`${
+          Platform.OS === "web"
+            ? "pt-10 pb-16 lg:flex-row lg:items-center lg:justify-center lg:gap-x-20"
+            : ""
+        } `}
+      >
         <View
           className="
             w-full max-w-xl
@@ -50,7 +57,7 @@ const Horarios = () => {
               elevation={5}
               background="primary"
               icon="call-outline"
-              onPress={() => openPhoneCall({ phone: "+34671788518" })}
+              onPress={() => openPhoneCall({ phone: MAIN_PELUQUERO })}
               border
             >
               <ThemedText>Llamar</ThemedText>
@@ -60,7 +67,7 @@ const Horarios = () => {
               background="secondary"
               icon="logo-whatsapp"
               border
-              onPress={() => openWhatsApp({ phoneNumber: "+34671788518" })}
+              onPress={() => openWhatsApp({ phoneNumber: MAIN_PELUQUERO })}
             >
               <ThemedText>WhatsApp</ThemedText>
             </ThemedButton>
@@ -72,13 +79,14 @@ const Horarios = () => {
 
   return (
     <ThemedView className="lg:items-center lg:justify-center -m-14">
-      <View className="lg:flex-row lg:items-center lg:justify-center lg:gap-x-20">
-        {Platform.OS === "web" ? (
-          <View className="w-full">{content}</View>
-        ) : (
-          <ScrollView className="w-full">{content}</ScrollView>
-        )}
-      </View>
+      <ScrollView
+        className="flex-1 w-full h-full"
+        // contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View className="lg:flex-row lg:items-center lg:justify-center lg:gap-x-20">
+          {content}
+        </View>
+      </ScrollView>
     </ThemedView>
   );
 };

@@ -2,6 +2,7 @@ import ElevatedButton from "@/components/ElevatedButton";
 import ThemedButton from "@/components/ThemedComponents/ThemedButton";
 import ThemedText from "@/components/ThemedComponents/ThemedText";
 import { ThemedView } from "@/components/ThemedComponents/ThemedView";
+import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import {
@@ -69,7 +70,7 @@ const ClienteIndex = () => {
       <ElevatedButton
         icon="logo-whatsapp"
         openType="whatsapp"
-        phoneNumber="34671788518"
+        phoneNumber={MAIN_PELUQUERO}
         message=""
       />
     </ThemedView>
