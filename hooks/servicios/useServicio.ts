@@ -25,7 +25,7 @@ export const useServicio = (servicioId: number) => {
         id: servicioId,
       }),
     onSuccess(data: ServicioEntitie) {
-      console.log("Servicio guardado correctamente", data.id);
+      // console.log("Servicio guardado correctamente", data.id);
       queryCliente.invalidateQueries({
         queryKey: ["servicios"],
       });
@@ -41,7 +41,7 @@ export const useServicio = (servicioId: number) => {
       });
     },
     onError(error: Error) {
-      console.log("Error al guardar el servicio", error);
+      // console.log("Error al guardar el servicio", error);
 
       Toast.show({
         type: "error",
@@ -64,7 +64,7 @@ export const useServicio = (servicioId: number) => {
       });
     },
     onError(error: Error) {
-      console.log("Error al eliminar el servicio", error);
+      // console.log("Error al eliminar el servicio", error);
       Toast.show({
         type: "error",
         text1: error.message || "Error al eliminar el servicio",

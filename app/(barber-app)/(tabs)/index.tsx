@@ -11,16 +11,16 @@ import { ActivityIndicator } from "react-native";
 const DrawerIndexScreen = () => {
   const { status, user } = useAuthStore();
 
-  console.log("DEBUG console log antes del useEffect");
+  // console.log("DEBUG console log antes del useEffect");
   // Mueve la lógica de redirección a un useEffect
-  console.log(
-    `DEBUG antes del useEffect --> Estado ${status} y usuario ${user?.rol}`
-  );
+  // console.log(
+  //   `DEBUG antes del useEffect --> Estado ${status} y usuario ${user?.rol}`
+  // );
 
   useEffect(() => {
-    console.log(
-      `DEBUG drawer.index --> Estado ${status} y usuario ${user?.rol}`
-    );
+    // console.log(
+    //   `DEBUG drawer.index --> Estado ${status} y usuario ${user?.rol}`
+    // );
 
     if (status === "authenticated" && user !== null) {
       if (user?.rol === ROLE.ADMIN) {

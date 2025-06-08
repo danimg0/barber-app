@@ -28,7 +28,7 @@ const ConfirmacionReservaScreen = () => {
         );
         if (citaString) {
           setCita(JSON.parse(citaString));
-          console.log(`Cita en useState: ${JSON.stringify(cita)}`);
+          // console.log(`Cita en useState: ${JSON.stringify(cita)}`);
         }
       } catch (error) {
         Toast.show({
@@ -50,6 +50,12 @@ const ConfirmacionReservaScreen = () => {
       </ThemedView>
     );
   }
+
+  // console.log(`Cita en ConfirmacionReservaScreen: ${JSON.stringify(cita)}`);
+
+  // const nuevaCita:CitaUsuarioEntitie = {
+
+  // };
 
   const handleSubmit = () => {
     citaMutation.mutate(cita, {

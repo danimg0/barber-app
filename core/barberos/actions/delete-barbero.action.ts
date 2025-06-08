@@ -1,12 +1,12 @@
 import { barberApi } from "@/core/auth/api/barberApi";
 
 export const deleteBarberoPorIdAction = async (id: number) => {
-  console.log(`Eliminando barbero con id: ${id}`);
+  // console.log(`Eliminando barbero con id: ${id}`);
 
   try {
     const { data } = await barberApi.delete(`/barbero/${id}`);
 
-    console.log("data delete barbero:", data);
+    // console.log("data delete barbero:", data);
 
     if (!data.success) {
       throw new Error(data.message || "No se pudo eliminar el barbero");

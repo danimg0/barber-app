@@ -13,7 +13,7 @@ export const createUpdateBarberoByIdAction = async (
     }
     return updateBarbero(barbero);
   } catch (error) {
-    console.log(`Error al crear o actualizar barbero: ${error}`);
+    // console.log(`Error al crear o actualizar barbero: ${error}`);
 
     throw new Error(`Imposible crear o actualizar barbero: ${error}`);
   }
@@ -57,7 +57,7 @@ const createBarbero = async (barbero: Partial<BarberoConHorario>) => {
         "https://i.ibb.co/zT82pnHR/default-avatar-icon-of-social-media-user-vector.jpg",
     });
 
-    console.log(`data: ${data}`);
+    // console.log(`data: ${data}`);
 
     if (!data || data.success === false) {
       const msg =

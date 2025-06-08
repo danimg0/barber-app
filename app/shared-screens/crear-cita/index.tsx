@@ -105,11 +105,15 @@ const CrearCitaEmpleadoScreen = () => {
           onSubmit={async (citaFinal) => {
             // console.log("anadiendo fecha", citaFinal.fecha);
 
+            //info barbero
+
             try {
               const citaCompleta: CitaUsuarioEntitie = {
                 idBarbero: parseInt(barberoIdStr),
-                nombreBarbero: barberoData.nombre,
-                fotoPerfil: barberoData.foto,
+                //@ts-expect-error
+                nombreBarbero: barberoData[0].name,
+                //@ts-expect-error
+                fotoPerfil: barberoData[0].foto_perfil,
                 duracionTotal: 0,
                 //NO CONVERTIR A FECHA QUE SE ME JODE EL CITACARD
                 //@ts-expect-error
@@ -125,7 +129,9 @@ const CrearCitaEmpleadoScreen = () => {
                 telefono: citaFinal.telefonoCliente,
               };
 
-              // console.log(`Guardando cita en storage: ${citaCompleta}`);
+              // console.log(
+              //   `Guardando cita en storage: ${JSON.stringify(citaCompleta)}`
+              // );
 
               await SecureStorageAdapter.setItem(
                 "citaActualEmpleado",
@@ -133,10 +139,10 @@ const CrearCitaEmpleadoScreen = () => {
               );
 
               if (user.rol === ROLE.ADMIN) {
-                console.log("Redirigiendo a confirmacion cita admin");
+                // console.log("Redirigiendo a confirmacion cita admin");
                 router.replace("/crear-cita-admin/confirmacion-cita-admin");
               } else if (user.rol === ROLE.EMPLEADO) {
-                console.log("Redirigiendo a confirmacion cita empleado");
+                // console.log("Redirigiendo a confirmacion cita empleado");
                 router.replace("/crear-cita/confirmacion-cita");
               }
 
@@ -196,8 +202,8 @@ const CrearCitaEmpleadoScreen = () => {
                     value={values.telefonoCliente}
                     onChangeText={(value) => {
                       //Busca todo lo que no sea un num y lo reemplaza por nada
-                      const soloNumeros = value.replace(/[^0-9]/g, "");
-                      setFieldValue("telefonoCliente", soloNumeros);
+                      // const soloNumeros = value.replace(/[^0-9]/g, "");
+                      setFieldValue("telefonoCliente", value);
                     }}
                     placeholder="Telefono del cliente"
                   />

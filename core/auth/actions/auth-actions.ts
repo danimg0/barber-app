@@ -166,7 +166,7 @@ export const requestResetPassword = async (email: string) => {
     const { data } = await barberApi.post("/auth/reset-password-email", {
       email,
     });
-    console.log("data:", data);
+    // console.log("data:", data);
 
     if (!data.success) {
       throw new Error(data.error || "Error requesting reset password");

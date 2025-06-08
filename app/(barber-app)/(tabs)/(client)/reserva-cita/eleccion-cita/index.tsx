@@ -44,7 +44,7 @@ const SeleccionCitaScreen = () => {
     );
   }
 
-  console.log("Barbero data:", barberoData);
+  // console.log("Barbero data:", barberoData);
 
   //@ts-expect-error
   const diasTrabaja = getDiasTrabaja(barberoData[0].horario);

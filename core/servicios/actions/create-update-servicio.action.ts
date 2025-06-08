@@ -10,7 +10,7 @@ export const updateCreateServicio = (servicio: Partial<ServicioEntitie>) => {
     ? 0
     : Number(servicio.duracion);
 
-  console.log("Servicio a actualizar o crear en el action:", servicio);
+  // console.log("Servicio a actualizar o crear en el action:", servicio);
 
   if (servicio.id && servicio.id !== 0) {
     return updateServicio(servicio);
@@ -22,13 +22,13 @@ export const updateCreateServicio = (servicio: Partial<ServicioEntitie>) => {
 const updateServicio = async (servicio: Partial<ServicioEntitie>) => {
   const { id, ...rest } = servicio;
   try {
-    console.log("Llamado a la action de actualizar servicio", id, rest);
+    // console.log("Llamado a la action de actualizar servicio", id, rest);
 
     //El patch es para actualizar
     const { data } = await barberApi.put<ServicioEntitie>(`/servicios/${id}`, {
       ...rest,
     });
-    console.log("Respuesta de la base de datos:", data);
+    // console.log("Respuesta de la base de datos:", data);
 
     return data;
   } catch (error) {

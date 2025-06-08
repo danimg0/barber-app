@@ -30,7 +30,7 @@ export const useCitas = <T = any>({
   //Solo funciona en web
   useFocusEffect(
     useCallback(() => {
-      console.log("Suscribiendo al canal de citas");
+      // console.log("Suscribiendo al canal de citas");
       const channel = supabase
         .channel("citas-all")
         .on(
@@ -41,7 +41,7 @@ export const useCitas = <T = any>({
             table: "citas_r_cliente_empleado",
           },
           (payload) => {
-            console.log("Nueva cita:", payload);
+            // console.log("Nueva cita:", payload);
             Toast.show({
               type: "success",
               text1: "Nueva cita",

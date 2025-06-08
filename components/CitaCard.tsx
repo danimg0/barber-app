@@ -21,17 +21,6 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
   const serviciosSeleccionados: string[] = [];
   const { citaMutation } = useCita(cita.idCita);
 
-  // console.log("fecha recibida en card", cita.fechaCita);
-
-  // const serviciosPrueba = data
-  //   //Me quedo solo con los servicios que hay
-  //   ?.filter((servicio) => cita.servicios.includes(servicio.id))
-  //   //Me quedo solo con los nombres
-  //   .map((servicio) => servicio.nombre);
-
-  // console.log("serviciosPrueba", serviciosPrueba);
-
-  //guarrada historica
   //@ts-expect-error
   if (isNaN(cita.servicios[0])) {
     cita.servicios.map((servicio) => {

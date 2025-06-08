@@ -33,14 +33,14 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
   const barberoMutation = useMutation({
     mutationFn: async (data: BarberoConHorario) => {
       //si no tiene id, es un nuevo barbero
-      console.log("Guardando barbero:", data);
+      // console.log("Guardando barbero:", data);
 
       await createUpdateBarberoByIdAction(data);
       return data;
     },
 
     onSuccess(data: BarberoConHorario) {
-      console.log("Barbero guardado:", data);
+      // console.log("Barbero guardado:", data);
 
       //invalidar barberos querys e invalidar cache
       queryCliente.invalidateQueries({ queryKey: ["barberos"] });
@@ -52,7 +52,7 @@ export const useBarbero = <T = any>({ id, mapper }: useBarberoProps<T>) => {
       });
     },
     onError(error: Error) {
-      console.log("Error al guardar el barbero:", error);
+      // console.log("Error al guardar el barbero:", error);
       Toast.show({
         type: "error",
         text1: "Error al guardar el barbero",

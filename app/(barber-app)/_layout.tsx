@@ -12,7 +12,7 @@ export default function CheckAuthLayout() {
 
   // 1) Estado de carga
   if (status === "checking") {
-    console.log("DEBUG layout principal de barber app cargado");
+    // console.log("DEBUG layout principal de barber app cargado");
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#FF5656" />

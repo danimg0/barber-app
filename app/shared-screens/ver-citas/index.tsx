@@ -55,7 +55,7 @@ const VerCitasEmpleadoScreen = () => {
   const handleChange = (name: string, value: string) => {
     setFiltroInputs({ ...filtroInputs, [name]: value });
     if (name === "estado") {
-      console.log("estado:", value);
+      // console.log("estado:", value);
     }
   };
 
@@ -160,7 +160,7 @@ const VerCitasEmpleadoScreen = () => {
               </ThemedText>
             )}
             renderItem={({ item }) => {
-              console.log("estado en index:", item.estado.tipo);
+              // console.log("estado en index:", item.estado.tipo);
 
               const estadoMapeado = mapEstadoCitaStrToNumber(item.estado.tipo);
               return (

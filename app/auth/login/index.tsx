@@ -48,7 +48,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     const { email, password } = inputs;
-    console.log("HandleLogin en loginIndex:", email, password);
+    // console.log("HandleLogin en loginIndex:", email, password);
 
     setError("");
     // Validación básica
