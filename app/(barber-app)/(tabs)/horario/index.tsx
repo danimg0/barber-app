@@ -5,7 +5,7 @@ import { ThemedView } from "@/components/ThemedComponents/ThemedView";
 import { MAIN_PELUQUERO } from "@/constants/PhoneNumbers";
 import { openPhoneCall } from "@/utils/helpers/phonecall-open";
 import openWhatsApp from "@/utils/helpers/whatsapp-open";
-import { Image, Platform, ScrollView, View } from "react-native";
+import { Image, Platform, Pressable, ScrollView, View } from "react-native";
 
 const Horarios = () => {
   const horariosSemana = [
@@ -45,13 +45,29 @@ const Horarios = () => {
           </View>
         </View>
         <View className="w-full flex items-center ">
-          <Image
-            className="rounded-xl w-[70%] max-w-xl h-80 "
-            source={{
-              uri: "https://i.ibb.co/BV0DTbxH/Captura-de-pantalla-2025-05-13-220744.png",
+          <Pressable
+            onPress={() => {
+              const address = encodeURIComponent(
+                "Pl. los Pinos, 11405 Jerez de la Frontera, Cádiz"
+              );
+              const url =
+                Platform.OS === "ios"
+                  ? `http://maps.apple.com/?q=${address}`
+                  : `https://www.google.com/maps/search/?api=1&query=${address}`;
+              window.open
+                ? window.open(url, "_blank")
+                : require("react-native").Linking.openURL(url);
             }}
-            resizeMode="cover"
-          />
+            className="rounded-xl w-[70%] max-w-xl h-80 "
+          >
+            <Image
+              className="rounded-xl w-full h-full"
+              source={{
+                uri: "https://i.ibb.co/BV0DTbxH/Captura-de-pantalla-2025-05-13-220744.png",
+              }}
+              resizeMode="cover"
+            />
+          </Pressable>
           <View className="flex flex-row justify-evenly w-full">
             <ThemedButton
               elevation={5}
