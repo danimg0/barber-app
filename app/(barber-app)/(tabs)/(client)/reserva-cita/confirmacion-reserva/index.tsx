@@ -44,6 +44,8 @@ const ConfirmacionReservaScreen = () => {
     );
   }
 
+  console.log(`Cita en ConfirmacionReservaScreen: ${JSON.stringify(cita)}`);
+
   const handleSubmit = () => {
     citaMutation.mutate(cita, {
       onSuccess: () => {

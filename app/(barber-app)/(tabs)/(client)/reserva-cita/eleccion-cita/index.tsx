@@ -96,12 +96,13 @@ const SeleccionCitaScreen = () => {
             servicios: [],
           }}
           onSubmit={async (citaFinal) => {
-            // console.log("anadiendo fecha", citaFinal.fecha);
             try {
               const citaCompleta: CitaUsuarioEntitie = {
                 idBarbero: parseInt(barberoIdStr),
-                nombreBarbero: barberoData.nombre,
-                fotoPerfil: barberoData.foto,
+                //@ts-expect-error
+                nombreBarbero: barberoData[0].name,
+                //@ts-expect-error
+                fotoPerfil: barberoData[0].foto_perfil,
                 duracionTotal: 0,
                 //NO CONVERTIR A FECHA QUE SE ME JODE EL CITACARD
                 //@ts-expect-error

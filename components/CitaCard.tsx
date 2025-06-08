@@ -96,7 +96,6 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
         textBody="¿Seguro que quieres cancelar tu cita? Esta acción es irreversible?"
         loading={citaMutation.isPending}
         onConfirm={() => {
-          //todo: cambiar delete por patch estado
           citaMutation.mutate({
             tipoEstado: ESTADO_CITA.CANCELADA,
             idCita: cita.idCita,
@@ -108,7 +107,6 @@ const CitaCard = ({ cita, confirmacion }: Props) => {
         onClose={() => setAbrirModal(false)}
       />
       {!confirmacion &&
-        //TODO: Hacer el tipado para los estados
         (cita.tipoEstado === ESTADO_CITA.COMPLETADA ? (
           <View className="flex flex-row justify-end">
             <ThemedButton className="w-fit p-2 bg-gray-500" disabled>

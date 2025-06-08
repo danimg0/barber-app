@@ -327,6 +327,7 @@ export default function ModalStepperEmpleado({
         className="mt-4 bg-dark-secondary"
         onPress={async () => {
           await onSaveUser({ ...form, horario });
+          setStep(1);
           onClose();
         }}
         disabled={loading}

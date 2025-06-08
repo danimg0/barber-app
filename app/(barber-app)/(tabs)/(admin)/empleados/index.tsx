@@ -26,9 +26,14 @@ const EmpleadosViewAdmin = () => {
     disponible?: boolean;
   };
 
-  const [empleadoEdit, setEmpleadoEdit] = useState<
-    EmpleadoFormValues | undefined
-  >(undefined);
+  const [empleadoEdit, setEmpleadoEdit] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    foto_perfil: "",
+    horario: {} as Horario, // Inicializar como un objeto vacío
+    disponible: true,
+  } as EmpleadoFormValues);
   const [loading, setLoading] = useState(false);
 
   const handleSaveUser = async (userData: EmpleadoFormValues) => {
@@ -45,6 +50,14 @@ const EmpleadosViewAdmin = () => {
         horario: userData?.horario || {}, // Mantener el horario existente si se está editando
         disponible: userData.disponible || true,
         rol: ROLE.EMPLEADO, // Rol de empleado
+      });
+      setEmpleadoEdit({
+        name: "",
+        email: "",
+        phone: "",
+        foto_perfil: "",
+        horario: {},
+        disponible: true,
       });
       setModalVisible(false);
     } finally {
@@ -77,7 +90,6 @@ const EmpleadosViewAdmin = () => {
           border
           className="w-full"
           onPress={() => {
-            setEmpleadoEdit(undefined);
             setModalVisible(true);
           }}
           icon="add-outline"

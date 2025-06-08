@@ -78,8 +78,10 @@ const CrearCitaEmpleadoScreen = () => {
       errors.telefonoCliente = "Se requiere telefono del cliente";
     if (!values.fecha) errors.fecha = "Se requiere fecha";
     if (!values.hora) errors.hora = "Se requiere hora";
-    if (values.telefonoCliente.length !== 9)
-      errors.telefonoCliente = "El tlf deben ser 9 numeros";
+    if (!/^\+\d{6,15}$/.test(values.telefonoCliente)) {
+      errors.telefonoCliente =
+        "El teléfono debe tener el formato +XXXXXXXXX (6-15 dígitos)";
+    }
     if (!values.servicios || values.servicios.length === 0) {
       errors.servicios = ["Se requiere al menos un servicio"];
     }
